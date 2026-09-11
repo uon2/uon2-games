@@ -62,7 +62,8 @@ function renderPalette() {
 // ---------- 놓기 / 옮기기 / 치우기 ----------
 function addItem(word) {
   sfx.pop();
-  roomSave().items.push({ w: word, x: 20 + Math.random() * 60, y: 30 + Math.random() * 50 });
+  // 처음에는 바닥(아래쪽)에 놓이고, 끌어서 벽에 걸 수도 있음
+  roomSave().items.push({ w: word, x: 15 + Math.random() * 70, y: 68 + Math.random() * 22 });
   persist();
   renderRoom();
   renderPalette();
