@@ -7,6 +7,7 @@ const PAL = {
   grassTop: ['#5fa83b', '#6cbf45', '#54953a', '#77c94f'],
   deep:     ['#4b4b57', '#40404b', '#565663', '#393943', '#5e5e6b'],
   sand:     ['#dbd3a0', '#e5dcab', '#cfc690', '#d6cd98'],
+  plank:    ['#a9773f', '#b8834a', '#96682f', '#c08d52'],
 };
 
 const ORES = {
@@ -39,6 +40,12 @@ function makeTexture(type, seed) {
       const depth = 3 + (r() < 0.45 ? 1 : 0) + (r() < 0.2 ? 1 : 0);
       for (let y = 0; y < depth; y++) px(x, y, pick(PAL.grassTop));
     }
+  } else if (kind === 'plank') {
+    fill(PAL.plank);
+    for (const y of [3, 11]) for (let x = 0; x < 16; x++) px(x, y, '#6f4a22');
+    for (let y = 4; y <= 10; y++) px(9, y, '#6f4a22');
+    for (let y = 12; y <= 15; y++) px(4, y, '#6f4a22');
+    for (let y = 0; y <= 2; y++) px(4, y, '#6f4a22');
   } else if (kind === 'ore') {
     fill(PAL[base || 'stone']);
     const clusters = 3 + Math.floor(r() * 2);

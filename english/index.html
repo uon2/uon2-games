@@ -160,6 +160,18 @@
     <div class="book-grid" id="book-grid"></div>
   </section>
 
+  <!-- 내 방 -->
+  <section id="screen-room" class="screen room-screen" hidden>
+    <header class="topbar">
+      <button class="btn icon" id="room-back" aria-label="지도로">⬅️</button>
+      <h2 class="bag-title">🏠 내 방</h2>
+      <button class="btn icon" id="room-trash" aria-label="휴지통">🗑️</button>
+    </header>
+    <div class="room" id="room"></div>
+    <p class="msg" id="room-msg"></p>
+    <div class="palette" id="palette"></div>
+  </section>
+
   <!-- 단어 카드 / 효과 레이어 -->
   <div id="word-card" class="word-card" hidden>
     <div class="wc-emoji" id="wc-emoji"></div>
@@ -172,6 +184,7 @@
   <script src="js/textures.js"></script>
   <script src="js/app.js"></script>
   <script src="js/craft.js"></script>
+  <script src="js/room.js"></script>
   <script>
     // 허브 전체를 담당하는 서비스 워커를 등록 (HTTPS 또는 localhost에서만 동작)
     if ('serviceWorker' in navigator) {

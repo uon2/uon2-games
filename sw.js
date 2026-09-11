@@ -16,6 +16,8 @@ const CORE = [
   'english/js/audio.js',
   'english/js/textures.js',
   'english/js/app.js',
+  'english/js/craft.js',
+  'english/js/room.js',
 ];
 
 self.addEventListener('install', event => {

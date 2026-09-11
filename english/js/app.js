@@ -354,6 +354,18 @@ function goMap() {
   });
   list.appendChild(craftCard);
 
+  // 내 방
+  const placed = (save.room && save.room.items && save.room.items.length) || 0;
+  const roomCard = document.createElement('button');
+  roomCard.className = 'stage';
+  roomCard.innerHTML = `
+    <div class="stage-icon room-icon">🏠</div>
+    <div class="stage-name">내 방</div>
+    <div class="stage-letters">아이템 꾸미기</div>
+    ${placed ? `<div class="stage-badge">🏠 ${placed}</div>` : ''}`;
+  roomCard.addEventListener('click', () => { sfx.click(); goRoom(); });
+  list.appendChild(roomCard);
+
   show('screen-map');
 }
 

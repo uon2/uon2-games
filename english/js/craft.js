@@ -222,7 +222,7 @@ async function checkWord() {
   await sleep(150);
   sfx.fanfare();
   updateCraftBag();
-  setCraftMsg(`${recipe.ko} 완성! 🎉`);
+  setCraftMsg(`${recipe.ko} 완성! 🎉 내 방에 놓아 보세요`);
   await showCraftCard(recipe);
   if (sess !== craft.session) return;
   await sleep(400);
