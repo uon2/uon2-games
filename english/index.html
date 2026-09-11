@@ -115,6 +115,51 @@
     </div>
   </section>
 
+  <!-- 작업대 -->
+  <section id="screen-craft" class="screen cave" hidden>
+    <header class="topbar">
+      <button class="btn icon" id="craft-home" aria-label="지도로">🏠</button>
+      <div class="row">
+        <button class="btn" id="craft-book">📖 도감</button>
+      </div>
+      <div class="bag" id="craft-bag">🎒 <span id="craft-bag-count">0</span></div>
+    </header>
+
+    <div class="craft-body">
+      <div id="craft-work">
+        <div class="order-card">
+          <div class="order-emoji" id="order-emoji"></div>
+          <div class="order-ko" id="order-ko"></div>
+          <div class="row">
+            <button class="btn listen" id="craft-listen">🔊 듣기</button>
+            <button class="btn" id="craft-slow">🐢 천천히</button>
+          </div>
+        </div>
+        <div class="slots" id="slots"></div>
+        <p class="msg" id="craft-msg"></p>
+        <div class="tray" id="tray"></div>
+      </div>
+
+      <div class="panel" id="craft-shortage" hidden>
+        <h2>재료가 모자라요!</h2>
+        <p id="shortage-word"></p>
+        <div class="shortage-letters" id="shortage-letters"></div>
+        <p>이 글자를 광산에서 캐 와요 ⛏️</p>
+        <button class="btn green big" id="shortage-mine">🗺️ 광산 지도로</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 도감 -->
+  <section id="screen-book" class="screen cave" hidden>
+    <header class="topbar">
+      <button class="btn icon" id="book-back" aria-label="뒤로">⬅️</button>
+      <h2 class="bag-title">📖 낱말 도감</h2>
+      <div class="bag"><span id="book-count">0 / 0</span></div>
+    </header>
+    <div class="book-grid" id="book-grid"></div>
+  </section>
+
   <!-- 단어 카드 / 효과 레이어 -->
   <div id="word-card" class="word-card" hidden>
     <div class="wc-emoji" id="wc-emoji"></div>
@@ -126,6 +171,7 @@
   <script src="js/audio.js"></script>
   <script src="js/textures.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/craft.js"></script>
   <script>
     // 허브 전체를 담당하는 서비스 워커를 등록 (HTTPS 또는 localhost에서만 동작)
     if ('serviceWorker' in navigator) {

@@ -29,9 +29,17 @@ PHRASES = {
 }
 
 
+def data_src():
+    return (ROOT / 'js' / 'data.js').read_text(encoding='utf-8')
+
+
 def letters_and_words():
-    src = (ROOT / 'js' / 'data.js').read_text(encoding='utf-8')
-    return re.findall(r"^\s*([A-Z]): \{ word: '([^']+)'", src, re.M)
+    return re.findall(r"^\s*([A-Z]): \{ word: '([^']+)'", data_src(), re.M)
+
+
+def all_words():
+    """알파벳 예시 단어 + 작업대 레시피 단어"""
+    return sorted(set(re.findall(r"word: '([^']+)'", data_src())))
 
 
 def record(text, out):
@@ -49,8 +57,9 @@ def main():
         sys.exit(f'data.js에서 알파벳 26개를 찾지 못했습니다 ({len(pairs)}개)')
 
     audio = ROOT / 'audio'
-    for letter, word in pairs:
+    for letter, _ in pairs:
         record(LETTER_TEXT.get(letter, letter.lower()), audio / 'letters' / f'{letter}.m4a')
+    for word in all_words():
         record(word, audio / 'words' / f'{word}.m4a')
     for name, text in PHRASES.items():
         record(text, audio / 'phrases' / f'{name}.m4a')

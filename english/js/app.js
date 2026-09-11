@@ -332,6 +332,28 @@ function goMap() {
     });
     list.appendChild(card);
   });
+
+  // 작업대 (광산을 한 번 다녀와야 열림)
+  const craftLocked = !Object.keys(save.clears).length;
+  const madeTotal = (save.craft && save.craft.total) || 0;
+  const craftCard = document.createElement('button');
+  craftCard.className = 'stage' + (craftLocked ? ' locked' : '');
+  craftCard.innerHTML = `
+    <div class="stage-icon craft-icon">${craftLocked ? '🔒' : '🔨'}</div>
+    <div class="stage-name">작업대</div>
+    <div class="stage-letters">낱말 만들기</div>
+    ${madeTotal ? `<div class="stage-badge">🔨 ${madeTotal}</div>` : ''}`;
+  craftCard.addEventListener('click', () => {
+    if (craftLocked) {
+      sfx.bonk();
+      $('#map-msg').textContent = '먼저 풀밭 광산을 한 번 다녀와요! ⛏️';
+      return;
+    }
+    sfx.click();
+    goCraft();
+  });
+  list.appendChild(craftCard);
+
   show('screen-map');
 }
 

@@ -30,6 +30,23 @@ const LETTERS = {
   Z: { word: 'zebra',    emoji: '🦓' },
 };
 
+// 작업대 레시피: 글자 블록을 조합해 만드는 3글자 단어
+// tier 1이 쉬운 단계, tier 2가 다음 단계
+const RECIPES = [
+  { word: 'cat', emoji: '🐱', ko: '고양이', group: '동물', tier: 1 },
+  { word: 'dog', emoji: '🐶', ko: '강아지', group: '동물', tier: 1 },
+  { word: 'pig', emoji: '🐷', ko: '돼지',   group: '동물', tier: 1 },
+  { word: 'bed', emoji: '🛏️', ko: '침대',   group: '물건', tier: 1 },
+  { word: 'cup', emoji: '🥤', ko: '컵',     group: '물건', tier: 1 },
+  { word: 'box', emoji: '📦', ko: '상자',   group: '물건', tier: 1 },
+  { word: 'fox', emoji: '🦊', ko: '여우',   group: '동물', tier: 2 },
+  { word: 'cow', emoji: '🐮', ko: '소',     group: '동물', tier: 2 },
+  { word: 'hen', emoji: '🐔', ko: '암탉',   group: '동물', tier: 2 },
+  { word: 'hat', emoji: '🎩', ko: '모자',   group: '물건', tier: 2 },
+  { word: 'bag', emoji: '🎒', ko: '가방',   group: '물건', tier: 2 },
+  { word: 'bus', emoji: '🚌', ko: '버스',   group: '물건', tier: 2 },
+];
+
 // 광산 단계: 블록 종류(kinds)는 무작위로 섞여 나옴
 const STAGES = [
   { id: 1, name: '풀밭 광산',   letters: ['A', 'B', 'C', 'D', 'E'],      icon: 'grass',             kinds: ['grass', 'grass', 'grass', 'dirt'] },
