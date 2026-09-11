@@ -1,7 +1,7 @@
 {
-  "name": "영어 블록 월드",
-  "short_name": "블록 월드",
-  "description": "알파벳 블록을 캐며 배우는 영어 게임",
+  "name": "블록 게임방",
+  "short_name": "블록 게임방",
+  "description": "블록을 캐며 배우는 아이들 학습 게임 모음",
   "lang": "ko",
   "start_url": "./",
   "scope": "./",

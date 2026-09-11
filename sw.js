@@ -1,18 +1,21 @@
 'use strict';
 
+// 허브 전체(모든 게임)를 담당하는 서비스 워커
 // 네트워크 우선: 온라인이면 항상 최신 파일, 인터넷이 끊기면 마지막으로 받은 파일로 실행
-const CACHE = 'ebw-v1';
+const CACHE = 'uon2-games-v1';
+
+// index.html은 호스팅에서 폴더 주소로 리다이렉트될 수 있어 폴더 주소('./', 'english/')로만 캐시
 const CORE = [
   './',
-  'index.html',
   'manifest.webmanifest',
-  'css/style.css',
-  'js/data.js',
-  'js/audio.js',
-  'js/textures.js',
-  'js/app.js',
   'icons/icon-192.png',
   'icons/icon-512.png',
+  'english/',
+  'english/css/style.css',
+  'english/js/data.js',
+  'english/js/audio.js',
+  'english/js/textures.js',
+  'english/js/app.js',
 ];
 
 self.addEventListener('install', event => {
@@ -37,7 +40,7 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     fetch(req)
       .then(res => {
-        if (res.ok || res.type === 'opaque') {
+        if ((res.ok && !res.redirected) || res.type === 'opaque') {
           const copy = res.clone();
           caches.open(CACHE).then(cache => cache.put(req, copy));
         }

@@ -78,6 +78,7 @@ input { -webkit-user-select: text; user-select: text; }
 .btn.green:active { box-shadow: inset 4px 4px 0 #2a6420, inset -4px -4px 0 #6fc257; }
 .btn.big { font-size: clamp(24px, 4.2vmin, 40px); padding: 0.55em 1.6em; }
 .btn.icon { padding: 0.25em 0.45em; font-size: clamp(26px, 4vmin, 38px); }
+a.btn { display: inline-block; text-decoration: none; }
 
 .panel {
   background: #c6c6c6;

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#1b1b22">
+  <title>영어 블록 월드</title>
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../icons/icon-192.png">
+  <link rel="apple-touch-icon" href="../icons/icon-180.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/galmuri.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 시작 화면 -->
+  <section id="screen-start" class="screen sky">
+    <div class="cloud c1"></div><div class="cloud c2"></div>
+    <div class="title-wrap">
+      <div class="logo-blocks" id="logo-blocks"></div>
+      <h1 class="logo">영어 블록 월드</h1>
+      <p class="sub">알파벳 블록을 캐러 가요! ⛏️</p>
+      <button class="btn green big" id="start-btn">▶ 시작하기</button>
+    </div>
+    <div class="ground"></div>
+  </section>
+
+  <!-- 캐릭터 선택 -->
+  <section id="screen-profile" class="screen sky" hidden>
+    <div class="cloud c1"></div>
+    <div class="panel profile-panel">
+      <h2>나의 광부를 골라요</h2>
+      <div class="avatar-grid" id="avatar-grid"></div>
+      <label class="name-label">이름
+        <input id="name-input" maxlength="8" placeholder="이름을 써요" autocomplete="off">
+      </label>
+      <button class="btn green big" id="profile-ok">확인</button>
+    </div>
+    <div class="ground"></div>
+  </section>
+
+  <!-- 광산 지도 -->
+  <section id="screen-map" class="screen sky" hidden>
+    <div class="cloud c1"></div><div class="cloud c2"></div>
+    <header class="topbar">
+      <div class="who"><span id="map-avatar"></span><b id="map-name"></b></div>
+      <div class="row">
+        <a class="btn icon" href="../" aria-label="게임 목록">🎮</a>
+        <button class="btn" id="bag-btn">🎒 창고</button>
+        <button class="btn icon" id="settings-btn" aria-label="설정">⚙️</button>
+      </div>
+    </header>
+    <p class="msg" id="map-msg">어느 광산으로 갈까요?</p>
+    <div class="stage-list" id="stage-list"></div>
+    <div class="ground"></div>
+  </section>
+
+  <!-- 알파벳 광산 (게임) -->
+  <section id="screen-mine" class="screen cave" hidden>
+    <header class="topbar">
+      <button class="btn icon" id="mine-home" aria-label="지도로">🏠</button>
+      <div class="pips" id="pips"></div>
+      <div class="bag" id="bag">🎒 <span id="bag-count">0</span></div>
+    </header>
+    <div class="mine-head">
+      <button class="btn listen" id="listen-btn">🔊 다시 듣기</button>
+      <p class="msg" id="mine-msg"></p>
+    </div>
+    <div class="board" id="board"></div>
+  </section>
+
+  <!-- 결과 -->
+  <section id="screen-result" class="screen cave" hidden>
+    <div class="panel result-panel">
+      <h2 id="result-title"></h2>
+      <div class="mined-row" id="mined-row"></div>
+      <p class="unlock" id="result-unlock"></p>
+      <div class="row">
+        <button class="btn" id="again-btn">⛏️ 한 번 더</button>
+        <button class="btn green" id="tomap-btn">🗺️ 광산 지도</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 블록 창고 -->
+  <section id="screen-bag" class="screen cave" hidden>
+    <header class="topbar">
+      <button class="btn icon" id="bag-back" aria-label="뒤로">⬅️</button>
+      <h2 class="bag-title">🎒 블록 창고</h2>
+      <span class="spacer"></span>
+    </header>
+    <p class="msg">블록을 누르면 소리를 들을 수 있어요</p>
+    <div class="bag-grid" id="bag-grid"></div>
+  </section>
+
+  <!-- 설정 -->
+  <section id="screen-settings" class="screen cave" hidden>
+    <header class="topbar">
+      <button class="btn icon" id="settings-back" aria-label="뒤로">⬅️</button>
+      <h2 class="bag-title">⚙️ 설정</h2>
+      <span class="spacer"></span>
+    </header>
+    <div class="settings-body">
+      <div class="panel settings-panel">
+        <h3>🔊 소리</h3>
+        <p class="hint">미리 만들어 둔 영어 발음 파일로 읽어요. 소리가 안 나면 기기 음량을 확인해 주세요.</p>
+        <div class="row">
+          <button class="btn" id="sound-test">▶ 소리 테스트</button>
+        </div>
+        <h3>🙂 캐릭터</h3>
+        <div class="row">
+          <button class="btn" id="change-avatar">캐릭터 바꾸기</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 단어 카드 / 효과 레이어 -->
+  <div id="word-card" class="word-card" hidden>
+    <div class="wc-emoji" id="wc-emoji"></div>
+    <div class="wc-text"><span class="wc-letter" id="wc-letter"></span><span class="wc-word" id="wc-word"></span></div>
+  </div>
+  <div id="fx"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/textures.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // 허브 전체를 담당하는 서비스 워커를 등록 (HTTPS 또는 localhost에서만 동작)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('../sw.js', { scope: '../' }).catch(() => {}));
+    }
+  </script>
+</body>
+</html>

@@ -4,127 +4,123 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#1b1b22">
-  <title>영어 블록 월드</title>
+  <title>블록 게임방</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/galmuri.css">
-  <link rel="stylesheet" href="css/style.css">
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: linear-gradient(#6fb6ff, #b5ddff);
+      color: #fff;
+      font-family: 'Galmuri11', system-ui, sans-serif;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .hub {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(8px, 2vmin, 20px);
+      padding: 16px 16px 16vh;
+      text-align: center;
+    }
+
+    .logo {
+      margin: 0;
+      font-family: 'Galmuri14', 'Galmuri11', system-ui, sans-serif;
+      font-size: clamp(40px, 8vmin, 88px);
+      text-shadow: 5px 5px 0 #3a3a3a, 9px 9px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .sub {
+      margin: 0 0 0.6em;
+      font-size: clamp(20px, 3.4vmin, 34px);
+      text-shadow: 2px 2px 0 #245;
+    }
+
+    .games {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(12px, 3vmin, 28px);
+      justify-content: center;
+    }
+
+    .game {
+      width: clamp(200px, 30vmin, 280px);
+      padding: 18px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: #c6c6c6;
+      color: #3a3a3a;
+      text-decoration: none;
+      border: 4px solid #111;
+      box-shadow: inset -5px -5px 0 #555, inset 5px 5px 0 #fff;
+    }
+    a.game:active { transform: translateY(3px); }
+
+    .game img,
+    .game .soon-icon {
+      width: clamp(80px, 12vmin, 120px);
+      height: clamp(80px, 12vmin, 120px);
+      border: 3px solid #111;
+      image-rendering: pixelated;
+    }
+    .game .soon-icon {
+      display: grid;
+      place-items: center;
+      background: #6a6a6a;
+      font-size: clamp(36px, 6vmin, 56px);
+    }
+
+    .game b, .game span { word-break: keep-all; }
+    .game b { font-size: clamp(20px, 3vmin, 28px); }
+    .game span { font-size: clamp(15px, 2.2vmin, 20px); }
+    .game.soon { filter: grayscale(0.7) brightness(0.85); }
+
+    .ground {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      height: 14vh;
+      background:
+        linear-gradient(#5fa83b, #5fa83b) top / 100% 18px no-repeat,
+        repeating-conic-gradient(#79553a 0 25%, #6c4a31 0 50%) 0 0 / 24px 24px;
+      border-top: 4px solid rgba(0, 0, 0, 0.25);
+    }
+  </style>
 </head>
 <body>
-
-  <!-- 시작 화면 -->
-  <section id="screen-start" class="screen sky">
-    <div class="cloud c1"></div><div class="cloud c2"></div>
-    <div class="title-wrap">
-      <div class="logo-blocks" id="logo-blocks"></div>
-      <h1 class="logo">영어 블록 월드</h1>
-      <p class="sub">알파벳 블록을 캐러 가요! ⛏️</p>
-      <button class="btn green big" id="start-btn">▶ 시작하기</button>
-    </div>
-    <div class="ground"></div>
-  </section>
-
-  <!-- 캐릭터 선택 -->
-  <section id="screen-profile" class="screen sky" hidden>
-    <div class="cloud c1"></div>
-    <div class="panel profile-panel">
-      <h2>나의 광부를 골라요</h2>
-      <div class="avatar-grid" id="avatar-grid"></div>
-      <label class="name-label">이름
-        <input id="name-input" maxlength="8" placeholder="이름을 써요" autocomplete="off">
-      </label>
-      <button class="btn green big" id="profile-ok">확인</button>
-    </div>
-    <div class="ground"></div>
-  </section>
-
-  <!-- 광산 지도 -->
-  <section id="screen-map" class="screen sky" hidden>
-    <div class="cloud c1"></div><div class="cloud c2"></div>
-    <header class="topbar">
-      <div class="who"><span id="map-avatar"></span><b id="map-name"></b></div>
-      <div class="row">
-        <button class="btn" id="bag-btn">🎒 창고</button>
-        <button class="btn icon" id="settings-btn" aria-label="설정">⚙️</button>
-      </div>
-    </header>
-    <p class="msg" id="map-msg">어느 광산으로 갈까요?</p>
-    <div class="stage-list" id="stage-list"></div>
-    <div class="ground"></div>
-  </section>
-
-  <!-- 알파벳 광산 (게임) -->
-  <section id="screen-mine" class="screen cave" hidden>
-    <header class="topbar">
-      <button class="btn icon" id="mine-home" aria-label="지도로">🏠</button>
-      <div class="pips" id="pips"></div>
-      <div class="bag" id="bag">🎒 <span id="bag-count">0</span></div>
-    </header>
-    <div class="mine-head">
-      <button class="btn listen" id="listen-btn">🔊 다시 듣기</button>
-      <p class="msg" id="mine-msg"></p>
-    </div>
-    <div class="board" id="board"></div>
-  </section>
-
-  <!-- 결과 -->
-  <section id="screen-result" class="screen cave" hidden>
-    <div class="panel result-panel">
-      <h2 id="result-title"></h2>
-      <div class="mined-row" id="mined-row"></div>
-      <p class="unlock" id="result-unlock"></p>
-      <div class="row">
-        <button class="btn" id="again-btn">⛏️ 한 번 더</button>
-        <button class="btn green" id="tomap-btn">🗺️ 광산 지도</button>
+  <main class="hub">
+    <h1 class="logo">블록 게임방</h1>
+    <p class="sub">어떤 게임을 할까요?</p>
+    <div class="games">
+      <a class="game" href="english/">
+        <img src="icons/icon-192.png" alt="">
+        <b>영어 블록 월드</b>
+        <span>알파벳 블록 캐기</span>
+      </a>
+      <div class="game soon" aria-disabled="true">
+        <div class="soon-icon">🔒</div>
+        <b>새 게임</b>
+        <span>준비 중이에요</span>
       </div>
     </div>
-  </section>
+  </main>
+  <div class="ground"></div>
 
-  <!-- 블록 창고 -->
-  <section id="screen-bag" class="screen cave" hidden>
-    <header class="topbar">
-      <button class="btn icon" id="bag-back" aria-label="뒤로">⬅️</button>
-      <h2 class="bag-title">🎒 블록 창고</h2>
-      <span class="spacer"></span>
-    </header>
-    <p class="msg">블록을 누르면 소리를 들을 수 있어요</p>
-    <div class="bag-grid" id="bag-grid"></div>
-  </section>
-
-  <!-- 설정 -->
-  <section id="screen-settings" class="screen cave" hidden>
-    <header class="topbar">
-      <button class="btn icon" id="settings-back" aria-label="뒤로">⬅️</button>
-      <h2 class="bag-title">⚙️ 설정</h2>
-      <span class="spacer"></span>
-    </header>
-    <div class="settings-body">
-      <div class="panel settings-panel">
-        <h3>🔊 소리</h3>
-        <p class="hint">미리 만들어 둔 영어 발음 파일로 읽어요. 소리가 안 나면 기기 음량을 확인해 주세요.</p>
-        <div class="row">
-          <button class="btn" id="sound-test">▶ 소리 테스트</button>
-        </div>
-        <h3>🙂 캐릭터</h3>
-        <div class="row">
-          <button class="btn" id="change-avatar">캐릭터 바꾸기</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 단어 카드 / 효과 레이어 -->
-  <div id="word-card" class="word-card" hidden>
-    <div class="wc-emoji" id="wc-emoji"></div>
-    <div class="wc-text"><span class="wc-letter" id="wc-letter"></span><span class="wc-word" id="wc-word"></span></div>
-  </div>
-  <div id="fx"></div>
-
-  <script src="js/data.js"></script>
-  <script src="js/audio.js"></script>
-  <script src="js/textures.js"></script>
-  <script src="js/app.js"></script>
   <script>
     // 홈 화면 설치와 오프라인 실행을 위한 서비스 워커 (HTTPS 또는 localhost에서만 동작)
     if ('serviceWorker' in navigator) {
