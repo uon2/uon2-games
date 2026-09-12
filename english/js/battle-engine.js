@@ -20,10 +20,10 @@ class AdventureEngine {
     for (let i = 0; i < count; i++) {
       const boss = this.phase === 'boss';
       this.enemies.push({ x: 580 + this.rng() * 250, y: 90 + this.rng() * 330,
-        hp: boss ? 10 + this.stage.id * 2 : 2 + (this.stage.id >= 4 ? 1 : 0),
-        maxHP: boss ? 10 + this.stage.id * 2 : 2 + (this.stage.id >= 4 ? 1 : 0),
-        speed: boss ? 28 : 30 + this.stage.id * 5 + this.rng() * 12,
-        boss, windup: 0, cooldown: boss ? 2.8 : 0, target: null, flash: 0,
+        hp: boss ? 18 + this.stage.id * 4 : 2 + (this.stage.id >= 4 ? 1 : 0),
+        maxHP: boss ? 18 + this.stage.id * 4 : 2 + (this.stage.id >= 4 ? 1 : 0),
+        speed: boss ? 46 : 44 + this.stage.id * 7 + this.rng() * 16,
+        boss, windup: 0, cooldown: boss ? 1.8 : 0, target: null, flash: 0, recoil: 0,
         color: ['#65cfaf', '#bc98e8', '#f1ac7b'][i % 3], dead: false });
     }
     this.emit(this.phase === 'boss' ? 'boss' : 'wave', { wave: this.wave });
@@ -32,7 +32,8 @@ class AdventureEngine {
   attack() {
     if (!['fight', 'boss'].includes(this.phase) || this.player.attackCD > 0) return false;
     this.player.attackCD = 0.42; this.player.swing = 0.2;
-    const target = this.enemies.filter(e => !e.dead && Math.hypot(e.x - this.player.x, e.y - this.player.y) < (e.boss ? 110 : 92))
+    // 검 사거리를 좁혀서 바짝 붙어야 벨 수 있게 한다 (서서 휘두르기만 하면 안 되도록)
+    const target = this.enemies.filter(e => !e.dead && Math.hypot(e.x - this.player.x, e.y - this.player.y) < (e.boss ? 78 : 60))
       .sort((a, b) => Math.hypot(a.x-this.player.x, a.y-this.player.y) - Math.hypot(b.x-this.player.x,b.y-this.player.y))[0];
     if (target) {
       this.player.facing = target.x >= this.player.x ? 1 : -1;
@@ -50,9 +51,11 @@ class AdventureEngine {
     if (e.dead) return;
     e.hp -= damage; e.flash = 0.16;
     const dx = e.x - this.player.x, dy = e.y - this.player.y, len = Math.hypot(dx,dy) || 1;
-    if (!e.boss) { e.x = Math.max(30, Math.min(870, e.x + dx/len*18)); e.y = Math.max(45, Math.min(475,e.y+dy/len*18)); }
+    // 넉백을 짧게: 사거리를 좁혔기 때문에 크게 밀려나면 이어서 벨 수 없다
+    if (!e.boss) { e.x = Math.max(30, Math.min(870, e.x + dx/len*6)); e.y = Math.max(45, Math.min(475,e.y+dy/len*6)); }
     this.effects.push({ x:e.x, y:e.y-25, text:'−'+damage, ttl:0.5 });
     this.emit('hit');
+    if (!e.boss) e.recoil = 0.18; // 맞으면 잠깐 주춤했다가 더 빠르게 달려든다
     if (e.hp <= 0) {
       e.dead = true; this.kills++;
       this.drops.push({ x:e.x, y:e.y, kind:'gem' });
@@ -111,14 +114,23 @@ class AdventureEngine {
           if (e.windup <= 0) {
             this.effects.push({ x:e.target.x,y:e.target.y,text:'💥',ttl:0.4 });
             if (Math.hypot(p.x-e.target.x,p.y-e.target.y)<105) this.hurt();
-            e.target = null; e.cooldown = 2.6;
+            e.target = null; e.cooldown = 1.7;
           }
           continue;
         }
         if (e.cooldown <= 0) { e.windup=1.15; e.target={x:p.x,y:p.y}; this.emit('warning'); continue; }
       }
       const ex=p.x-e.x, ey=p.y-e.y, distance=Math.hypot(ex,ey)||1;
-      if (distance > 26) { e.x+=ex/distance*e.speed*dt; e.y+=ey/distance*e.speed*dt; }
+      if (e.recoil > 0) {
+        // 맞은 직후 제자리에서 잠깐 멈칫한다 (넉백으로 이미 밀려나 있으므로 더 물러나지는 않는다)
+        e.recoil = Math.max(0, e.recoil - dt);
+        if (e.recoil === 0) e.lunge = 1.1; // 멈칫이 끝나면 더 빠르게 달려든다
+        continue;
+      }
+      // 물러났다 돌아올 때는 훨씬 빠르게 달려든다 (서서 기다리는 전법 차단)
+      const rush = e.lunge > 0 ? 1.7 : 1;
+      if (e.lunge > 0) e.lunge = Math.max(0, e.lunge - dt);
+      if (distance > 26) { e.x+=ex/distance*e.speed*rush*dt; e.y+=ey/distance*e.speed*rush*dt; }
       if (distance < (e.boss ? 45 : 30)) this.hurt();
     }
     this.enemies=this.enemies.filter(e=>!e.dead);
