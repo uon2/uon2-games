@@ -118,6 +118,7 @@ test('new adventure respects paid and progression gates; existing save and compa
 test('treasure completion grants one charge, records help correctly, and advances exactly once',()=>{
   const u=ui();u.run('startBattle(BATTLE_STAGES[0]); battle.engine.enemies.forEach(e=>battle.engine.hitEnemy(e,99)); battle.engine.update(.01); battle.engine.player.x=450; battle.engine.player.y=260; openForge();');
   assert.equal(u.nodes['#adventure-forge'].hidden,false);assert.equal(u.run('battle.paused'),true);
+  u.run("chooseForgeWord('cat')");
   u.nodes['#forge-hint'].listeners.click();
   u.run("battle.slots=['c','a','t']; checkForge();");
   assert.equal(u.save.battle.words.cat.helped,1);assert.equal(u.nodes['#forge-leave'].hidden,false);

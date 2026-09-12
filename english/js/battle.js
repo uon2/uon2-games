@@ -204,25 +204,58 @@ function renderAdventure() {
   });
 }
 
+// 보물에서 고를 낱말 3개: 도감에 아직 없는 낱말을 먼저 보여 준다
+function forgeCandidates() {
+  const made=(save.craft&&save.craft.made)||{};
+  const tierMax=battle.engine.stage.id>=3?2:1;
+  const pool=RECIPES.filter(r=>r.tier<=tierMax);
+  const fresh=shuffle(pool.filter(r=>!made[r.word]));
+  const owned=shuffle(pool.filter(r=>made[r.word]));
+  return [...fresh,...owned].slice(0,3);
+}
+
 function openForge() {
   const g=battle.engine;
   if(!battle.running || g.phase!=='chest' || Math.hypot(g.player.x-450,g.player.y-260)>105) return;
   battle.paused=true; stopInput();
-  // 보물에서 완성하는 낱말은 '작업대에서 만든 낱말' 중에서 고름 (광산 → 작업대 → 모험)
-  const made=Object.keys((save.craft&&save.craft.made)||{}).filter(w=>RECIPES.some(r=>r.word===w));
-  const words=made.length?made:['cat','bed'];
-  battle.forgeWord=RECIPES.find(r=>r.word===words[(g.wave-1)%words.length]);
-  battle.forgeFailed=false; battle.forgeComplete=false;
-  const r=battle.forgeWord;
+  battle.forgeWord=null; battle.forgeFailed=false; battle.forgeComplete=false;
+  battle.slots=[]; battle.bank=[]; battle.fixed=[];
+  $('#forge-emoji').textContent='🎁';
+  $('#forge-title').textContent='어떤 보물을 열까요?';
+  $('#forge-message').textContent='새 낱말을 고르면 도감에도 모여요!';
+  $('#forge-leave').hidden=true; $('#forge-bank').hidden=true;
+  $('#adventure-forge').hidden=false;
+  renderForgeChoices();
+}
+
+function renderForgeChoices() {
+  const made=(save.craft&&save.craft.made)||{};
+  $('#forge-slots').replaceChildren();
+  $('#forge-choices').replaceChildren(...forgeCandidates().map(r=>{
+    const isNew=!made[r.word];
+    const effect=({cat:'🐱 모두 공격',bed:'🛏️ 하트 회복',dog:'🛡️ 2번 보호'})[AdventureEngine.spellOf(r.word)];
+    const b=document.createElement('button');
+    b.className='forge-choice'+(isNew?' fresh':'');
+    b.innerHTML=`<span class="fc-emoji">${r.emoji}</span><span class="fc-ko">${r.ko}</span>`
+      +`<span class="fc-effect">${effect}</span><span class="fc-tag">${isNew?'✨ 새 낱말':'📖 도감에 있음'}</span>`;
+    b.addEventListener('click',()=>{ sfx.click(); chooseForgeWord(r.word); });
+    return b;
+  }));
+}
+
+function chooseForgeWord(word) {
+  const g=battle.engine, r=RECIPES.find(x=>x.word===word);
+  if(!g || !r) return;
+  battle.forgeWord=r; battle.forgeFailed=false; battle.forgeComplete=false;
   const fixedCount=g.stage.id===1?2:g.stage.id===2?1:0;
   battle.fixed=shuffle([0,1,2]).slice(0,fixedCount);
   battle.slots=r.word.split('').map((ch,i)=>battle.fixed.includes(i)?ch:null);
   battle.bank=shuffle([...r.word.split('').filter((_,i)=>!battle.fixed.includes(i)),...shuffle(['a','b','c','d','e','g','o','t'].filter(ch=>!r.word.includes(ch))).slice(0,3)]);
+  $('#forge-choices').replaceChildren();
   $('#forge-emoji').textContent=r.emoji;
-  $('#forge-title').textContent=({cat:'고양이를 동료로 불러요',bed:'침대의 회복 마법을 열어요',dog:'강아지의 보호 마법을 열어요'})[r.word]||`${r.ko}의 마법을 열어요`;
-  $('#forge-message').textContent='작업대에서 만든 낱말이에요. 빈칸을 채우면 마법이 돼요!';
+  $('#forge-title').textContent=`${r.ko}의 마법을 열어요`;
+  $('#forge-message').textContent='빈칸을 채우면 마법이 되고 도감에도 들어가요!';
   $('#forge-leave').hidden=true; $('#forge-bank').hidden=false;
-  $('#adventure-forge').hidden=false;
   renderForge(); speech.say(r.word);
 }
 function renderForge() {
@@ -251,10 +284,16 @@ function checkForge() {
   }
   battle.forgeComplete=true;
   battle.words.push(r.word);
+  // 도감에 없던 낱말이면 모험에서 새로 획득 → 도감과 내 방 아이템에 추가
+  const cs=(save.craft=save.craft||{total:0,made:{}});
+  cs.made=cs.made||{};
+  if(!cs.made[r.word]) { cs.made[r.word]=1; cs.total=(cs.total||0)+1; battle.forgeNew=true; }
+  else battle.forgeNew=false;
   const bs=battleSave(); bs.words ||= {}; const stat=bs.words[r.word] ||= {ok:0,helped:0};
   stat[battle.forgeFailed?'helped':'ok']++; persist();
   const spell=AdventureEngine.spellOf(r.word);
-  $('#forge-message').textContent=`${r.word} 완성! `+({cat:'🐱 버튼으로 몬스터를 한꺼번에 공격해요.',bed:'🛏️ 버튼으로 하트를 회복해요.',dog:'🐶 버튼으로 두 번 보호받아요.'})[spell];
+  $('#forge-message').textContent=(battle.forgeNew?`✨ ${r.word} 새 낱말을 도감에 모았어요! `:`${r.word} 완성! `)
+    +({cat:'🐱 버튼으로 몬스터를 한꺼번에 공격해요.',bed:'🛏️ 버튼으로 하트를 회복해요.',dog:'🐶 버튼으로 두 번 보호받아요.'})[spell];
   $('#forge-leave').hidden=false; $('#forge-bank').hidden=true;
   renderForge(); sfx.pop(); speech.say(r.word);
 }

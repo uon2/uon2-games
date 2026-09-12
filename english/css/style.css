@@ -732,6 +732,35 @@ a.btn { display: inline-block; text-decoration: none; }
 .theme-dot[data-theme="sunset"] { background: #ffc9a0; }
 .theme-dot[data-theme="wood"]   { background: #e3cdaa; }
 
+/* 보물 상자에서 낱말 고르기 */
+.forge-choices {
+  display: flex;
+  gap: clamp(6px, 1.4vmin, 14px);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 6px 0 10px;
+}
+.forge-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: clamp(96px, 15vmin, 140px);
+  padding: 8px 6px;
+  background: #fffdf7;
+  color: #4b3a2a;
+  border: 4px solid #6b4a2f;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.forge-choice:active { transform: translateY(2px); }
+.forge-choice.fresh { background: #fff2c2; box-shadow: 0 0 0 3px #ffd23f inset; }
+.fc-emoji { font-size: clamp(28px, 5vmin, 46px); line-height: 1.1; }
+.fc-ko { font-size: clamp(15px, 2.2vmin, 20px); font-weight: 700; }
+.fc-effect { font-size: clamp(11px, 1.7vmin, 15px); }
+.fc-tag { font-size: clamp(11px, 1.7vmin, 15px); color: #8a6a3f; }
+.forge-choice.fresh .fc-tag { color: #b8551d; font-weight: 700; }
+
 /* 도감의 모험 효과 배지 */
 .book-effect {
   margin-top: 4px;
