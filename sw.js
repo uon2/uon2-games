@@ -18,6 +18,7 @@ const CORE = [
   'english/js/app.js',
   'english/js/craft.js',
   'english/js/room.js',
+  'english/js/battle.js',
 ];
 
 self.addEventListener('install', event => {

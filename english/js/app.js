@@ -366,6 +366,26 @@ function goMap() {
   roomCard.addEventListener('click', () => { sfx.click(); goRoom(); });
   list.appendChild(roomCard);
 
+  // 밤의 방어전 (광산을 한 번 다녀와야 열림)
+  const nightLocked = !Object.keys(save.clears).length;
+  const nightCard = document.createElement('button');
+  nightCard.className = 'stage' + (nightLocked ? ' locked' : '');
+  nightCard.innerHTML = `
+    <div class="stage-icon night-icon">${nightLocked ? '🔒' : '🌙'}</div>
+    <div class="stage-name">밤의 방어전</div>
+    <div class="stage-letters">몬스터 물리치기</div>
+    ${(save.battle && save.battle.stars) ? `<div class="stage-badge">⭐ ${save.battle.stars}</div>` : ''}`;
+  nightCard.addEventListener('click', () => {
+    if (nightLocked) {
+      sfx.bonk();
+      $('#map-msg').textContent = '먼저 풀밭 광산을 한 번 다녀와요! ⛏️';
+      return;
+    }
+    sfx.click();
+    goNights();
+  });
+  list.appendChild(nightCard);
+
   show('screen-map');
 }
 

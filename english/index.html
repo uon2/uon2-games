@@ -160,6 +160,78 @@
     <div class="book-grid" id="book-grid"></div>
   </section>
 
+  <!-- 밤 고르기 -->
+  <section id="screen-nights" class="screen night" hidden>
+    <header class="topbar">
+      <button class="btn icon" id="nights-back" aria-label="지도로">⬅️</button>
+      <h2 class="bag-title">🌙 밤의 방어전</h2>
+      <div class="bag">⭐ <span id="nights-stars">0</span></div>
+    </header>
+    <p class="msg" id="nights-msg">어느 밤을 지킬까요?</p>
+    <div class="stage-list" id="night-list"></div>
+  </section>
+
+  <!-- 전투 -->
+  <section id="screen-battle" class="screen night" hidden>
+    <header class="topbar">
+      <button class="btn icon" id="battle-quit" aria-label="그만두기">🏠</button>
+      <div class="hearts" id="hearts"></div>
+      <div class="row">
+        <div class="bag">⭐ <span id="battle-stars">0</span></div>
+        <div class="bag">🔥 <span id="battle-combo">0</span></div>
+      </div>
+    </header>
+    <div class="battle-head">
+      <button class="btn listen" id="battle-listen">🔊 다시 듣기</button>
+      <p class="msg" id="battle-msg"></p>
+    </div>
+    <div class="field" id="field">
+      <div class="gate" id="gate"></div>
+      <div class="hero" id="hero"></div>
+      <div class="pet" id="pet" hidden></div>
+    </div>
+  </section>
+
+  <!-- 전투 결과 -->
+  <section id="screen-battle-result" class="screen night" hidden>
+    <div class="panel result-panel">
+      <h2 id="br-title"></h2>
+      <p id="br-stats"></p>
+      <div class="mined-row" id="br-rewards"></div>
+      <p class="unlock" id="br-unlock"></p>
+      <div class="row">
+        <button class="btn" id="br-again">⚔️ 한 번 더</button>
+        <button class="btn green" id="br-back">🌙 밤 고르기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 잠긴 밤 -->
+  <section id="screen-locked" class="screen night" hidden>
+    <div class="panel result-panel">
+      <h2 id="locked-title">🔒 잠긴 밤</h2>
+      <p>이 밤은 아직 잠겨 있어요.<br>부모님과 함께 열 수 있어요.</p>
+      <div class="row">
+        <button class="btn green" id="locked-parent">🔓 부모님과 열기</button>
+        <button class="btn" id="locked-back">⬅️ 돌아가기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 부모님 확인 -->
+  <div id="screen-gate" class="overlay" hidden>
+    <div class="panel">
+      <h2>부모님 확인</h2>
+      <p class="hint" id="gate-msg">계속하려면 문제를 풀어 주세요</p>
+      <p class="gate-q" id="gate-q"></p>
+      <input id="gate-input" inputmode="numeric" maxlength="4" autocomplete="off">
+      <div class="row">
+        <button class="btn green" id="gate-ok">확인</button>
+        <button class="btn" id="gate-cancel">취소</button>
+      </div>
+    </div>
+  </div>
+
   <!-- 내 방 -->
   <section id="screen-room" class="screen room-screen" hidden>
     <header class="topbar">
@@ -185,6 +257,7 @@
   <script src="js/app.js"></script>
   <script src="js/craft.js"></script>
   <script src="js/room.js"></script>
+  <script src="js/battle.js"></script>
   <script>
     // 허브 전체를 담당하는 서비스 워커를 등록 (HTTPS 또는 localhost에서만 동작)
     if ('serviceWorker' in navigator) {
