@@ -237,6 +237,7 @@ async function onBlockTap(cell) {
   sfx.hit();
   cell.el.classList.add('hit');
   await sleep(160);
+  if (sess !== mine.session) return;
   sfx.pop();
   burst(cell.el);
   flyToBag(cell.el, letter);
@@ -307,7 +308,7 @@ function goMap() {
   who.innerHTML = '';
   who.appendChild(avatarEl(save.profile.avatar, 48));
   $('#map-name').textContent = save.profile.name;
-  $('#map-msg').textContent = `${save.profile.name}, 어느 광산으로 갈까요?`;
+  $('#map-msg').textContent = `${save.profile.name}, 어디로 모험을 떠날까요?`;
 
   const list = $('#stage-list');
   list.innerHTML = '';
@@ -366,25 +367,19 @@ function goMap() {
   roomCard.addEventListener('click', () => { sfx.click(); goRoom(); });
   list.appendChild(roomCard);
 
-  // 밤의 방어전 (광산을 한 번 다녀와야 열림)
-  const nightLocked = !Object.keys(save.clears).length;
+  // 액션 모험은 처음부터 체험할 수 있음
   const nightCard = document.createElement('button');
-  nightCard.className = 'stage' + (nightLocked ? ' locked' : '');
+  nightCard.className = 'stage';
   nightCard.innerHTML = `
-    <div class="stage-icon night-icon">${nightLocked ? '🔒' : '🌙'}</div>
-    <div class="stage-name">밤의 방어전</div>
-    <div class="stage-letters">몬스터 물리치기</div>
+    <div class="stage-icon night-icon">⚔️</div>
+    <div class="stage-name">숲속 모험</div>
+    <div class="stage-letters">이동 · 검 · 보물 마법</div>
     ${(save.battle && save.battle.stars) ? `<div class="stage-badge">⭐ ${save.battle.stars}</div>` : ''}`;
   nightCard.addEventListener('click', () => {
-    if (nightLocked) {
-      sfx.bonk();
-      $('#map-msg').textContent = '먼저 풀밭 광산을 한 번 다녀와요! ⛏️';
-      return;
-    }
     sfx.click();
     goNights();
   });
-  list.appendChild(nightCard);
+  list.prepend(nightCard);
 
   show('screen-map');
 }

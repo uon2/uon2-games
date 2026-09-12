@@ -96,7 +96,7 @@ function buildTray() {
 }
 
 async function nextOrder() {
-  const sess = craft.session;
+  const sess = ++craft.session;
   const recipe = pickOrder();
   if (!recipe) return showShortage();
 
@@ -215,11 +215,12 @@ async function checkWord() {
   const cs = craftSave();
   cs.made[recipe.word] = (cs.made[recipe.word] || 0) + 1;
   cs.total++;
-  const unlockedNow = Object.keys(cs.made).length === 4;
+  const unlockedNow = Object.keys(cs.made).length === 4 && cs.made[recipe.word] === 1;
   persist();
 
   sfx.hit();
   await sleep(150);
+  if (sess !== craft.session) return;
   sfx.fanfare();
   updateCraftBag();
   setCraftMsg(`${recipe.ko} 완성! 🎉 내 방에 놓아 보세요`);
@@ -267,6 +268,9 @@ async function speakSlow() {
 
 // ---------- 도감 ----------
 function goBook() {
+  craft.session++;
+  craft.locked = true;
+  hideWordCard();
   const grid = $('#book-grid');
   grid.innerHTML = '';
   RECIPES.forEach(r => {
@@ -308,7 +312,7 @@ function leaveCraft() {
 function initCraft() {
   $('#craft-home').addEventListener('click', () => { sfx.click(); leaveCraft(); });
   $('#craft-book').addEventListener('click', () => { sfx.click(); speech.stop(); goBook(); });
-  $('#book-back').addEventListener('click', () => { sfx.click(); speech.stop(); show('screen-craft'); });
+  $('#book-back').addEventListener('click', () => { sfx.click(); speech.stop(); goCraft(); });
   $('#craft-listen').addEventListener('click', () => { if (craft.order && !craft.locked) speech.say(craft.order.word); });
   $('#craft-slow').addEventListener('click', () => { if (craft.order && !craft.locked) speakSlow(); });
   $('#shortage-mine').addEventListener('click', () => { sfx.click(); leaveCraft(); });

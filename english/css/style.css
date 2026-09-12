@@ -701,3 +701,51 @@ a.btn { display: inline-block; text-decoration: none; }
 .book-emoji { font-size: clamp(32px, 5vmin, 52px); line-height: 1.1; }
 .book-word { font-size: clamp(18px, 2.6vmin, 26px); font-weight: 700; letter-spacing: 0.05em; }
 .book-ko { font-size: clamp(14px, 2vmin, 19px); }
+
+
+/* Action adventure: full arena, multi-touch controls, and a quiet word-forge break. */
+.battle-status { text-align:center; color:#bbe2d9; font-size:clamp(13px,2vmin,18px); }
+.adventure-top { flex-wrap:wrap; gap:6px; }
+.adventure-hearts { font:20px system-ui,sans-serif; letter-spacing:1px; }
+#adventure-level { font:700 18px system-ui,sans-serif; color:#ffe299; }
+.adventure-note { text-align:center; margin:4px 10px; font-size:clamp(13px,2vmin,18px); min-height:1.4em; }
+.adventure-world { flex:1; min-height:0; position:relative; margin:4px 12px; background:#11242a; border:3px solid #3b6564; border-radius:12px; overflow:hidden; }
+#adventure-canvas { display:block; width:100%; height:100%; object-fit:contain; }
+#adventure-open { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); }
+.spell-row { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; padding:4px; }
+.spell-row .btn { font:700 clamp(13px,2vmin,18px) system-ui,sans-serif; padding:9px 12px; }
+.adventure-controls { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 18px 12px; }
+#adventure-help { flex:1; max-width:330px; font:14px/1.6 system-ui,sans-serif; color:#d0e4e2; }
+#adventure-stick { position:relative; flex:0 0 108px; height:108px; border:3px solid #709eaa; border-radius:50%; background:#234456; touch-action:none; user-select:none; }
+#adventure-stick span { position:absolute; top:7px; width:100%; text-align:center; font:13px system-ui; color:#aec4cf; }
+#stick-knob { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:44px; height:44px; border-radius:50%; background:#b2d8dd; border:4px solid #e5f4f4; pointer-events:none; }
+#adventure-attack { background:#bd602f; border-radius:22px; min-height:78px; min-width:94px; box-shadow:inset 0 -6px #743621; touch-action:none; }
+#adventure-dash { background:#315b8e; border-radius:18px; min-height:62px; min-width:90px; }
+button:disabled { opacity:.5; cursor:default; }
+button:focus-visible { outline:3px solid #ffe18a; outline-offset:3px; }
+.boss-panel { display:flex; align-items:center; justify-content:center; gap:12px; padding:3px 12px; background:#382253; }
+.boss-panel progress { max-width:35vw; height:15px; accent-color:#e79ac8; }
+.forge-panel { width:min(92vw,620px); max-height:92vh; overflow-y:auto; text-align:center; }
+.forge-emoji { font-size:64px; }
+#forge-message { min-height:3em; font-family:system-ui,sans-serif; }
+#forge-slots { margin:20px 0; }
+.forge-slot { width:70px; height:76px; background:#263a46; border:3px solid #91dfce; font:700 44px system-ui,sans-serif; border-radius:8px; }
+.forge-slot.fixed { opacity:.7; }
+#forge-bank .btn { font:700 30px system-ui,sans-serif; min-width:58px; }
+#forge-leave { margin-top:15px; }
+#screen-battle-result { overflow-y:auto; }
+#screen-battle-result .result-panel { max-height:94vh; overflow-y:auto; }
+#battle-review { margin:12px auto; }
+.trophy-shelf { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; padding:8px; color:#ffe09d; font:14px system-ui,sans-serif; }
+.trophy-shelf span { padding:6px 10px; border:1px solid #a88b56; border-radius:8px; }
+@media (orientation:portrait) { #adventure-help { display:none; } }
+@media (max-height:600px) and (orientation:landscape) {
+  .adventure-top { padding:4px 12px; }
+  .adventure-controls { padding:2px 16px 6px; }
+  #adventure-stick { flex-basis:78px; height:78px; }
+  #adventure-attack { min-height:60px; }
+  #adventure-dash { min-height:50px; }
+  .adventure-note { font-size:13px; margin:2px; }
+  .spell-row .btn { padding:5px 10px; }
+}
+@media (prefers-reduced-motion:reduce) { .pet { animation:none; } }

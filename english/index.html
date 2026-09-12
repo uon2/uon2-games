@@ -164,34 +164,50 @@
   <section id="screen-nights" class="screen night" hidden>
     <header class="topbar">
       <button class="btn icon" id="nights-back" aria-label="지도로">⬅️</button>
-      <h2 class="bag-title">🌙 밤의 방어전</h2>
+      <h2 class="bag-title">⚔️ 숲속 모험</h2>
       <div class="bag">⭐ <span id="nights-stars">0</span></div>
     </header>
     <p class="msg" id="nights-msg">어느 밤을 지킬까요?</p>
     <div class="stage-list" id="night-list"></div>
   </section>
 
-  <!-- 전투 -->
+  <!-- 액션 탐험: 이동/검/회피와 보물 마법 -->
   <section id="screen-battle" class="screen night" hidden>
-    <header class="topbar">
-      <button class="btn icon" id="battle-quit" aria-label="그만두기">🏠</button>
-      <div class="hearts" id="hearts"></div>
-      <div class="row">
-        <div class="bag">⭐ <span id="battle-stars">0</span></div>
-        <div class="bag">🔥 <span id="battle-combo">0</span></div>
-      </div>
+    <header class="topbar adventure-top">
+      <button class="btn icon" id="battle-quit" aria-label="탐험 메뉴">🏠</button>
+      <div id="hearts" class="adventure-hearts" aria-label="남은 하트"></div>
+      <span id="adventure-level"></span>
+      <button class="btn" id="battle-pause">⏸ 쉬기</button>
     </header>
-    <div class="battle-head">
-      <button class="btn listen" id="battle-listen">🔊 다시 듣기</button>
-      <p class="msg" id="battle-msg"></p>
+    <div class="battle-status" id="battle-progress"></div>
+    <div id="boss-panel" class="boss-panel" hidden><span>👑 안개 대장</span><progress id="boss-health" max="12" value="12" aria-label="보스 체력"></progress></div>
+    <p id="adventure-note" class="adventure-note" aria-live="polite"></p>
+    <div class="adventure-world"><canvas id="adventure-canvas" width="900" height="520" aria-label="몬스터가 있는 숲. 이동 조이스틱 또는 방향키로 움직이고 공격과 대시 버튼을 사용하세요."></canvas>
+      <button class="btn green" id="adventure-open" hidden>🎁 보물 열기</button>
     </div>
-    <div class="field" id="field">
-      <div class="gate" id="gate"></div>
-      <div class="hero" id="hero"></div>
-      <div class="pet" id="pet" hidden></div>
+    <div class="spell-row"><button class="btn" id="spell-cat" disabled>🐱 cat 공격 ×0</button><button class="btn" id="spell-bed" disabled>🛏️ bed 회복 ×0</button><button class="btn" id="spell-dog" disabled>🐶 dog 보호 ×0</button></div>
+    <div class="adventure-controls">
+      <div id="adventure-stick" role="group" aria-label="이동 조이스틱"><span>이동</span><i id="stick-knob"></i></div>
+      <p id="adventure-help"></p>
+      <button class="btn" id="adventure-dash">💨 대시</button>
+      <button class="btn attack-button" id="adventure-attack">⚔️ 공격</button>
     </div>
   </section>
-
+  <div id="battle-pause-panel" class="overlay" hidden>
+    <div class="panel" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+      <h2 id="pause-title">잠깐 쉬어도 괜찮아요 🌙</h2><p>모험을 잠시 멈췄어요.</p>
+      <div class="row"><button class="btn green" id="battle-resume">▶ 이어하기</button><button class="btn" id="battle-exit">🌙 밤 고르기</button></div>
+    </div>
+  </div>
+  <div id="adventure-forge" class="overlay" hidden>
+    <div class="panel forge-panel" role="dialog" aria-modal="true" aria-labelledby="forge-title">
+      <div id="forge-emoji" class="forge-emoji"></div><h2 id="forge-title"></h2>
+      <p id="forge-message" aria-live="polite"></p>
+      <div class="row"><button class="btn" id="forge-listen">🔊 낱말 듣기</button><button class="btn" id="forge-hint">💡 낱말 보기</button></div>
+      <div id="forge-slots" class="row"></div><div id="forge-bank" class="row"></div>
+      <button class="btn green" id="forge-leave" hidden>✨ 마법 받고 출발</button>
+    </div>
+  </div>
   <!-- 전투 결과 -->
   <section id="screen-battle-result" class="screen night" hidden>
     <div class="panel result-panel">
@@ -199,9 +215,10 @@
       <p id="br-stats"></p>
       <div class="mined-row" id="br-rewards"></div>
       <p class="unlock" id="br-unlock"></p>
+      <p id="battle-review-title"></p><div id="battle-review" class="row"></div>
       <div class="row">
         <button class="btn" id="br-again">⚔️ 한 번 더</button>
-        <button class="btn green" id="br-back">🌙 밤 고르기</button>
+        <button class="btn green" id="br-back">🌙 밤 고르기</button><button class="btn" id="br-room">🏠 내 방</button>
       </div>
     </div>
   </section>
@@ -210,7 +227,7 @@
   <section id="screen-locked" class="screen night" hidden>
     <div class="panel result-panel">
       <h2 id="locked-title">🔒 잠긴 밤</h2>
-      <p>이 밤은 아직 잠겨 있어요.<br>부모님과 함께 열 수 있어요.</p>
+      <p>추가 모험을 준비하고 있어요.<br>지금은 부모님과 시험용으로 열 수 있어요.<br>실제 결제는 발생하지 않아요.</p>
       <div class="row">
         <button class="btn green" id="locked-parent">🔓 부모님과 열기</button>
         <button class="btn" id="locked-back">⬅️ 돌아가기</button>
@@ -239,6 +256,7 @@
       <h2 class="bag-title">🏠 내 방</h2>
       <button class="btn icon" id="room-trash" aria-label="휴지통">🗑️</button>
     </header>
+    <div id="trophy-shelf" class="trophy-shelf" aria-label="모험 트로피"></div>
     <div class="room" id="room"></div>
     <p class="msg" id="room-msg"></p>
     <div class="palette" id="palette"></div>
@@ -257,6 +275,7 @@
   <script src="js/app.js"></script>
   <script src="js/craft.js"></script>
   <script src="js/room.js"></script>
+  <script src="js/battle-engine.js"></script>
   <script src="js/battle.js"></script>
   <script>
     // 허브 전체를 담당하는 서비스 워커를 등록 (HTTPS 또는 localhost에서만 동작)

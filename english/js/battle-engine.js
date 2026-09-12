@@ -1,0 +1,129 @@
+'use strict';
+
+// Action simulation, independent of DOM/audio: also used by node regression tests.
+class AdventureEngine {
+  constructor(stage, rng = Math.random) {
+    this.stage = stage; this.rng = rng; this.width = 900; this.height = 520;
+    this.player = { x: 190, y: 260, hp: 6, maxHP: 6, facing: 1, invincible: 0, dash: 0, dashCD: 0, attackCD: 0, swing: 0 };
+    this.input = { x: 0, y: 0, attack: false };
+    this.enemies = []; this.drops = []; this.effects = []; this.events = [];
+    this.phase = 'fight'; this.wave = 0; this.xp = 0; this.level = 1; this.kills = 0;
+    this.spells = { cat: 0, bed: 0, dog: 0 }; this.shield = 0; this.time = 0;
+    this.nextWave();
+  }
+  emit(type, extra = {}) { this.events.push({ type, ...extra }); }
+  nextWave() {
+    if (this.phase === 'won' || this.phase === 'lost') return;
+    this.wave++; this.phase = this.wave >= this.stage.waves ? 'boss' : 'fight';
+    this.enemies = []; this.drops = [];
+    const count = this.phase === 'boss' ? 1 : this.stage.perWave + this.wave - 1;
+    for (let i = 0; i < count; i++) {
+      const boss = this.phase === 'boss';
+      this.enemies.push({ x: 580 + this.rng() * 250, y: 90 + this.rng() * 330,
+        hp: boss ? 10 + this.stage.id * 2 : 2 + (this.stage.id >= 4 ? 1 : 0),
+        maxHP: boss ? 10 + this.stage.id * 2 : 2 + (this.stage.id >= 4 ? 1 : 0),
+        speed: boss ? 28 : 30 + this.stage.id * 5 + this.rng() * 12,
+        boss, windup: 0, cooldown: boss ? 2.8 : 0, target: null, flash: 0,
+        color: ['#65cfaf', '#bc98e8', '#f1ac7b'][i % 3], dead: false });
+    }
+    this.emit(this.phase === 'boss' ? 'boss' : 'wave', { wave: this.wave });
+  }
+  move(x, y) { const length = Math.hypot(x, y); this.input.x = length > 1 ? x / length : x; this.input.y = length > 1 ? y / length : y; }
+  attack() {
+    if (!['fight', 'boss'].includes(this.phase) || this.player.attackCD > 0) return false;
+    this.player.attackCD = 0.42; this.player.swing = 0.2;
+    const target = this.enemies.filter(e => !e.dead && Math.hypot(e.x - this.player.x, e.y - this.player.y) < (e.boss ? 110 : 92))
+      .sort((a, b) => Math.hypot(a.x-this.player.x, a.y-this.player.y) - Math.hypot(b.x-this.player.x,b.y-this.player.y))[0];
+    if (target) {
+      this.player.facing = target.x >= this.player.x ? 1 : -1;
+      this.hitEnemy(target, this.level >= 3 ? 2 : 1);
+    }
+    this.emit('swing'); return true;
+  }
+  dash() {
+    const p = this.player;
+    if (!['fight','boss'].includes(this.phase) || p.dashCD > 0) return false;
+    p.dash = 0.19; p.dashCD = 1.8; p.invincible = Math.max(p.invincible, 0.32);
+    this.emit('dash'); return true;
+  }
+  hitEnemy(e, damage) {
+    if (e.dead) return;
+    e.hp -= damage; e.flash = 0.16;
+    const dx = e.x - this.player.x, dy = e.y - this.player.y, len = Math.hypot(dx,dy) || 1;
+    if (!e.boss) { e.x = Math.max(30, Math.min(870, e.x + dx/len*18)); e.y = Math.max(45, Math.min(475,e.y+dy/len*18)); }
+    this.effects.push({ x:e.x, y:e.y-25, text:'−'+damage, ttl:0.5 });
+    this.emit('hit');
+    if (e.hp <= 0) {
+      e.dead = true; this.kills++;
+      this.drops.push({ x:e.x, y:e.y, kind:'gem' });
+      if (this.kills % 4 === 0) this.drops.push({ x:e.x+20, y:e.y, kind:'heart' });
+      this.emit('defeat', { boss:e.boss });
+    }
+  }
+  hurt() {
+    if (this.player.invincible > 0 || ['won','lost'].includes(this.phase)) return;
+    if (this.shield) { this.shield--; this.emit('shield'); }
+    else { this.player.hp--; this.emit('hurt'); }
+    this.player.invincible = 1;
+    if (this.player.hp <= 0) { this.phase = 'lost'; this.emit('lost'); }
+  }
+  cast(word) {
+    if (!['fight','boss'].includes(this.phase) || !(this.spells[word] > 0)) return false;
+    if (word === 'bed' && this.player.hp === this.player.maxHP) return false;
+    this.spells[word]--;
+    if (word === 'bed') this.player.hp = Math.min(this.player.maxHP, this.player.hp + 3);
+    if (word === 'dog') this.shield += 2;
+    if (word === 'cat') this.enemies.filter(e=>!e.dead).forEach(e=>this.hitEnemy(e,2));
+    this.effects.push({ x:this.player.x, y:this.player.y-45, text:word, ttl:0.9 });
+    this.emit('magic', { word }); return true;
+  }
+  forge(word) {
+    if (this.phase !== 'chest' || !['cat','bed','dog'].includes(word)) return false;
+    this.spells[word]++;
+    this.nextWave(); return true;
+  }
+  update(delta) {
+    if (['won','lost'].includes(this.phase)) return;
+    const dt = Math.min(0.05, Math.max(0,delta)), p = this.player;
+    this.time += dt;
+    for (const k of ['invincible','dash','dashCD','attackCD','swing']) p[k]=Math.max(0,p[k]-dt);
+    const sprint = p.dash > 0;
+    const dx = sprint && !this.input.x && !this.input.y ? p.facing : this.input.x;
+    p.x = Math.max(30, Math.min(870,p.x+dx*(sprint ? 560 : 180)*dt));
+    p.y = Math.max(45, Math.min(475,p.y+this.input.y*(sprint ? 560 : 180)*dt));
+    if (this.input.x) p.facing = this.input.x > 0 ? 1 : -1;
+    if (this.input.attack) this.attack();
+    for (const e of this.enemies) {
+      if (e.dead || this.phase === 'lost') continue;
+      e.flash=Math.max(0,e.flash-dt);
+      if (e.boss) {
+        e.cooldown -= dt;
+        if (e.windup > 0) {
+          e.windup -= dt;
+          if (e.windup <= 0) {
+            this.effects.push({ x:e.target.x,y:e.target.y,text:'💥',ttl:0.4 });
+            if (Math.hypot(p.x-e.target.x,p.y-e.target.y)<105) this.hurt();
+            e.target = null; e.cooldown = 2.6;
+          }
+          continue;
+        }
+        if (e.cooldown <= 0) { e.windup=1.15; e.target={x:p.x,y:p.y}; this.emit('warning'); continue; }
+      }
+      const ex=p.x-e.x, ey=p.y-e.y, distance=Math.hypot(ex,ey)||1;
+      if (distance > 26) { e.x+=ex/distance*e.speed*dt; e.y+=ey/distance*e.speed*dt; }
+      if (distance < (e.boss ? 45 : 30)) this.hurt();
+    }
+    this.enemies=this.enemies.filter(e=>!e.dead);
+    this.drops=this.drops.filter(d=>{
+      if (Math.hypot(d.x-p.x,d.y-p.y)>48) return true;
+      if (d.kind==='heart') p.hp=Math.min(p.maxHP,p.hp+1);
+      else { this.xp++; const level=1+Math.floor(this.xp/3); if(level>this.level) { this.level=level; this.emit('level'); } }
+      this.emit('pickup'); return false;
+    });
+    this.effects.forEach(e=>e.ttl-=dt); this.effects=this.effects.filter(e=>e.ttl>0);
+    if (!this.enemies.length && ['fight','boss'].includes(this.phase)) {
+      if (this.phase==='boss') { this.phase='won'; this.emit('won'); }
+      else { this.phase='chest'; this.emit('chest'); }
+    }
+  }
+}

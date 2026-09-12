@@ -71,7 +71,7 @@ if ('speechSynthesis' in window) {
 
 // ---------- 영어 발음: 미리 만든 파일 재생 (tools/make_audio.py로 생성) ----------
 const PHRASE_FILES = { "Let's go!": 'lets-go', 'Great job!': 'great-job' };
-const WORD_SET = new Set(Object.values(LETTERS).map(d => d.word));
+const WORD_SET = new Set([...Object.values(LETTERS).map(d => d.word), ...RECIPES.map(r => r.word)]);
 
 const speech = {
   clips: new Map(), // url → Promise<AudioBuffer | null>
@@ -108,6 +108,7 @@ const speech = {
       this.load(this.urlFor(letter));
       this.load(this.urlFor(d.word));
     });
+    WORD_SET.forEach(word => this.load(this.urlFor(word)));
     Object.keys(PHRASE_FILES).forEach(text => this.load(this.urlFor(text)));
   },
 
@@ -126,7 +127,7 @@ const speech = {
     const url = this.urlFor(text);
     const buffer = url ? await this.load(url) : null;
     if (tok !== this.token) return;
-    if (!buffer) return tts.speak(text);
+    if (!buffer) return tts.speak(/^[A-Z]$/.test(text) ? text.toLowerCase() : text);
 
     const a = ac();
     return new Promise(resolve => {

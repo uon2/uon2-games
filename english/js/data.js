@@ -56,16 +56,14 @@ const STAGES = [
   { id: 5, name: '다이아 광산', letters: ['U', 'V', 'W', 'X', 'Y', 'Z'], icon: 'ore:diamond:deep',  kinds: ['deep', 'ore:diamond:deep', 'ore:diamond:deep', 'ore:emerald:deep'] },
 ];
 
-// 밤의 방어전: free가 false면 잠긴 밤 (나중에 결제로 열림)
-// mode - letter: 글자 소리 듣고 글자 몬스터 때리기
-//        initial: 글자 소리 듣고 그 소리로 시작하는 그림 몬스터 때리기
-//        word: 낱말 소리 듣고 낱말 몬스터 때리기
+// 액션 탐험: 마지막 구역은 보스. 앞선 구역을 마칠 때 보물 마법을 배움.
+// 기존 id/clear 기록을 유지하며, 뒤의 두 구역은 시험용 잠금 상태.
 const BATTLE_STAGES = [
-  { id: 1, name: '첫 번째 밤', mode: 'letter',  letters: ['A', 'B', 'C', 'D', 'E'], waves: 3, perWave: 4, speed: 6.5, gap: 2.2, free: true },
-  { id: 2, name: '두 번째 밤', mode: 'letter',  letters: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'], waves: 3, perWave: 5, speed: 7.5, gap: 2.0, free: true },
-  { id: 3, name: '첫소리의 밤', mode: 'initial', letters: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'], waves: 3, perWave: 4, speed: 7.0, gap: 2.2, free: true },
-  { id: 4, name: '낱말의 밤', mode: 'word', tier: 1, waves: 3, perWave: 4, speed: 7.5, gap: 2.3, free: false },
-  { id: 5, name: '깊은 밤',   mode: 'word', tier: 2, waves: 4, perWave: 5, speed: 8.5, gap: 2.0, free: false },
+  { id: 1, name: '풀숲의 보물', letters: ['A','B','C','D','E'], waves: 3, perWave: 3, free: true },
+  { id: 2, name: '안개 숲 탐험', letters: ['F','G','H','I','J'], waves: 3, perWave: 4, free: true },
+  { id: 3, name: '수호 동물의 숲', letters: ['K','L','M','N','O'], waves: 3, perWave: 4, free: true },
+  { id: 4, name: '잊힌 유적', letters: ['P','Q','R','S','T'], waves: 3, perWave: 4, free: false },
+  { id: 5, name: '안개 왕의 성', letters: ['U','V','W','X','Y','Z'], waves: 4, perWave: 4, free: false },
 ];
 
 // 몬스터 생김새 (직접 고른 조합, 마인크래프트 캐릭터 아님)

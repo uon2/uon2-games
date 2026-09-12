@@ -67,6 +67,15 @@ function addItem(word) {
   persist();
   renderRoom();
   renderPalette();
+  const shelf = $('#trophy-shelf');
+  shelf.replaceChildren();
+  const trophies = (save.battle && save.battle.trophies) || {};
+  BATTLE_STAGES.filter(stage => trophies[stage.id]).forEach(stage => {
+    const badge = document.createElement('span');
+    badge.textContent = '🏆 ' + stage.name;
+    shelf.appendChild(badge);
+  });
+  shelf.hidden = !shelf.children.length;
   $('#room-msg').textContent = '끌어서 옮기고, 🗑️에 끌어다 놓으면 치워져요';
   const el = $('#room').lastElementChild;
   el.animate([
@@ -136,6 +145,15 @@ function goRoom() {
   roomSave();
   renderRoom();
   renderPalette();
+  const shelf = $('#trophy-shelf');
+  shelf.replaceChildren();
+  const trophies = (save.battle && save.battle.trophies) || {};
+  BATTLE_STAGES.filter(stage => trophies[stage.id]).forEach(stage => {
+    const badge = document.createElement('span');
+    badge.textContent = '🏆 ' + stage.name;
+    shelf.appendChild(badge);
+  });
+  shelf.hidden = !shelf.children.length;
   $('#room-msg').textContent = Object.keys(madeCounts()).length
     ? '아래 아이템을 눌러서 방에 놓아 보세요!'
     : '작업대에서 낱말을 만들면 아이템이 생겨요 🔨';
