@@ -77,9 +77,15 @@ class AdventureEngine {
     this.effects.push({ x:this.player.x, y:this.player.y-45, text:word, ttl:0.9 });
     this.emit('magic', { word }); return true;
   }
+  // 작업대에서 만든 어떤 낱말이든 마법이 된다: 동물=공격(cat), 쉬는 물건=회복(bed), 나머지=보호(dog)
+  static spellOf(word) {
+    if (['cat','dog','pig','fox','cow','hen'].includes(word)) return word === 'dog' ? 'dog' : 'cat';
+    if (['bed','cup'].includes(word)) return 'bed';
+    return 'dog';
+  }
   forge(word) {
-    if (this.phase !== 'chest' || !['cat','bed','dog'].includes(word)) return false;
-    this.spells[word]++;
+    if (this.phase !== 'chest' || typeof word !== 'string' || !word) return false;
+    this.spells[AdventureEngine.spellOf(word)]++;
     this.nextWave(); return true;
   }
   update(delta) {

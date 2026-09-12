@@ -367,19 +367,26 @@ function goMap() {
   roomCard.addEventListener('click', () => { sfx.click(); goRoom(); });
   list.appendChild(roomCard);
 
-  // 액션 모험은 처음부터 체험할 수 있음
+  // 숲속 모험: 작업대에서 낱말을 만들어야 열림 (글자 → 낱말 → 모험 순서)
+  const madeWords = Object.keys((save.craft && save.craft.made) || {});
+  const nightLocked = !madeWords.length;
   const nightCard = document.createElement('button');
-  nightCard.className = 'stage';
+  nightCard.className = 'stage' + (nightLocked ? ' locked' : '');
   nightCard.innerHTML = `
-    <div class="stage-icon night-icon">⚔️</div>
+    <div class="stage-icon night-icon">${nightLocked ? '🔒' : '⚔️'}</div>
     <div class="stage-name">숲속 모험</div>
-    <div class="stage-letters">이동 · 검 · 보물 마법</div>
+    <div class="stage-letters">${nightLocked ? '낱말을 먼저 만들어요' : `만든 낱말 ${madeWords.length}개로 모험`}</div>
     ${(save.battle && save.battle.stars) ? `<div class="stage-badge">⭐ ${save.battle.stars}</div>` : ''}`;
   nightCard.addEventListener('click', () => {
+    if (nightLocked) {
+      sfx.bonk();
+      $('#map-msg').textContent = '작업대에서 낱말을 만들면 모험을 떠날 수 있어요! 🔨';
+      return;
+    }
     sfx.click();
     goNights();
   });
-  list.prepend(nightCard);
+  list.appendChild(nightCard);
 
   show('screen-map');
 }

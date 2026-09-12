@@ -63,6 +63,11 @@ function askParent(onPass) {
 function startBattle(stage) {
   const i=BATTLE_STAGES.indexOf(stage), bs=battleSave();
   if(i<0 || (!stage.free && !isPremium()) || (i>0 && !bs.cleared[BATTLE_STAGES[i-1].id])) return goNights();
+  // 작업대에서 만든 낱말이 모험의 재료 → 하나도 없으면 작업대로 돌려보냄
+  if(!Object.keys((save.craft&&save.craft.made)||{}).length) {
+    $('#nights-msg').textContent='작업대에서 낱말을 만들고 오면 모험을 떠날 수 있어요! 🔨';
+    return goNights();
+  }
   leaveBattle();
   battle.engine=new AdventureEngine(stage);
   const made = save.craft?.made || {};
@@ -200,7 +205,9 @@ function openForge() {
   const g=battle.engine;
   if(!battle.running || g.phase!=='chest' || Math.hypot(g.player.x-450,g.player.y-260)>105) return;
   battle.paused=true; stopInput();
-  const words=g.stage.id>=3?['dog','cat','bed']:['cat','bed'];
+  // 보물에서 완성하는 낱말은 '작업대에서 만든 낱말' 중에서 고름 (광산 → 작업대 → 모험)
+  const made=Object.keys((save.craft&&save.craft.made)||{}).filter(w=>RECIPES.some(r=>r.word===w));
+  const words=made.length?made:['cat','bed'];
   battle.forgeWord=RECIPES.find(r=>r.word===words[(g.wave-1)%words.length]);
   battle.forgeFailed=false; battle.forgeComplete=false;
   const r=battle.forgeWord;
@@ -209,8 +216,8 @@ function openForge() {
   battle.slots=r.word.split('').map((ch,i)=>battle.fixed.includes(i)?ch:null);
   battle.bank=shuffle([...r.word.split('').filter((_,i)=>!battle.fixed.includes(i)),...shuffle(['a','b','c','d','e','g','o','t'].filter(ch=>!r.word.includes(ch))).slice(0,3)]);
   $('#forge-emoji').textContent=r.emoji;
-  $('#forge-title').textContent=({cat:'고양이를 동료로 불러요',bed:'침대의 회복 마법을 열어요',dog:'강아지의 보호 마법을 열어요'})[r.word];
-  $('#forge-message').textContent='빈칸을 채우면 전투에서 쓸 마법을 얻어요!';
+  $('#forge-title').textContent=({cat:'고양이를 동료로 불러요',bed:'침대의 회복 마법을 열어요',dog:'강아지의 보호 마법을 열어요'})[r.word]||`${r.ko}의 마법을 열어요`;
+  $('#forge-message').textContent='작업대에서 만든 낱말이에요. 빈칸을 채우면 마법이 돼요!';
   $('#forge-leave').hidden=true; $('#forge-bank').hidden=false;
   $('#adventure-forge').hidden=false;
   renderForge(); speech.say(r.word);
@@ -243,7 +250,8 @@ function checkForge() {
   battle.words.push(r.word);
   const bs=battleSave(); bs.words ||= {}; const stat=bs.words[r.word] ||= {ok:0,helped:0};
   stat[battle.forgeFailed?'helped':'ok']++; persist();
-  $('#forge-message').textContent=({cat:'cat 완성! 🐱 버튼으로 몬스터를 한꺼번에 공격해요.',bed:'bed 완성! 🛏️ 버튼으로 하트를 회복해요.',dog:'dog 완성! 🐶 버튼으로 두 번 보호받아요.'})[r.word];
+  const spell=AdventureEngine.spellOf(r.word);
+  $('#forge-message').textContent=`${r.word} 완성! `+({cat:'🐱 버튼으로 몬스터를 한꺼번에 공격해요.',bed:'🛏️ 버튼으로 하트를 회복해요.',dog:'🐶 버튼으로 두 번 보호받아요.'})[spell];
   $('#forge-leave').hidden=false; $('#forge-bank').hidden=true;
   renderForge(); sfx.pop(); speech.say(r.word);
 }
