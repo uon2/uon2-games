@@ -2,7 +2,7 @@
 
 // 허브 전체(모든 게임)를 담당하는 서비스 워커
 // 네트워크 우선: 온라인이면 항상 최신 파일, 인터넷이 끊기면 마지막으로 받은 파일로 실행
-const CACHE = 'uon2-games-v6-profile-player';
+const CACHE = 'uon2-games-v7-math-farm';
 
 // index.html은 호스팅에서 폴더 주소로 리다이렉트될 수 있어 폴더 주소('./', 'english/')로만 캐시
 const CORE = [
@@ -10,6 +10,9 @@ const CORE = [
   'manifest.webmanifest',
   'icons/icon-192.png',
   'icons/icon-512.png',
+  'math/',
+  'math/style.css',
+  'math/game.js',
   'english/',
   'english/css/style.css',
   'english/js/data.js',
