@@ -14,6 +14,15 @@ function goNights() {
   const bs = battleSave();
   $('#nights-msg').textContent = '움직이고, 공격하고, 보물의 마법을 열어요. 마지막에는 보스가 기다려요!';
   $('#nights-stars').textContent = bs.stars;
+  $('#forest-friends').replaceChildren(...Object.entries(MONSTER_TYPES).map(([kind,info])=>{
+    const card=document.createElement('div'), portrait=document.createElement('canvas');
+    portrait.width=132; portrait.height=132;
+    portrait.setAttribute('role','img');portrait.setAttribute('aria-label',info.name+' · '+info.role);
+    drawForestCharacter(portrait.getContext('2d'),kind,66,77,1.2);
+    const label=document.createElement('b');label.textContent=info.name;
+    const hint=document.createElement('small');hint.textContent=info.role+(kind==='archer'?' · 2단계':kind==='charger'?' · 3단계':'');
+    card.appendChild(portrait);card.appendChild(label);card.appendChild(hint);return card;
+  }));
   const list = $('#night-list');
   list.innerHTML = '';
 
@@ -26,7 +35,7 @@ function goNights() {
     card.innerHTML = `
       <div class="stage-icon night-icon">${needPay ? '🔒' : needClear ? '🌑' : '🌙'}</div>
       <div class="stage-name">${stage.name}</div>
-      <div class="stage-letters">탐험 · 보물 · 보스</div>
+      <div class="stage-letters">${stage.id>=3 ? '돌쿵 · 돌진 피하기' : stage.id>=2 ? '나무활 · 화살 피하기' : '이끼콩 · 검 연습'}</div>
       ${bs.cleared[stage.id] ? '<div class="stage-badge">⭐</div>' : ''}`;
     card.addEventListener('click', () => {
       if (needPay) { sfx.bonk(); showLocked(stage); return; }
@@ -129,9 +138,9 @@ function adventureEvent(event) {
   if(event.type==='shieldup') { sfx.fanfare(); $('#adventure-note').textContent='🛡️ 방패를 얻었어요! 공격을 한 번 막아 줘요.'; }
   if(event.type==='shield') $('#adventure-note').textContent='🛡️ 방패가 막아 줬어요!';
   if(event.type==='hurt') sfx.bonk();
-  if(event.type==='boss') $('#adventure-note').textContent='안개 대장 등장! 붉은 원이 생기면 대시로 피해요!';
+  if(event.type==='boss') $('#adventure-note').textContent='안개왕 등장! 붉은 원이 생기면 대시로 피해요!';
   if(event.type==='chest') $('#adventure-note').textContent='보물을 찾았어요! 가운데 상자에 다가가서 열어 보세요.';
-  if(event.type==='wave') $('#adventure-note').textContent='몬스터를 피하며 싸워요. 보석을 주우면 강해져요!';
+  if(event.type==='wave') $('#adventure-note').textContent=battle.engine.stage.id>=3?'돌쿵이 몸을 낮추면 주황색 길 옆으로 피해요! 돌진 후가 공격 기회예요.':battle.engine.stage.id>=2?'나무활은 노란 선을 따라 화살을 쏴요. 옆으로 피하거나 대시로 다가가요!':'이끼콩을 피하며 싸워요. 보석을 주우면 강해져요!';
   if(event.type==='level') { sfx.fanfare(); $('#adventure-note').textContent=battle.engine.level>=3?'레벨 업! 검의 공격력이 강해졌어요!':'레벨 업! 보석을 더 모아 보세요.'; }
   if(event.type==='magic') { speech.say(event.word); $('#adventure-note').textContent=event.word==='cat'?'고양이 동료가 몬스터를 공격했어요!':event.word==='bed'?'침대 마법으로 하트가 회복됐어요!':'강아지 동료가 두 번 지켜줘요!'; }
   if(event.type==='won' || event.type==='lost') endAdventure(event.type==='won');
@@ -144,7 +153,7 @@ function renderAdventure() {
   c.clearRect(0,0,900,520); c.fillStyle='#162e36'; c.fillRect(0,0,900,520);
   c.fillStyle='#203f42';
   for(let y=0;y<520;y+=40) for(let x=0;x<900;x+=40) if((x/40+y/40)%3===0) c.fillRect(x+2,y+2,36,36);
-  c.fillStyle='#2a5050'; c.fillRect(34,40,832,436);
+  c.fillStyle=['#2a5050','#34465d','#355341','#49435a','#373654'][g.stage.id-1]; c.fillRect(34,40,832,436);
   c.strokeStyle='#426963'; c.lineWidth=4; c.strokeRect(34,40,832,436);
   for(let i=0;i<13;i++) {
     const x=24+i*70; c.fillStyle='#172e32'; c.fillRect(x,12,20,32); c.fillRect(x,478,20,32);
@@ -154,6 +163,23 @@ function renderAdventure() {
     c.beginPath(); c.arc(e.target.x,e.target.y,105,0,Math.PI*2);
     c.fillStyle='rgba(255,90,89,0.28)'; c.fill(); c.strokeStyle='#ff8074'; c.lineWidth=5; c.stroke();
     c.fillStyle='#fff'; c.font='bold 28px system-ui'; c.textAlign='center'; c.fillText('!',e.target.x,e.target.y+8);
+  });
+  g.enemies.filter(e=>e.aim).forEach(e=>{
+    c.save(); c.setLineDash([10,9]); c.strokeStyle='#ffe69a'; c.lineWidth=3;
+    c.beginPath(); c.moveTo(e.x,e.y); c.lineTo(e.aim.x,e.aim.y); c.stroke(); c.restore();
+    c.fillStyle='#ffe69a'; c.font='bold 23px system-ui'; c.textAlign='center'; c.fillText('!',e.x,e.y-42);
+  });
+  g.enemies.filter(e=>e.chargeWindup>0 && e.chargeAim).forEach(e=>{
+    const dx=e.chargeAim.x-e.x,dy=e.chargeAim.y-e.y,len=Math.hypot(dx,dy)||1;
+    c.save();c.strokeStyle='rgba(255,178,78,.26)';c.lineWidth=54;
+    c.beginPath();c.moveTo(e.x,e.y);c.lineTo(e.x+dx/len*240,e.y+dy/len*240);c.stroke();
+    c.setLineDash([12,8]);c.strokeStyle='#ffd27c';c.lineWidth=3;c.stroke();c.restore();
+    c.fillStyle='#ffe3ac';c.font='bold 22px system-ui';c.textAlign='center';c.fillText('!',e.x,e.y-52);
+  });
+  g.projectiles.forEach(a=>{
+    c.save(); c.translate(a.x,a.y); c.rotate(Math.atan2(a.vy,a.vx));
+    c.strokeStyle='#fff1bd'; c.lineWidth=4; c.beginPath(); c.moveTo(-15,0); c.lineTo(10,0); c.stroke();
+    c.fillStyle='#ffcd6b'; c.beginPath(); c.moveTo(15,0); c.lineTo(5,-6); c.lineTo(5,6); c.fill(); c.restore();
   });
   g.drops.forEach(d=>{
     c.font='23px system-ui'; c.textAlign='center';
@@ -165,15 +191,12 @@ function renderAdventure() {
     c.fillStyle='#fff'; c.font='bold 18px system-ui'; c.textAlign='center'; c.fillText('마법 보물',450,216);
   }
   g.enemies.forEach(e=>{
-    const size=e.boss?66:38;
+    const size=MONSTER_TYPES[e.kind].size;
     c.fillStyle='rgba(0,0,0,.2)'; c.fillRect(e.x-size/2,e.y+size/2-1,size,8);
-    c.fillStyle=e.flash?'#fff':e.boss?'#b49aea':e.color; c.fillRect(e.x-size/2,e.y-size/2,size,size);
-    c.fillRect(e.x-size/2+6,e.y-size/2-8,size-12,8);
-    c.fillStyle='#182b39'; c.fillRect(e.x-size/4-4,e.y-8,8,10); c.fillRect(e.x+size/4-4,e.y-8,8,10);
-    c.fillRect(e.x-7,e.y+10,14,4);
-    if(e.boss) { c.fillStyle='#ffd670'; c.fillRect(e.x-23,e.y-49,46,12); c.fillRect(e.x-23,e.y-58,10,12); c.fillRect(e.x-5,e.y-60,10,12); c.fillRect(e.x+13,e.y-58,10,12); }
-    c.fillStyle='#15212c'; c.fillRect(e.x-size/2,e.y-size/2-18,size,5);
-    c.fillStyle='#f7aa80'; c.fillRect(e.x-size/2,e.y-size/2-18,size*Math.max(0,e.hp/e.maxHP),5);
+    drawForestCharacter(c,e.kind,e.x,e.y,size/80,g.time,e.flash>0,
+      {facing:e.x<g.player.x?1:-1,aiming:e.shootWindup>0,charging:e.chargeTime>0,preparing:e.chargeWindup>0});
+    c.fillStyle='#15212c'; c.fillRect(e.x-size/2,e.y-size*0.7-12,size,5);
+    c.fillStyle='#f7aa80'; c.fillRect(e.x-size/2,e.y-size*0.7-12,size*Math.max(0,e.hp/e.maxHP),5);
   });
   const p=g.player;
   c.save(); c.translate(p.x,p.y);
@@ -190,11 +213,7 @@ function renderAdventure() {
       c.strokeStyle=i===0?'#bff2ff':'rgba(140,231,255,.55)'; c.lineWidth=i===0?3:2; c.stroke();
     }
   }
-  c.fillStyle='#e7b17a'; c.fillRect(-12,-23,24,22);
-  c.fillStyle='#374a72'; c.fillRect(-14,-29,28,11);
-  c.fillStyle='#61cbe3'; c.fillRect(-15,-1,30,23);
-  c.fillStyle='#243751'; c.fillRect(-12,22,9,12); c.fillRect(3,22,9,12);
-  c.fillStyle='#132736'; c.fillRect(p.facing>0?4:-8,-17,4,5);
+  drawForestCharacter(c,'player',0,0,0.9,g.time,false,{facing:p.facing,avatar:save.profile?.avatar ?? 0});
   c.fillStyle='#eaf1f1'; c.fillRect(p.facing*24-3,-16,6,33); c.fillStyle='#ffcc64'; c.fillRect(p.facing*24-9,12,18,5);
   // 검 반대쪽 손에 방패를 들고, 남은 횟수를 방패에 적어 준다
   if(g.shield) {
@@ -274,7 +293,7 @@ function chooseForgeWord(word) {
   if(!g || !r) return;
   battle.forgeWord=r; battle.forgeFailed=false; battle.forgeComplete=false;
   const fixedCount=g.stage.id===1?2:g.stage.id===2?1:0;
-  battle.fixed=shuffle([0,1,2]).slice(0,fixedCount);
+  battle.fixed=shuffle([...r.word].map((_,i)=>i)).slice(0,fixedCount);
   battle.slots=r.word.split('').map((ch,i)=>battle.fixed.includes(i)?ch:null);
   battle.bank=shuffle([...r.word.split('').filter((_,i)=>!battle.fixed.includes(i)),...shuffle(['a','b','c','d','e','g','o','t'].filter(ch=>!r.word.includes(ch))).slice(0,3)]);
   $('#forge-choices').replaceChildren();
@@ -293,7 +312,9 @@ function renderForge() {
   }));
   $('#forge-bank').replaceChildren(...battle.bank.map(ch=>{
     const b=document.createElement('button'); b.className='btn'; b.textContent=ch;
-    b.disabled=battle.slots.some((s,i)=>s===ch&&!battle.fixed.includes(i));
+    const available=battle.bank.filter(x=>x===ch).length;
+    const used=battle.slots.filter((s,i)=>s===ch&&!battle.fixed.includes(i)).length;
+    b.disabled=battle.forgeComplete || used>=available;
     b.addEventListener('click',()=>{
       const i=battle.slots.indexOf(null); if(i<0||battle.forgeComplete) return;
       battle.slots[i]=ch; renderForge();
@@ -303,6 +324,7 @@ function renderForge() {
 }
 function checkForge() {
   const r=battle.forgeWord;
+  if(!r || battle.forgeComplete) return;
   if(battle.slots.join('')!==r.word) {
     battle.forgeFailed=true; if(!battle.mistakes.includes(r.word)) battle.mistakes.push(r.word);
     $('#forge-message').textContent=`${r.word} · 잘 봤어요. 다른 글자를 눌러 빼고 다시 놓아봐요.`;
@@ -333,7 +355,7 @@ function endAdventure(won) {
     rewards.forEach(l=>save.blocks[l]=(save.blocks[l]||0)+1);
   }
   persist(); speech.stop();
-  $('#br-title').textContent=won?'🏆 안개 대장을 물리쳤어요!':'🌙 잠깐 쉬고 다시 도전해요';
+  $('#br-title').textContent=won?'🏆 안개왕을 물리쳤어요!':'🌙 잠깐 쉬고 다시 도전해요';
   $('#br-stats').textContent=`몬스터 ${g.kills}마리 · 보석 ${g.xp}개 · Lv.${g.level}`;
   $('#br-rewards').replaceChildren(...rewards.map(l=>blockEl(l,'ore:gold')));
   $('#br-unlock').textContent=won?'트로피가 내 방에 놓였어요! 글자 블록 3개도 얻었어요.':'모은 보석과 낱말 기록은 저장했어요. 하트는 다시 채워져요.';

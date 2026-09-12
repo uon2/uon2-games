@@ -874,3 +874,12 @@ button:focus-visible { outline:3px solid #ffe18a; outline-offset:3px; }
   .spell-row .btn { padding:5px 10px; }
 }
 @media (prefers-reduced-motion:reduce) { .pet { animation:none; } }
+
+/* 숲속 친구들: 전투와 동일한 자체 제작 캐릭터 */
+.forest-friends { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin:10px auto 18px; }
+.forest-friends > div { display:flex; flex-direction:column; align-items:center; width:120px; padding:8px 4px; background:#243f45; border:1px solid #80af9c; border-radius:4px; color:#fff2d4; }
+.forest-friends canvas { width:88px; height:88px; }
+.forest-friends small { font-size:11px; margin-top:4px; color:#d3e8df; }
+@media(max-width:560px) { .forest-friends { gap:5px; } .forest-friends > div { width:78px; } .forest-friends small { font-size:10px; } }
+
+@media(max-width:560px) { .forest-friends canvas { width:70px; height:70px; } }

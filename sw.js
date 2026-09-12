@@ -2,7 +2,7 @@
 
 // 허브 전체(모든 게임)를 담당하는 서비스 워커
 // 네트워크 우선: 온라인이면 항상 최신 파일, 인터넷이 끊기면 마지막으로 받은 파일로 실행
-const CACHE = 'uon2-games-v2-action-adventure';
+const CACHE = 'uon2-games-v6-profile-player';
 
 // index.html은 호스팅에서 폴더 주소로 리다이렉트될 수 있어 폴더 주소('./', 'english/')로만 캐시
 const CORE = [
@@ -20,6 +20,7 @@ const CORE = [
   'english/js/room.js',
   'english/js/battle.js',
   'english/js/battle-engine.js',
+  'english/js/forest-art.js',
   'english/audio/letters/A.m4a',
   'english/audio/letters/B.m4a',
   'english/audio/letters/C.m4a',
@@ -49,6 +50,22 @@ const CORE = [
   'english/audio/phrases/great-job.m4a',
   'english/audio/phrases/lets-go.m4a',
   'english/audio/words/apple.m4a',
+  'english/audio/words/ant.m4a',
+  'english/audio/words/bat.m4a',
+  'english/audio/words/bee.m4a',
+  'english/audio/words/owl.m4a',
+  'english/audio/words/rat.m4a',
+  'english/audio/words/bug.m4a',
+  'english/audio/words/ram.m4a',
+  'english/audio/words/log.m4a',
+  'english/audio/words/net.m4a',
+  'english/audio/words/pen.m4a',
+  'english/audio/words/key.m4a',
+  'english/audio/words/car.m4a',
+  'english/audio/words/jam.m4a',
+  'english/audio/words/map.m4a',
+  'english/audio/words/pot.m4a',
+  'english/audio/words/toy.m4a',
   'english/audio/words/bag.m4a',
   'english/audio/words/bear.m4a',
   'english/audio/words/bed.m4a',

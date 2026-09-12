@@ -45,6 +45,24 @@ const RECIPES = [
   { word: 'hat', emoji: '🎩', ko: '모자',   group: '물건', tier: 2 },
   { word: 'bag', emoji: '🎒', ko: '가방',   group: '물건', tier: 2 },
   { word: 'bus', emoji: '🚌', ko: '버스',   group: '물건', tier: 2 },
+  { word: 'ant', emoji: '🐜', ko: '개미', group: '동물', tier: 1, spell: 'cat' },
+  { word: 'bat', emoji: '🦇', ko: '박쥐', group: '동물', tier: 2, spell: 'cat' },
+  { word: 'bee', emoji: '🐝', ko: '벌', group: '동물', tier: 2, spell: 'cat' },
+  { word: 'owl', emoji: '🦉', ko: '부엉이', group: '동물', tier: 2, spell: 'cat' },
+  { word: 'rat', emoji: '🐀', ko: '쥐', group: '동물', tier: 2, spell: 'cat' },
+  { word: 'bug', emoji: '🐛', ko: '벌레', group: '동물', tier: 1, spell: 'cat' },
+  { word: 'ram', emoji: '🐏', ko: '숫양', group: '동물', tier: 2, spell: 'cat' },
+  { word: 'sun', emoji: '☀️', ko: '해', group: '자연', tier: 1, spell: 'dog' },
+  { word: 'log', emoji: '🪵', ko: '통나무', group: '자연', tier: 2, spell: 'dog' },
+  { word: 'net', emoji: '🥅', ko: '그물', group: '물건', tier: 2, spell: 'dog' },
+  { word: 'pen', emoji: '🖊️', ko: '펜', group: '물건', tier: 1, spell: 'dog' },
+  { word: 'key', emoji: '🔑', ko: '열쇠', group: '물건', tier: 2, spell: 'dog' },
+  { word: 'car', emoji: '🚗', ko: '자동차', group: '물건', tier: 1, spell: 'dog' },
+  { word: 'jam', emoji: '🫙', ko: '잼', group: '음식', tier: 1, spell: 'bed' },
+  { word: 'map', emoji: '🗺️', ko: '지도', group: '물건', tier: 1, spell: 'dog' },
+  { word: 'pot', emoji: '🍲', ko: '냄비', group: '물건', tier: 2, spell: 'bed' },
+  { word: 'toy', emoji: '🧸', ko: '장난감', group: '물건', tier: 1, spell: 'dog' },
+  { word: 'egg', emoji: '🥚', ko: '달걀', group: '음식', tier: 1, spell: 'bed' },
 ];
 
 // 광산 단계: 블록 종류(kinds)는 무작위로 섞여 나옴
@@ -66,8 +84,13 @@ const BATTLE_STAGES = [
   { id: 5, name: '안개 왕의 성', letters: ['U','V','W','X','Y','Z'], waves: 4, perWave: 7, free: false },
 ];
 
-// 몬스터 생김새 (직접 고른 조합, 마인크래프트 캐릭터 아님)
-const MONSTERS = ['👾', '🦇', '👻', '🕷️', '🧟'];
+// 직접 만든 블록 몬스터. 이름/크기/역할은 소개 화면과 전투에서 함께 사용.
+const MONSTER_TYPES = {
+  moss: { name: '이끼콩', role: '근접형', size: 48 },
+  archer: { name: '나무활', role: '원거리형', size: 48 },
+  charger: { name: '돌쿵', role: '돌진형', size: 62 },
+  boss: { name: '안개왕', role: '보스형', size: 78 },
+};
 
 // 8x8 픽셀 얼굴: h 머리, s 피부, w 눈 흰자, p 눈동자, m 입
 const AVATAR_PATTERN = [

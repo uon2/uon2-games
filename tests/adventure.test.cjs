@@ -71,13 +71,13 @@ test('gem pickup drives level progression',()=>{
   g.drops=Array.from({length:6},()=>({kind:'gem',x:g.player.x,y:g.player.y}));g.update(.01);
   assert.equal(g.xp,6);assert.equal(g.level,3);
 });
-test('all recipe words use local clips and all 61 clips are precached',()=>{
+test('all recipe words use local clips and all 77 clips are precached',()=>{
   const ctx=vm.createContext({window:{},Map,Set});
   vm.runInContext(source('english/js/data.js')+'\n'+source('english/js/audio.js')+'\nthis.speech=speech; this.recipes=RECIPES;',ctx);
   for(const r of ctx.recipes){const url=ctx.speech.urlFor(r.word);assert.ok(url);assert.ok(fs.existsSync(path.join(root,'english',url)));}
   const sw=source('sw.js');
   const clips=fs.readdirSync(path.join(root,'english/audio'),{recursive:true}).filter(f=>f.endsWith('.m4a'));
-  assert.equal(clips.length,61);clips.forEach(f=>assert.ok(sw.includes('english/audio/'+f),f));
+  assert.equal(clips.length,77);clips.forEach(f=>assert.ok(sw.includes('english/audio/'+f),f));
 });
 test('HTML script paths and SW core assets exist',()=>{
   for(const match of source('english/index.html').matchAll(/<script src="([^"]+)"/g)) assert.ok(fs.existsSync(path.join(root,'english',match[1])),match[1]);
@@ -92,13 +92,13 @@ function ui() {
     addEventListener(t,fn){this.listeners[t]=fn;}
     replaceChildren(...nodes){this.children=nodes;}
     appendChild(n){this.children.push(n);return n;}
-    setAttribute(){} focus(){} animate(){return{};}
+    setAttribute(){} focus(){} animate(){return{};} getContext(){return{};}
   }
   const nodes=Object.fromEntries(ids.map(id=>[id,new Element()]));
   let queued=[];const persisted=[];
   const save={profile:{avatar:0,name:'test'},blocks:{A:2},clears:{},craft:{made:{cat:1}},battle:{stars:4,cleared:{}}};
   const context=vm.createContext({
-    console,Math,Set,save,
+    console,Math,Set,save,drawForestCharacter(){},
     $:s=>{assert.ok(nodes[s],`Missing DOM ID: ${s}`);return nodes[s];},
     document:{createElement:()=>new Element(),addEventListener(){}},window:{addEventListener(){}},
     requestAnimationFrame:fn=>{queued.push(fn);return queued.length;},cancelAnimationFrame(){},
@@ -134,4 +134,91 @@ test('pause clears controls, stale frame cannot update a new adventure, results 
   u.run('endAdventure(true); endAdventure(true)');
   assert.equal(u.save.blocks.A,5);assert.equal(u.save.battle.trophies[1],true);
   assert.equal(u.save.battle.stars,4);
+});
+
+test('30 unique beginner recipes retain the original collection and map new spells',()=>{
+  const ctx=vm.createContext({Math});
+  vm.runInContext(source('english/js/data.js')+'\n'+source('english/js/battle-engine.js')+'\nthis.recipes=RECIPES;this.Engine=AdventureEngine;',ctx);
+  assert.equal(ctx.recipes.length,30);assert.equal(new Set(ctx.recipes.map(r=>r.word)).size,30);
+  assert.ok(ctx.recipes.every(r=>/^[a-z]{3}$/.test(r.word)));
+  assert.equal(ctx.Engine.spellOf('bee'),'cat');assert.equal(ctx.Engine.spellOf('egg'),'bed');assert.equal(ctx.Engine.spellOf('map'),'dog');
+});
+test('archers start at stage two, aim before firing, and do not track after aiming',()=>{
+  assert.equal(setup(1).enemies.filter(e=>e.kind==='archer').length,0);
+  const g=setup(2);const e=g.enemies.find(e=>e.kind==='archer');g.enemies=[e];e.shootCD=0;
+  g.update(.01);assert.ok(e.aim);assert.equal(g.projectiles.length,0);
+  const target={...e.aim};g.move(0,-1);ticks(g,10);
+  assert.equal(e.aim.x,target.x);assert.equal(e.aim.y,target.y);assert.equal(g.projectiles.length,0);
+  ticks(g,10);assert.equal(g.projectiles.length,1);assert.equal(e.aim,null);
+  ticks(g,50);assert.equal(g.player.hp,6);
+});
+test('melee interrupts archer aiming; archers remain inside arena',()=>{
+  const g=setup(2),e=g.enemies.find(e=>e.kind==='archer');g.enemies=[e];e.shootCD=0;
+  g.update(.01);g.hitEnemy(e,1);ticks(g,8);assert.equal(e.aim,null);assert.equal(g.projectiles.length,0);
+  e.x=45;e.y=60;g.player.x=60;g.player.y=60;ticks(g,30);
+  assert.ok(e.x>=45 && e.y>=60);
+});
+test('arrows hurt once, shields absorb, and dashes evade; wave end clears arrows',()=>{
+  for(const protection of ['none','shield','dash']) {
+    const g=setup(2);g.enemies.forEach(e=>{e.shootCD=100;});
+    g.projectiles=[{x:g.player.x-5,y:g.player.y,vx:200,vy:0,ttl:2}];
+    if(protection==='shield')g.shield=1;
+    if(protection==='dash')g.dash();
+    g.update(.01);assert.equal(g.player.hp,protection==='none'?5:6);assert.equal(g.projectiles.length,0);
+    if(protection==='shield')assert.equal(g.shield,0);
+  }
+  const g=setup(2);g.projectiles=[{x:100,y:100,vx:200,vy:0,ttl:2}];nextChest(g);
+  assert.equal(g.projectiles.length,0);g.forge('bee');assert.equal(g.projectiles.length,0);
+});
+test('repeated letters in bee and egg can be placed, removed, and rewarded once',()=>{
+  for(const word of ['bee','egg']) {
+    const u=ui();u.run("startBattle(BATTLE_STAGES[0]);battle.engine.phase='chest';battle.engine.stage={id:3};chooseForgeWord('"+word+"');");
+    const put=ch=>{
+      const button=u.nodes['#forge-bank'].children.find(b=>b.textContent===ch&&!b.disabled);
+      assert.ok(button,`available ${ch} in ${word}`);button.listeners.click();
+    };
+    put(word[0]);put(word[1]);
+    u.nodes['#forge-slots'].children[1].listeners.click();
+    put(word[1]);put(word[2]);
+    assert.equal(u.run('battle.forgeComplete'),true);assert.equal(u.save.craft.made[word],1);
+    u.run('checkForge()');assert.equal(u.save.craft.made[word],1);assert.equal(u.save.battle.words[word].ok,1);
+  }
+});
+
+test('block monster roster introduces one charger at stage three without increasing wave size',()=>{
+  assert.equal(setup(2).enemies.some(e=>e.kind==='charger'),false);
+  const g=setup(3);
+  assert.equal(g.enemies.length,g.stage.perWave);
+  assert.equal(g.enemies.filter(e=>e.kind==='charger').length,1);
+  assert.equal(g.enemies.filter(e=>e.kind==='archer').length,2);
+  assert.ok(g.enemies.some(e=>e.kind==='moss'));
+  assert.equal(g.enemies.find(e=>e.kind==='charger').hp,4);
+  g.wave=g.stage.waves-1;g.nextWave();assert.equal(g.enemies.length,1);assert.equal(g.enemies[0].kind,'boss');
+});
+function chargingSetup() {
+  const g=setup(3),e=g.enemies.find(e=>e.kind==='charger');g.enemies=[e];
+  e.x=390;e.y=g.player.y;e.chargeCD=0;g.update(.01);
+  return {g,e};
+}
+test('charger telegraphs a fixed path, then charges and rests; sidestepping avoids damage',()=>{
+  const {g,e}=chargingSetup();const x=e.x,y=e.y;
+  assert.equal(e.chargeWindup,1);assert.equal(e.chargeAim.y,g.player.y);
+  g.move(0,-1);ticks(g,19);assert.equal(e.x,x);assert.equal(e.y,y);assert.equal(e.chargeAim.y,y);
+  ticks(g,18);assert.ok(e.recovery>0);assert.equal(g.player.hp,6);
+  const stopX=e.x;ticks(g,10);assert.equal(e.x,stopX);
+});
+test('charger collision damages once and shield absorbs; melee cancels the windup',()=>{
+  for(const shield of [0,1]) {
+    const {g,e}=chargingSetup();g.shield=shield;ticks(g,37);
+    assert.equal(g.player.hp,shield?6:5);assert.equal(g.shield,0);assert.ok(e.recovery>0);
+  }
+  const {g,e}=chargingSetup();g.hitEnemy(e,1);g.update(.01);
+  assert.equal(e.chargeAim,null);assert.equal(e.chargeWindup,0);assert.equal(e.chargeTime,0);
+  assert.ok(e.recovery>0);assert.equal(e.hp,3);
+});
+test('charger stops at arena wall and defeat cannot leave a damaging charge',()=>{
+  const {g,e}=chargingSetup();e.x=50;e.chargeWindup=0;e.chargeTime=.75;e.chargeVX=-320;e.chargeVY=0;
+  g.update(.05);assert.equal(e.x,45);assert.equal(e.chargeTime,0);assert.ok(e.recovery>0);
+  g.hitEnemy(e,999);g.update(.01);assert.equal(g.enemies.length,0);assert.equal(g.phase,'chest');
+  const hp=g.player.hp;ticks(g);assert.equal(g.player.hp,hp);
 });

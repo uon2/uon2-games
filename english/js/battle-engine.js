@@ -6,7 +6,7 @@ class AdventureEngine {
     this.stage = stage; this.rng = rng; this.width = 900; this.height = 520;
     this.player = { x: 190, y: 260, hp: 6, maxHP: 6, facing: 1, invincible: 0, dash: 0, dashCD: 0, attackCD: 0, swing: 0 };
     this.input = { x: 0, y: 0, attack: false };
-    this.enemies = []; this.drops = []; this.effects = []; this.events = [];
+    this.enemies = []; this.projectiles = []; this.drops = []; this.effects = []; this.events = [];
     this.phase = 'fight'; this.wave = 0; this.xp = 0; this.level = 1; this.kills = 0;
     this.spells = { cat: 0, bed: 0, dog: 0 }; this.shield = 0; this.time = 0;
     this.nextWave();
@@ -15,15 +15,21 @@ class AdventureEngine {
   nextWave() {
     if (this.phase === 'won' || this.phase === 'lost') return;
     this.wave++; this.phase = this.wave >= this.stage.waves ? 'boss' : 'fight';
-    this.enemies = []; this.drops = [];
+    this.enemies = []; this.projectiles = []; this.drops = [];
     const count = this.phase === 'boss' ? 1 : this.stage.perWave + this.wave - 1;
     for (let i = 0; i < count; i++) {
       const boss = this.phase === 'boss';
+      // 2단계는 한 마리, 3단계부터 두 마리까지. 첫 사격은 시차를 둔다.
+      const archer = !boss && this.stage.id >= 2 && i < (this.stage.id >= 3 ? 2 : 1);
+      const charger = !boss && this.stage.id >= 3 && i === 2;
       this.enemies.push({ x: 580 + this.rng() * 250, y: 90 + this.rng() * 330,
-        hp: boss ? 18 + this.stage.id * 4 : 2 + (this.stage.id >= 4 ? 1 : 0),
-        maxHP: boss ? 18 + this.stage.id * 4 : 2 + (this.stage.id >= 4 ? 1 : 0),
-        speed: boss ? 46 : 44 + this.stage.id * 7 + this.rng() * 16,
-        boss, windup: 0, cooldown: boss ? 1.8 : 0, target: null, flash: 0, recoil: 0,
+        hp: boss ? 18 + this.stage.id * 4 : charger ? 4 : 2 + (this.stage.id >= 4 ? 1 : 0),
+        maxHP: boss ? 18 + this.stage.id * 4 : charger ? 4 : 2 + (this.stage.id >= 4 ? 1 : 0),
+        speed: boss ? 46 : charger ? 34 : 44 + this.stage.id * 7 + this.rng() * 16,
+        boss, kind: boss ? 'boss' : archer ? 'archer' : charger ? 'charger' : 'moss',
+        chargeAim: null, chargeWindup: 0, chargeTime: 0, chargeCD: 2.4, recovery: 0,
+        aim: null, shootWindup: 0, shootCD: 1.5 + i * 1.2,
+        windup: 0, cooldown: boss ? 1.8 : 0, target: null, flash: 0, recoil: 0,
         color: ['#65cfaf', '#bc98e8', '#f1ac7b'][i % 3], dead: false });
     }
     this.emit(this.phase === 'boss' ? 'boss' : 'wave', { wave: this.wave });
@@ -60,7 +66,7 @@ class AdventureEngine {
       e.dead = true; this.kills++;
       this.drops.push({ x:e.x, y:e.y, kind:'gem' });
       if (this.kills % 4 === 0) this.drops.push({ x:e.x+20, y:e.y, kind:'heart' });
-      // 방패 아이템: 주우면 공격을 3번 막아 준다
+      // 방패 아이템: 주우면 공격을 한 번 막아 준다
       if (this.kills % 3 === 0 || e.boss) this.drops.push({ x:e.x-20, y:e.y, kind:'shield' });
       this.emit('defeat', { boss:e.boss });
     }
@@ -84,6 +90,8 @@ class AdventureEngine {
   }
   // 작업대에서 만든 어떤 낱말이든 마법이 된다: 동물=공격(cat), 쉬는 물건=회복(bed), 나머지=보호(dog)
   static spellOf(word) {
+    const recipe = RECIPES.find(r => r.word === word);
+    if (recipe?.spell) return recipe.spell;
     if (['cat','dog','pig','fox','cow','hen'].includes(word)) return word === 'dog' ? 'dog' : 'cat';
     if (['bed','cup'].includes(word)) return 'bed';
     return 'dog';
@@ -92,6 +100,90 @@ class AdventureEngine {
     if (this.phase !== 'chest' || typeof word !== 'string' || !word) return false;
     this.spells[AdventureEngine.spellOf(word)]++;
     this.nextWave(); return true;
+  }
+  updateArcher(e, dt) {
+    const p = this.player;
+    if (e.recoil > 0) {
+      e.recoil = Math.max(0, e.recoil - dt);
+      // 근접 공격을 맞히면 준비 중인 사격을 끊을 수 있다.
+      e.aim = null; e.shootWindup = 0; e.shootCD = Math.max(e.shootCD, 0.8);
+      return;
+    }
+    if (e.shootWindup > 0) {
+      e.shootWindup = Math.max(0, e.shootWindup - dt);
+      if (!e.shootWindup) {
+        const dx = e.aim.x-e.x, dy = e.aim.y-e.y, len = Math.hypot(dx,dy)||1;
+        const speed = 185 + this.stage.id * 10;
+        this.projectiles.push({x:e.x, y:e.y, vx:dx/len*speed, vy:dy/len*speed, ttl:5});
+        e.aim = null; e.shootCD = 2.6;
+        this.emit('arrow');
+      }
+      return;
+    }
+    const dx=p.x-e.x, dy=p.y-e.y, len=Math.hypot(dx,dy)||1;
+    // 너무 가까우면 천천히 물러나고, 멀면 사정거리로 접근한다.
+    const direction=len<145 ? -0.55 : len>300 ? 0.65 : 0;
+    e.x=Math.max(45,Math.min(855,e.x+dx/len*e.speed*direction*dt));
+    e.y=Math.max(60,Math.min(460,e.y+dy/len*e.speed*direction*dt));
+    e.shootCD-=dt;
+    if(e.shootCD<=0) {
+      e.aim={x:p.x,y:p.y}; e.shootWindup=0.95;
+      this.emit('aim');
+    }
+  }
+  updateCharger(e, dt) {
+    const p=this.player;
+    if(e.recoil>0) {
+      e.recoil=Math.max(0,e.recoil-dt);
+      e.chargeWindup=0;e.chargeTime=0;e.chargeAim=null;
+      e.recovery=0.8;e.chargeCD=1.5;
+      return;
+    }
+    if(e.recovery>0) { e.recovery=Math.max(0,e.recovery-dt); return; }
+    if(e.chargeWindup>0) {
+      e.chargeWindup=Math.max(0,e.chargeWindup-dt);
+      if(!e.chargeWindup) {
+        const dx=e.chargeAim.x-e.x,dy=e.chargeAim.y-e.y,len=Math.hypot(dx,dy)||1;
+        e.chargeVX=dx/len*320;e.chargeVY=dy/len*320;e.chargeTime=0.75;
+      }
+      return;
+    }
+    if(e.chargeTime>0) {
+      const x=e.x,y=e.y,step=Math.min(dt,e.chargeTime);
+      const nx=x+e.chargeVX*step,ny=y+e.chargeVY*step;
+      e.x=Math.max(45,Math.min(855,nx));e.y=Math.max(60,Math.min(460,ny));
+      const dx=e.x-x,dy=e.y-y;
+      const t=Math.max(0,Math.min(1,((p.x-x)*dx+(p.y-y)*dy)/(dx*dx+dy*dy||1)));
+      if(Math.hypot(x+dx*t-p.x,y+dy*t-p.y)<32) this.hurt();
+      e.chargeTime=Math.max(0,e.chargeTime-dt);
+      if(!e.chargeTime || e.x!==nx || e.y!==ny) {
+        e.chargeTime=0;e.chargeAim=null;e.recovery=1.2;e.chargeCD=2;
+      }
+      return;
+    }
+    const dx=p.x-e.x,dy=p.y-e.y,distance=Math.hypot(dx,dy)||1;
+    e.chargeCD=Math.max(0,e.chargeCD-dt);
+    if(e.chargeCD===0 && distance<330) {
+      e.chargeAim={x:p.x,y:p.y};e.chargeWindup=1;
+      return;
+    }
+    if(distance>36) {
+      e.x=Math.max(45,Math.min(855,e.x+dx/distance*e.speed*dt));
+      e.y=Math.max(60,Math.min(460,e.y+dy/distance*e.speed*dt));
+    }
+    if(distance<33) this.hurt();
+  }
+  updateProjectiles(dt) {
+    const p=this.player;
+    this.projectiles=this.projectiles.filter(a=>{
+      const x=a.x,y=a.y;
+      a.x+=a.vx*dt; a.y+=a.vy*dt; a.ttl-=dt;
+      // 선분 충돌: 낮은 프레임에서도 화살이 플레이어를 관통하지 않는다.
+      const dx=a.x-x,dy=a.y-y;
+      const t=Math.max(0,Math.min(1,((p.x-x)*dx+(p.y-y)*dy)/(dx*dx+dy*dy||1)));
+      if(Math.hypot(x+dx*t-p.x,y+dy*t-p.y)<20) { this.hurt(); return false; }
+      return a.ttl>0 && a.x>15 && a.x<885 && a.y>25 && a.y<495;
+    });
   }
   update(delta) {
     if (['won','lost'].includes(this.phase)) return;
@@ -107,6 +199,8 @@ class AdventureEngine {
     for (const e of this.enemies) {
       if (e.dead || this.phase === 'lost') continue;
       e.flash=Math.max(0,e.flash-dt);
+      if (e.kind === 'charger') { this.updateCharger(e,dt); continue; }
+      if (e.kind === 'archer') { this.updateArcher(e,dt); continue; }
       if (e.boss) {
         e.cooldown -= dt;
         if (e.windup > 0) {
@@ -134,6 +228,8 @@ class AdventureEngine {
       if (distance < (e.boss ? 45 : 30)) this.hurt();
     }
     this.enemies=this.enemies.filter(e=>!e.dead);
+    if(this.enemies.length && this.phase!=='lost') this.updateProjectiles(dt);
+    else this.projectiles=[];
     this.drops=this.drops.filter(d=>{
       if (Math.hypot(d.x-p.x,d.y-p.y)>48) return true;
       if (d.kind==='heart') p.hp=Math.min(p.maxHP,p.hp+1);

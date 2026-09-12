@@ -19,7 +19,7 @@
     <div class="title-wrap">
       <div class="logo-blocks" id="logo-blocks"></div>
       <h1 class="logo">영어 블록 월드</h1>
-      <p class="sub">알파벳 블록을 캐러 가요! ⛏️</p>
+      <p class="sub">블록을 캐고, 낱말 30개를 모아 모험을 떠나요!</p>
       <button class="btn green big" id="start-btn">▶ 시작하기</button>
     </div>
     <div class="ground"></div>
@@ -168,6 +168,7 @@
       <div class="bag">⭐ <span id="nights-stars">0</span></div>
     </header>
     <p class="msg" id="nights-msg">어느 밤을 지킬까요?</p>
+    <div class="forest-friends" id="forest-friends" aria-label="블록 몬스터 도감"></div>
     <div class="stage-list" id="night-list"></div>
   </section>
 
@@ -180,7 +181,7 @@
       <button class="btn" id="battle-pause">⏸ 쉬기</button>
     </header>
     <div class="battle-status" id="battle-progress"></div>
-    <div id="boss-panel" class="boss-panel" hidden><span>👑 안개 대장</span><progress id="boss-health" max="12" value="12" aria-label="보스 체력"></progress></div>
+    <div id="boss-panel" class="boss-panel" hidden><span>👑 안개왕</span><progress id="boss-health" max="12" value="12" aria-label="보스 체력"></progress></div>
     <p id="adventure-note" class="adventure-note" aria-live="polite"></p>
     <div class="adventure-world"><canvas id="adventure-canvas" width="900" height="520" aria-label="몬스터가 있는 숲. 이동 조이스틱 또는 방향키로 움직이고 공격과 대시 버튼을 사용하세요."></canvas>
       <button class="btn green" id="adventure-open" hidden>🎁 보물 열기</button>
@@ -282,6 +283,7 @@
   <script src="js/craft.js"></script>
   <script src="js/room.js"></script>
   <script src="js/battle-engine.js"></script>
+  <script src="js/forest-art.js"></script>
   <script src="js/battle.js"></script>
   <script>
     // 허브 전체를 담당하는 서비스 워커를 등록 (HTTPS 또는 localhost에서만 동작)
