@@ -606,29 +606,81 @@ a.btn { display: inline-block; text-decoration: none; }
 /* ---------- 내 방 ---------- */
 .stage-icon.room-icon { background: #3f6f9f; font-size: clamp(40px, 6vmin, 64px); }
 
-.room-screen { background: #1b1b22; }
+.room-screen { background: linear-gradient(#2b2440, #3a2f4d); }
+
+/* 테마별 벽지·바닥 색 */
+.room[data-theme="candy"]  { --wall: #ffd9e6; --wall2: #ffc2d6; --floor: #e7a977; --floor2: #d9955f; }
+.room[data-theme="mint"]   { --wall: #d4f3e2; --wall2: #b9e9d2; --floor: #c9a882; --floor2: #b8946c; }
+.room[data-theme="sky"]    { --wall: #d6ecff; --wall2: #bfe0ff; --floor: #e3cfa6; --floor2: #d2ba8c; }
+.room[data-theme="sunset"] { --wall: #ffe0c2; --wall2: #ffc9a0; --floor: #c98f6b; --floor2: #b57a57; }
+.room[data-theme="wood"]   { --wall: #f0e0c8; --wall2: #e3cdaa; --floor: #b98254; --floor2: #a67045; }
+
 .room {
   position: relative;
   flex: 1;
   min-height: 0;
   margin: 0 clamp(8px, 2vmin, 20px);
-  border: 4px solid #111;
+  border: 5px solid #6b4a2f;
+  border-radius: 14px;
   overflow: hidden;
-  image-rendering: pixelated;
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.35), 0 6px 0 rgba(0, 0, 0, 0.35);
 }
+/* 벽: 은은한 물방울 무늬 벽지 */
 .room::before {
   content: '';
   position: absolute;
-  inset: 0 0 38% 0;
-  background: var(--tex-wall) 0 0 / 72px 72px;
-  filter: brightness(0.8);
+  inset: 0 0 34% 0;
+  background:
+    radial-gradient(circle at 50% 50%, var(--wall2) 4px, transparent 5px) 0 0 / 44px 44px,
+    radial-gradient(circle at 50% 50%, var(--wall2) 3px, transparent 4px) 22px 22px / 44px 44px,
+    linear-gradient(var(--wall), var(--wall));
 }
+/* 바닥: 나뭇결 줄무늬 + 굽도리 */
 .room::after {
   content: '';
   position: absolute;
-  inset: 62% 0 0 0;
-  background: var(--tex-plank) 0 0 / 72px 72px;
-  border-top: 4px solid rgba(0, 0, 0, 0.35);
+  inset: 66% 0 0 0;
+  background:
+    repeating-linear-gradient(90deg, var(--floor2) 0 3px, transparent 3px 64px),
+    repeating-linear-gradient(var(--floor) 0 26px, var(--floor2) 26px 28px);
+  border-top: 6px solid rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 8px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* 방 장식 */
+.room-deco { position: absolute; pointer-events: none; }
+.room-deco.window {
+  left: 8%; top: 10%;
+  width: clamp(70px, 16%, 150px);
+  aspect-ratio: 1.15;
+  background: linear-gradient(#bfe9ff, #eaf7ff 60%, #ffe9a8);
+  border: 5px solid #fff;
+  border-radius: 10px;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.18);
+}
+.room-deco.window::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(#fff, #fff) center / 100% 5px no-repeat,
+              linear-gradient(#fff, #fff) center / 5px 100% no-repeat;
+}
+.room-deco.lamp {
+  right: 10%; top: 8%;
+  width: clamp(42px, 9%, 80px);
+  aspect-ratio: 1;
+  background: radial-gradient(circle at 50% 40%, #fff6c9 45%, #ffd978 70%, transparent 72%);
+  filter: drop-shadow(0 0 12px rgba(255, 220, 130, 0.65));
+}
+.room-deco.rug {
+  left: 50%; bottom: 8%;
+  transform: translateX(-50%);
+  width: 46%;
+  aspect-ratio: 2.6;
+  border-radius: 50%;
+  background: repeating-radial-gradient(circle, #ff9db5 0 10px, #ffd3de 10px 20px);
+  opacity: 0.85;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.12);
 }
 
 .room-item {
@@ -639,12 +691,56 @@ a.btn { display: inline-block; text-decoration: none; }
   border: none;
   font-size: clamp(34px, 6.5vmin, 68px);
   line-height: 1;
-  filter: drop-shadow(3px 4px 0 rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 6px 4px rgba(0, 0, 0, 0.28));
   cursor: grab;
   touch-action: none;
   z-index: 1;
+  transition: filter 0.15s;
 }
-.room-item.dragging { transform: translate(-50%, -50%) scale(1.15); z-index: 5; cursor: grabbing; }
+.room-item:active { filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.35)) brightness(1.1); }
+.room-item.dragging { transform: translate(-50%, -50%) scale(1.18) rotate(-4deg); z-index: 5; cursor: grabbing; }
+
+/* 벽지·바닥 고르기 */
+.room-themes {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 8px 12px 0;
+}
+.theme-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: #fffdf7;
+  color: #5b4636;
+  border: 3px solid #6b4a2f;
+  border-radius: 999px;
+  font-size: clamp(13px, 1.9vmin, 17px);
+  cursor: pointer;
+}
+.theme-chip.on { background: #ffe08a; box-shadow: 0 0 0 3px #fff inset; }
+.theme-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid #6b4a2f;
+}
+.theme-dot[data-theme="candy"]  { background: #ffc2d6; }
+.theme-dot[data-theme="mint"]   { background: #b9e9d2; }
+.theme-dot[data-theme="sky"]    { background: #bfe0ff; }
+.theme-dot[data-theme="sunset"] { background: #ffc9a0; }
+.theme-dot[data-theme="wood"]   { background: #e3cdaa; }
+
+/* 도감의 모험 효과 배지 */
+.book-effect {
+  margin-top: 4px;
+  font-size: clamp(12px, 1.8vmin, 16px);
+  background: #ffe08a;
+  border: 2px solid #111;
+  padding: 1px 4px;
+}
+.book-item.unknown .book-effect { background: #b9b9b9; }
 
 #room-trash.hot { background: #b02222; box-shadow: inset -4px -4px 0 #7a1414, inset 4px 4px 0 #e06060; }
 

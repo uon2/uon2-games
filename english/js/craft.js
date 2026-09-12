@@ -223,7 +223,8 @@ async function checkWord() {
   if (sess !== craft.session) return;
   sfx.fanfare();
   updateCraftBag();
-  setCraftMsg(`${recipe.ko} 완성! 🎉 내 방에 놓아 보세요`);
+  const spellGot = { cat: '🐱 숲속 모험에서 모두 공격!', bed: '🛏️ 숲속 모험에서 하트 회복!', dog: '🛡️ 숲속 모험에서 2번 보호!' }[AdventureEngine.spellOf(recipe.word)];
+  setCraftMsg(`${recipe.ko} 완성! 🎉 ${spellGot}`);
   await showCraftCard(recipe);
   if (sess !== craft.session) return;
   await sleep(400);
@@ -277,10 +278,13 @@ function goBook() {
     const count = craftSave().made[r.word] || 0;
     const card = document.createElement('button');
     card.className = 'book-item' + (count ? '' : ' unknown');
+    const spell = AdventureEngine.spellOf(r.word);
+    const effect = { cat: '🐱 모두 공격', bed: '🛏️ 하트 회복', dog: '🛡️ 2번 보호' }[spell];
     card.innerHTML = `
       <div class="book-emoji">${count ? r.emoji : '❓'}</div>
       <div class="book-word">${count ? r.word : '＿ ＿ ＿'}</div>
-      <div class="book-ko">${r.ko}${count > 1 ? ` ×${count}` : ''}</div>`;
+      <div class="book-ko">${r.ko}${count > 1 ? ` ×${count}` : ''}</div>
+      <div class="book-effect">${count ? effect : '숲속 모험 효과 ?'}</div>`;
     card.addEventListener('click', () => {
       if (!count) { sfx.bonk(); return; }
       sfx.click();

@@ -126,6 +126,8 @@ function adventureLoop(ts,sess) {
 function adventureEvent(event) {
   if(event.type==='hit') sfx.hit();
   if(event.type==='pickup') sfx.pop();
+  if(event.type==='shieldup') { sfx.fanfare(); $('#adventure-note').textContent='🛡️ 방패를 얻었어요! 공격을 3번 막아 줘요.'; }
+  if(event.type==='shield') $('#adventure-note').textContent='🛡️ 방패가 막아 줬어요!';
   if(event.type==='hurt') sfx.bonk();
   if(event.type==='boss') $('#adventure-note').textContent='안개 대장 등장! 붉은 원이 생기면 대시로 피해요!';
   if(event.type==='chest') $('#adventure-note').textContent='보물을 찾았어요! 가운데 상자에 다가가서 열어 보세요.';
@@ -154,7 +156,8 @@ function renderAdventure() {
     c.fillStyle='#fff'; c.font='bold 28px system-ui'; c.textAlign='center'; c.fillText('!',e.target.x,e.target.y+8);
   });
   g.drops.forEach(d=>{
-    c.font='23px system-ui'; c.textAlign='center'; c.fillText(d.kind==='gem'?'💎':'❤️',d.x,d.y);
+    c.font='23px system-ui'; c.textAlign='center';
+    c.fillText(d.kind==='gem'?'💎':d.kind==='shield'?'🛡️':'❤️',d.x,d.y);
   });
   if(g.phase==='chest') {
     c.fillStyle='#e7b657'; c.fillRect(420,229,60,44); c.fillStyle='#865029'; c.fillRect(420,249,60,7);
@@ -186,7 +189,7 @@ function renderAdventure() {
   c.restore();
   g.effects.forEach(e=>{ c.globalAlpha=Math.min(1,e.ttl*2); c.fillStyle='#fff6b7'; c.textAlign='center'; c.font='bold 26px system-ui'; c.fillText(e.text,e.x,e.y-(1-e.ttl)*20); }); c.globalAlpha=1;
   $('#hearts').textContent='❤️'.repeat(Math.max(0,p.hp))+'♡'.repeat(Math.max(0,p.maxHP-p.hp));
-  $('#adventure-level').textContent=`Lv.${g.level} · 💎 ${g.xp}`;
+  $('#adventure-level').textContent=`Lv.${g.level} · 💎 ${g.xp}`+(g.shield?` · 🛡️ ${g.shield}`:'');
   $('#battle-progress').textContent=`${g.stage.name} · ${g.phase==='boss'?'보스':g.wave+' / '+g.stage.waves+' 구역'}`;
   $('#adventure-dash').textContent=p.dashCD>0?'💨 '+p.dashCD.toFixed(1):'💨 대시';
   $('#adventure-dash').disabled=p.dashCD>0;

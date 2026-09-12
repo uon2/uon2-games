@@ -3,9 +3,42 @@
 // ---------- 내 방: 작업대에서 만든 아이템을 꺼내 놓고 꾸미기 ----------
 const room = { dragging: null };
 
+// 아기자기한 벽지·바닥 테마 (아이가 직접 고름)
+const ROOM_THEMES = [
+  { id: 'candy',  name: '사탕방',   emoji: '🍬' },
+  { id: 'mint',   name: '민트방',   emoji: '🌿' },
+  { id: 'sky',    name: '하늘방',   emoji: '☁️' },
+  { id: 'sunset', name: '노을방',   emoji: '🌇' },
+  { id: 'wood',   name: '나무방',   emoji: '🪵' },
+];
+
 function roomSave() {
-  save.room = { items: [], ...save.room };
+  save.room = { items: [], theme: 'candy', ...save.room };
   return save.room;
+}
+
+function applyTheme() {
+  const theme = roomSave().theme;
+  $('#room').dataset.theme = theme;
+}
+
+function renderThemes() {
+  const box = $('#room-themes');
+  box.replaceChildren();
+  ROOM_THEMES.forEach(theme => {
+    const b = document.createElement('button');
+    b.className = 'theme-chip' + (roomSave().theme === theme.id ? ' on' : '');
+    b.innerHTML = `<span class="theme-dot" data-theme="${theme.id}"></span><span>${theme.emoji} ${theme.name}</span>`;
+    b.addEventListener('click', () => {
+      sfx.pop();
+      roomSave().theme = theme.id;
+      persist();
+      applyTheme();
+      renderThemes();
+      $('#room-msg').textContent = `${theme.emoji} ${theme.name}으로 바꿨어요!`;
+    });
+    box.appendChild(b);
+  });
 }
 
 function madeCounts() { return (save.craft && save.craft.made) || {}; }
@@ -17,7 +50,8 @@ function placedCount(word) { return roomSave().items.filter(i => i.w === word).l
 // ---------- 그리기 ----------
 function renderRoom() {
   const box = $('#room');
-  box.innerHTML = '';
+  // 창문·러그·조명 같은 방 장식은 남기고 아이템만 다시 그린다
+  box.querySelectorAll('.room-item').forEach(el => el.remove());
   roomSave().items.forEach(item => box.appendChild(roomItemEl(item)));
 }
 
@@ -143,6 +177,8 @@ function startDrag(e, el, item) {
 // ---------- 들어가기 ----------
 function goRoom() {
   roomSave();
+  applyTheme();
+  renderThemes();
   renderRoom();
   renderPalette();
   const shelf = $('#trophy-shelf');

@@ -57,6 +57,8 @@ class AdventureEngine {
       e.dead = true; this.kills++;
       this.drops.push({ x:e.x, y:e.y, kind:'gem' });
       if (this.kills % 4 === 0) this.drops.push({ x:e.x+20, y:e.y, kind:'heart' });
+      // 방패 아이템: 주우면 공격을 3번 막아 준다
+      if (this.kills % 3 === 0 || e.boss) this.drops.push({ x:e.x-20, y:e.y, kind:'shield' });
       this.emit('defeat', { boss:e.boss });
     }
   }
@@ -123,6 +125,7 @@ class AdventureEngine {
     this.drops=this.drops.filter(d=>{
       if (Math.hypot(d.x-p.x,d.y-p.y)>48) return true;
       if (d.kind==='heart') p.hp=Math.min(p.maxHP,p.hp+1);
+      else if (d.kind==='shield') { this.shield += 3; this.emit('shieldup'); }
       else { this.xp++; const level=1+Math.floor(this.xp/3); if(level>this.level) { this.level=level; this.emit('level'); } }
       this.emit('pickup'); return false;
     });
