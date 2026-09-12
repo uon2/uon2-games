@@ -126,7 +126,7 @@ function adventureLoop(ts,sess) {
 function adventureEvent(event) {
   if(event.type==='hit') sfx.hit();
   if(event.type==='pickup') sfx.pop();
-  if(event.type==='shieldup') { sfx.fanfare(); $('#adventure-note').textContent='🛡️ 방패를 얻었어요! 공격을 3번 막아 줘요.'; }
+  if(event.type==='shieldup') { sfx.fanfare(); $('#adventure-note').textContent='🛡️ 방패를 얻었어요! 공격을 한 번 막아 줘요.'; }
   if(event.type==='shield') $('#adventure-note').textContent='🛡️ 방패가 막아 줬어요!';
   if(event.type==='hurt') sfx.bonk();
   if(event.type==='boss') $('#adventure-note').textContent='안개 대장 등장! 붉은 원이 생기면 대시로 피해요!';

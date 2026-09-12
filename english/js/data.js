@@ -59,11 +59,11 @@ const STAGES = [
 // 액션 탐험: 마지막 구역은 보스. 앞선 구역을 마칠 때 보물 마법을 배움.
 // 기존 id/clear 기록을 유지하며, 뒤의 두 구역은 시험용 잠금 상태.
 const BATTLE_STAGES = [
-  { id: 1, name: '풀숲의 보물', letters: ['A','B','C','D','E'], waves: 3, perWave: 3, free: true },
-  { id: 2, name: '안개 숲 탐험', letters: ['F','G','H','I','J'], waves: 3, perWave: 4, free: true },
-  { id: 3, name: '수호 동물의 숲', letters: ['K','L','M','N','O'], waves: 3, perWave: 4, free: true },
-  { id: 4, name: '잊힌 유적', letters: ['P','Q','R','S','T'], waves: 3, perWave: 4, free: false },
-  { id: 5, name: '안개 왕의 성', letters: ['U','V','W','X','Y','Z'], waves: 4, perWave: 4, free: false },
+  { id: 1, name: '풀숲의 보물', letters: ['A','B','C','D','E'], waves: 3, perWave: 4, free: true },
+  { id: 2, name: '안개 숲 탐험', letters: ['F','G','H','I','J'], waves: 3, perWave: 5, free: true },
+  { id: 3, name: '수호 동물의 숲', letters: ['K','L','M','N','O'], waves: 3, perWave: 6, free: true },
+  { id: 4, name: '잊힌 유적', letters: ['P','Q','R','S','T'], waves: 3, perWave: 6, free: false },
+  { id: 5, name: '안개 왕의 성', letters: ['U','V','W','X','Y','Z'], waves: 4, perWave: 7, free: false },
 ];
 
 // 몬스터 생김새 (직접 고른 조합, 마인크래프트 캐릭터 아님)

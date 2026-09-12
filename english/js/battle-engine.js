@@ -125,7 +125,8 @@ class AdventureEngine {
     this.drops=this.drops.filter(d=>{
       if (Math.hypot(d.x-p.x,d.y-p.y)>48) return true;
       if (d.kind==='heart') p.hp=Math.min(p.maxHP,p.hp+1);
-      else if (d.kind==='shield') { this.shield += 3; this.emit('shieldup'); }
+      // 방패 아이템은 겹쳐 쌓이지 않는다: 이미 방패가 있으면 그대로 둔다
+      else if (d.kind==='shield') { if (this.shield < 1) { this.shield = 1; this.emit('shieldup'); } }
       else { this.xp++; const level=1+Math.floor(this.xp/3); if(level>this.level) { this.level=level; this.emit('level'); } }
       this.emit('pickup'); return false;
     });
