@@ -178,14 +178,40 @@ function renderAdventure() {
   const p=g.player;
   c.save(); c.translate(p.x,p.y);
   if(p.invincible>0 && Math.floor(g.time*15)%2) c.globalAlpha=.55;
-  if(g.shield) { c.beginPath(); c.arc(0,0,31,0,Math.PI*2); c.strokeStyle='#8ce7ff'; c.lineWidth=3; c.stroke(); }
+  // 방패를 들고 있으면 몸을 감싸는 보호막 (남은 횟수만큼 진해지고 숨 쉬듯 커졌다 작아짐)
+  if(g.shield) {
+    const pulse=1+Math.sin(g.time*4)*0.05, radius=36*pulse;
+    const glow=c.createRadialGradient(0,0,radius*0.6,0,0,radius);
+    glow.addColorStop(0,'rgba(140,231,255,0)');
+    glow.addColorStop(1,`rgba(140,231,255,${0.16+g.shield*0.07})`);
+    c.fillStyle=glow; c.beginPath(); c.arc(0,0,radius,0,Math.PI*2); c.fill();
+    for(let i=0;i<g.shield;i++) {
+      c.beginPath(); c.arc(0,0,radius-i*5,0,Math.PI*2);
+      c.strokeStyle=i===0?'#bff2ff':'rgba(140,231,255,.55)'; c.lineWidth=i===0?3:2; c.stroke();
+    }
+  }
   c.fillStyle='#e7b17a'; c.fillRect(-12,-23,24,22);
   c.fillStyle='#374a72'; c.fillRect(-14,-29,28,11);
   c.fillStyle='#61cbe3'; c.fillRect(-15,-1,30,23);
   c.fillStyle='#243751'; c.fillRect(-12,22,9,12); c.fillRect(3,22,9,12);
   c.fillStyle='#132736'; c.fillRect(p.facing>0?4:-8,-17,4,5);
   c.fillStyle='#eaf1f1'; c.fillRect(p.facing*24-3,-16,6,33); c.fillStyle='#ffcc64'; c.fillRect(p.facing*24-9,12,18,5);
+  // 검 반대쪽 손에 방패를 들고, 남은 횟수를 방패에 적어 준다
+  if(g.shield) {
+    const sx=-p.facing*20, sy=2;
+    c.fillStyle='#2f4f75'; c.fillRect(sx-11,sy-16,22,26);
+    c.beginPath(); c.moveTo(sx-11,sy+10); c.lineTo(sx,sy+20); c.lineTo(sx+11,sy+10); c.closePath(); c.fill();
+    c.fillStyle='#9fd8f5'; c.fillRect(sx-7,sy-12,14,18);
+    c.beginPath(); c.moveTo(sx-7,sy+6); c.lineTo(sx,sy+14); c.lineTo(sx+7,sy+6); c.closePath(); c.fill();
+    c.fillStyle='#ffd166'; c.fillRect(sx-3,sy-6,6,6);
+    c.fillStyle='#123'; c.font='bold 11px system-ui'; c.textAlign='center'; c.fillText(String(g.shield),sx,sy+4);
+  }
   if(p.swing>0) { c.beginPath(); c.arc(0,0,80,p.facing>0?-1.15:2,p.facing>0?1.15:4.3); c.strokeStyle='#fff2a3'; c.lineWidth=9; c.stroke(); }
+  // 방패가 막은 직후 번쩍임
+  if(g.shield && p.invincible>0.6) {
+    c.beginPath(); c.arc(0,0,44,0,Math.PI*2);
+    c.strokeStyle=`rgba(255,255,255,${(p.invincible-0.6)*2})`; c.lineWidth=6; c.stroke();
+  }
   c.restore();
   g.effects.forEach(e=>{ c.globalAlpha=Math.min(1,e.ttl*2); c.fillStyle='#fff6b7'; c.textAlign='center'; c.font='bold 26px system-ui'; c.fillText(e.text,e.x,e.y-(1-e.ttl)*20); }); c.globalAlpha=1;
   $('#hearts').textContent='❤️'.repeat(Math.max(0,p.hp))+'♡'.repeat(Math.max(0,p.maxHP-p.hp));
