@@ -9,7 +9,7 @@
   <link rel="icon" href="../icons/icon-192.png">
   <link rel="apple-touch-icon" href="../icons/icon-180.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/galmuri.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=v11">
 </head>
 <body>
 
@@ -210,6 +210,24 @@
       <button class="btn green" id="forge-leave" hidden>✨ 마법 받고 출발</button>
     </div>
   </div>
+  <!-- 문장 체크포인트: 푸는 동안 전투는 완전히 멈춘다 -->
+  <div id="sentence-box" class="overlay" hidden>
+    <div class="panel sentence-panel" role="dialog" aria-modal="true" aria-labelledby="sentence-ko">
+      <div class="sentence-scene"><span id="sentence-emoji"></span></div>
+      <p class="sentence-ko" id="sentence-ko"></p>
+      <p class="sentence-teach" id="sentence-teach"></p>
+      <div class="sentence-slots" id="sentence-slots"></div>
+      <div class="sentence-bank" id="sentence-bank"></div>
+      <p class="sentence-msg" id="sentence-msg" aria-live="polite"></p>
+      <div class="row">
+        <button class="btn listen" id="sentence-listen">🔊 다시 듣기</button>
+        <button class="btn" id="sentence-show">👀 문장 보기</button>
+      </div>
+      <button class="btn green big" id="sentence-done" hidden>⭐ 별 받고 계속하기</button>
+      <button class="btn" id="sentence-leave" hidden>나중에 하기</button>
+    </div>
+  </div>
+
   <!-- 전투 결과 -->
   <section id="screen-battle-result" class="screen night" hidden>
     <div class="panel result-panel">
@@ -276,15 +294,17 @@
   </div>
   <div id="fx"></div>
 
-  <script src="js/data.js"></script>
-  <script src="js/audio.js"></script>
-  <script src="js/textures.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/craft.js"></script>
-  <script src="js/room.js"></script>
-  <script src="js/battle-engine.js"></script>
-  <script src="js/forest-art.js"></script>
-  <script src="js/battle.js"></script>
+  <script src="js/data.js?v=v11"></script>
+  <script src="js/sentences.js?v=v11"></script>
+  <script src="js/audio.js?v=v11"></script>
+  <script src="js/textures.js?v=v11"></script>
+  <script src="js/app.js?v=v11"></script>
+  <script src="js/craft.js?v=v11"></script>
+  <script src="js/room.js?v=v11"></script>
+  <script src="js/battle-engine.js?v=v11"></script>
+  <script src="js/forest-art.js?v=v11"></script>
+  <script src="js/sentence.js?v=v11"></script>
+  <script src="js/battle.js?v=v11"></script>
   <script>
     // 허브 전체를 담당하는 서비스 워커를 등록 (HTTPS 또는 localhost에서만 동작)
     if ('serviceWorker' in navigator) {

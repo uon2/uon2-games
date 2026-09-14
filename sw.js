@@ -2,7 +2,7 @@
 
 // 허브 전체(모든 게임)를 담당하는 서비스 워커
 // 네트워크 우선: 온라인이면 항상 최신 파일, 인터넷이 끊기면 마지막으로 받은 파일로 실행
-const CACHE = 'uon2-games-v10-drag-fix';
+const CACHE = 'uon2-games-v11-sentences';
 
 // index.html은 호스팅에서 폴더 주소로 리다이렉트될 수 있어 폴더 주소('./', 'english/')로만 캐시
 const CORE = [
@@ -17,6 +17,8 @@ const CORE = [
   'english/',
   'english/css/style.css',
   'english/js/data.js',
+  'english/js/sentences.js',
+  'english/js/sentence.js',
   'english/js/audio.js',
   'english/js/textures.js',
   'english/js/app.js',
@@ -52,6 +54,18 @@ const CORE = [
   'english/audio/letters/Y.m4a',
   'english/audio/letters/Z.m4a',
   'english/audio/phrases/great-job.m4a',
+  'english/audio/sentences/isee-cat.m4a',
+  'english/audio/sentences/isee-cow.m4a',
+  'english/audio/sentences/isee-dog.m4a',
+  'english/audio/sentences/isee-fox.m4a',
+  'english/audio/sentences/itis-cat.m4a',
+  'english/audio/sentences/itis-dog.m4a',
+  'english/audio/sentences/itis-fox.m4a',
+  'english/audio/sentences/itis-pig.m4a',
+  'english/audio/sentences/thisismy-bag.m4a',
+  'english/audio/sentences/thisismy-bed.m4a',
+  'english/audio/sentences/thisismy-cup.m4a',
+  'english/audio/sentences/thisismy-hat.m4a',
   'english/audio/phrases/lets-go.m4a',
   'english/audio/words/apple.m4a',
   'english/audio/words/ant.m4a',

@@ -71,16 +71,18 @@ test('gem pickup drives level progression',()=>{
   g.drops=Array.from({length:6},()=>({kind:'gem',x:g.player.x,y:g.player.y}));g.update(.01);
   assert.equal(g.xp,6);assert.equal(g.level,3);
 });
-test('all recipe words use local clips and all 77 clips are precached',()=>{
+test('all recipe words use local clips and every clip is precached',()=>{
   const ctx=vm.createContext({window:{},Map,Set});
   vm.runInContext(source('english/js/data.js')+'\n'+source('english/js/audio.js')+'\nthis.speech=speech; this.recipes=RECIPES;',ctx);
   for(const r of ctx.recipes){const url=ctx.speech.urlFor(r.word);assert.ok(url);assert.ok(fs.existsSync(path.join(root,'english',url)));}
   const sw=source('sw.js');
   const clips=fs.readdirSync(path.join(root,'english/audio'),{recursive:true}).filter(f=>f.endsWith('.m4a'));
-  assert.equal(clips.length,77);clips.forEach(f=>assert.ok(sw.includes('english/audio/'+f),f));
+  const words=clips.filter(f=>!f.startsWith('sentences/'));const sentences=clips.filter(f=>f.startsWith('sentences/'));
+  assert.equal(words.length,77);assert.equal(sentences.length,12);
+  clips.forEach(f=>assert.ok(sw.includes('english/audio/'+f),f));
 });
 test('HTML script paths and SW core assets exist',()=>{
-  for(const match of source('english/index.html').matchAll(/<script src="([^"]+)"/g)) assert.ok(fs.existsSync(path.join(root,'english',match[1])),match[1]);
+  for(const match of source('english/index.html').matchAll(/<script src="([^"?]+)(?:\?[^"]*)?"/g)) assert.ok(fs.existsSync(path.join(root,'english',match[1])),match[1]);
   const swctx=vm.createContext({self:{addEventListener(){}},Response});vm.runInContext(source('sw.js')+'\nthis.core=CORE;',swctx);
   swctx.core.forEach(f=>assert.ok(fs.existsSync(path.join(root,f)),f));
 });

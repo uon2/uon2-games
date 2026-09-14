@@ -79,6 +79,8 @@ const speech = {
   token: 0,
 
   urlFor(text) {
+    // 문장은 낱말을 이어 붙이지 않고 문장 단위 파일을 그대로 재생한다
+    if (typeof SENTENCES !== 'undefined' && SENTENCES.some(s => s.id === text)) return `audio/sentences/${text}.m4a`;
     if (/^[A-Z]$/.test(text)) return `audio/letters/${text}.m4a`;
     if (WORD_SET.has(text)) return `audio/words/${text}.m4a`;
     if (PHRASE_FILES[text]) return `audio/phrases/${PHRASE_FILES[text]}.m4a`;
