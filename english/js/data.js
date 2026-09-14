@@ -80,8 +80,8 @@ const BATTLE_STAGES = [
   { id: 1, name: '풀숲의 보물', letters: ['A','B','C','D','E'], waves: 3, perWave: 4, free: true },
   { id: 2, name: '안개 숲 탐험', letters: ['F','G','H','I','J'], waves: 3, perWave: 5, free: true },
   { id: 3, name: '수호 동물의 숲', letters: ['K','L','M','N','O'], waves: 3, perWave: 6, free: true },
-  { id: 4, name: '잊힌 유적', letters: ['P','Q','R','S','T'], waves: 3, perWave: 6, free: false },
-  { id: 5, name: '안개 왕의 성', letters: ['U','V','W','X','Y','Z'], waves: 4, perWave: 7, free: false },
+  { id: 4, name: '잊힌 유적', letters: ['P','Q','R','S','T'], waves: 3, perWave: 6, free: true },
+  { id: 5, name: '안개 왕의 성', letters: ['U','V','W','X','Y','Z'], waves: 4, perWave: 7, free: true },
 ];
 
 // 직접 만든 블록 몬스터. 이름/크기/역할은 소개 화면과 전투에서 함께 사용.

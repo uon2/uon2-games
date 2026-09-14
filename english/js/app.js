@@ -67,9 +67,19 @@ function blockEl(letter, type) {
 // ---------- 단어 카드 ----------
 let cardToken = 0;
 
+// 광산 예시 낱말: 작업대 낱말 30개를 돌려 가며 보여 준다.
+// 후보가 없는 글자는 기존 LETTERS 예시를 쓰고, 예시를 봤다고 낱말을 얻지는 않는다.
+const exampleTurn = {};
+function exampleFor(letter) {
+  const pool = RECIPES.filter(r => r.word[0].toUpperCase() === letter);
+  if (!pool.length) return LETTERS[letter];
+  exampleTurn[letter] = (exampleTurn[letter] || 0) + 1;
+  return pool[(exampleTurn[letter] - 1) % pool.length];
+}
+
 async function showWordCard(letter) {
   const tok = ++cardToken;
-  const d = LETTERS[letter];
+  const d = exampleFor(letter);
   $('#wc-emoji').textContent = d.emoji;
   $('#wc-letter').textContent = letter;
   $('#wc-word').innerHTML = d.word.replace(new RegExp(letter, 'gi'), m => `<b>${m}</b>`);
