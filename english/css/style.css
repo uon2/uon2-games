@@ -854,9 +854,19 @@ button:focus-visible { outline:3px solid #ffe18a; outline-offset:3px; }
 .forge-emoji { font-size:64px; }
 #forge-message { min-height:3em; font-family:system-ui,sans-serif; }
 #forge-slots { margin:20px 0; }
-.forge-slot { width:70px; height:76px; background:#263a46; border:3px solid #91dfce; font:700 44px system-ui,sans-serif; border-radius:8px; }
-.forge-slot.fixed { opacity:.7; }
-#forge-bank .btn { font:700 30px system-ui,sans-serif; min-width:58px; }
+.forge-slot {
+  width: 70px; height: 76px;
+  background: #1d4f5e;
+  color: #ffffff;
+  border: 3px solid #a6f0dd;
+  font: 700 44px system-ui, sans-serif;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, .55);
+  border-radius: 8px;
+}
+/* 미리 채워 준 글자는 흐리게 하지 않고 색으로 구분한다 */
+.forge-slot.fixed { background: #3b6d55; color: #ffe9a8; border-color: #ffd166; }
+.forge-slot:disabled { opacity: 1; }
+#forge-bank .btn { font:700 30px system-ui,sans-serif; min-width:58px; color:#fff; text-shadow:0 2px 0 rgba(0,0,0,.5); }
 #forge-leave { margin-top:15px; }
 #screen-battle-result { overflow-y:auto; }
 #screen-battle-result .result-panel { max-height:94vh; overflow-y:auto; }
@@ -898,7 +908,7 @@ button:focus-visible { outline:3px solid #ffe18a; outline-offset:3px; }
   filter: drop-shadow(0 5px 0 rgba(0, 0, 0, 0.25));
 }
 .sentence-ko { margin: 0; font-size: clamp(20px, 3.2vmin, 30px); font-weight: 700; color: #2d2013; }
-.sentence-teach { margin: 0; font-size: clamp(13px, 2vmin, 17px); color: #6b5636; }
+.sentence-teach { margin: 0; font-size: clamp(14px, 2.1vmin, 18px); color: #4a3a1e; font-weight: 600; }
 .sentence-slots { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
 .sentence-slot {
   min-width: clamp(58px, 9vmin, 96px);
@@ -911,9 +921,21 @@ button:focus-visible { outline:3px solid #ffe18a; outline-offset:3px; }
   box-shadow: inset -3px -3px 0 #29506f, inset 3px 3px 0 #6fa3cd;
   cursor: pointer;
 }
-.sentence-slot.fixed { background: #8b8b8b; box-shadow: inset -3px -3px 0 #5a5a5a, inset 3px 3px 0 #b5b5b5; cursor: default; }
-.sentence-slot.empty { background: rgba(0, 0, 0, 0.22); color: rgba(255, 255, 255, 0.55); box-shadow: none; border-style: dashed; }
+/* 미리 채워 준 말은 노란 글자로, 아이가 놓을 칸은 또렷한 점선으로 구분 */
+.sentence-slot.fixed {
+  background: #3b6d55;
+  color: #ffe9a8;
+  box-shadow: inset -3px -3px 0 #2a5340, inset 3px 3px 0 #5f9b7e;
+  cursor: default;
+}
+.sentence-slot.empty {
+  background: #14313f;
+  color: #ffffff;
+  box-shadow: none;
+  border-style: dashed;
+  border-color: #a6f0dd;
+}
 .sentence-bank { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
 .sentence-token { font-size: clamp(16px, 2.6vmin, 24px); }
 .sentence-token.used { visibility: hidden; }
-.sentence-msg { margin: 0; min-height: 1.5em; font-size: clamp(15px, 2.2vmin, 20px); color: #3c2d1a; text-align: center; }
+.sentence-msg { margin: 0; min-height: 1.5em; font-size: clamp(15px, 2.3vmin, 21px); color: #241a0d; font-weight: 600; text-align: center; }
