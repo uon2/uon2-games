@@ -1,5 +1,11 @@
 'use strict';
 
+// 버전은 여기 한 곳에서만 올린다.
+// 같이 올려야 하는 곳: index.html 의 ?v=v15, sw.js 의 CACHE 이름.
+// tests/version.test.cjs 가 세 곳이 어긋나면 잡아 준다.
+const BUILD = 16;
+const APP_VERSION = 'v0.' + BUILD;
+
 // 알파벳별 예시 단어 (첫소리 위주, 그림은 이모지)
 const LETTERS = {
   A: { word: 'apple',    emoji: '🍎' },
@@ -98,6 +104,21 @@ const LAVA_STAGES = [
 
 // 문장 상자 보상: 중간 상자 40별, 보스 상자 70별
 const SENTENCE_STARS = { normal: 40, boss: 70 };
+
+// ---------- 상점 장비 ----------
+// 빙글검: 몸 둘레를 도는 검. 붙어만 있으면 이기지 않게 적마다 다시 맞기까지 시간을 둔다.
+// 효과는 용암에서만 적용한다(무료인 숲을 반복해 별을 빨리 모으는 길을 막는다).
+const BLADE_LEVELS = [
+  { level: 1, orbs: 1, damage: 1, radius: 72, speed: 2.2, recharge: 0.9,
+    name: '빙글검', desc: '검 하나가 몸 둘레를 돌며 닿는 몬스터를 벤다' },
+  { level: 2, orbs: 2, damage: 1, radius: 80, speed: 2.6, recharge: 0.8,
+    name: '빙글검 II', desc: '검이 둘로 늘고 더 빨리 돈다' },
+  { level: 3, orbs: 2, damage: 2, radius: 88, speed: 3.0, recharge: 0.7,
+    name: '빙글검 III', desc: '검이 더 크게 돌고 한 번에 두 배로 벤다' },
+];
+
+// 값은 미검증 초깃값이다. 아이들이 실제로 모으는 속도를 보고 조정한다.
+const BLADE_PRICES = { 1: 300, 2: 450, 3: 750 };
 
 // 직접 만든 블록 몬스터. 이름/크기/역할은 소개 화면과 전투에서 함께 사용.
 const MONSTER_TYPES = {

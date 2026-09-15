@@ -420,6 +420,20 @@ function goMap() {
   });
   list.appendChild(lavaCard);
 
+  // 상점: 문장으로 모은 별을 쓰는 곳. 살 게 없어도 목표를 볼 수 있게 항상 열어 둔다.
+  const stars = wallet().stars;
+  const blade = gearSave().blade;
+  const nextPrice = BLADE_PRICES[blade + 1];
+  const shopCard = document.createElement('button');
+  shopCard.className = 'stage';
+  shopCard.innerHTML = `
+    <div class="stage-icon shop-icon">🛒</div>
+    <div class="stage-name">상점</div>
+    <div class="stage-letters">${blade ? BLADE_LEVELS[blade-1].name + ' 가지고 있어요' : nextPrice ? `빙글검 ⭐${nextPrice}별` : '장비 구경하기'}</div>
+    <div class="stage-badge">⭐ ${stars}</div>`;
+  shopCard.addEventListener('click', () => { sfx.click(); goShop(); });
+  list.appendChild(shopCard);
+
   show('screen-map');
 }
 
@@ -501,6 +515,25 @@ function init() {
   $('#settings-back').addEventListener('click', () => { sfx.click(); speech.stop(); hideWordCard(); goMap(); });
   $('#sound-test').addEventListener('click', () => playWordCard('A'));
   $('#change-avatar').addEventListener('click', () => { sfx.click(); goProfile(); });
+
+  // 버전: 지금 실행 중인 파일의 번호. 새 내용이 안 보일 때 확인하는 곳이다.
+  $('#app-version').textContent = APP_VERSION;
+  $('#version-refresh').addEventListener('click', async () => {
+    sfx.click();
+    $('#version-note').textContent = '새 파일을 확인하고 있어요…';
+    try {
+      // 받아 둔 파일을 지우고 다시 받는다
+      if (window.caches) { const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); }
+      if (navigator.serviceWorker) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map(r => r.unregister()));
+      }
+      $('#version-note').textContent = '다시 받았어요! 화면을 새로 여는 중이에요…';
+      setTimeout(() => location.reload(), 600);
+    } catch (err) {
+      $('#version-note').textContent = '지금은 다시 받을 수 없어요. 앱을 완전히 닫았다 열어 주세요.';
+    }
+  });
   $('#bag-btn').addEventListener('click', () => { sfx.click(); goBag(); });
   $('#bag-back').addEventListener('click', () => { sfx.click(); speech.stop(); hideWordCard(); goMap(); });
   $('#mine-home').addEventListener('click', () => { sfx.click(); leaveMine(); });

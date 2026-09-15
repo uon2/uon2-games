@@ -9,7 +9,7 @@
   <link rel="icon" href="../icons/icon-192.png">
   <link rel="apple-touch-icon" href="../icons/icon-180.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/galmuri.css">
-  <link rel="stylesheet" href="css/style.css?v=v15">
+  <link rel="stylesheet" href="css/style.css?v=v16">
 </head>
 <body>
 
@@ -94,6 +94,20 @@
   </section>
 
   <!-- 설정 -->
+  <!-- 상점: 문장으로 모은 별을 쓰는 곳 -->
+  <section id="screen-shop" class="screen cave" hidden>
+    <header class="topbar">
+      <button class="btn icon" id="shop-back" aria-label="지도로">⬅️</button>
+      <h2 class="bag-title">🛒 상점</h2>
+      <div class="bag">⭐ <span id="shop-stars">0</span></div>
+    </header>
+    <p class="msg" id="shop-msg"></p>
+    <div class="shop-body">
+      <div id="shop-owned"></div>
+      <div id="shop-next"></div>
+    </div>
+  </section>
+
   <section id="screen-settings" class="screen cave" hidden>
     <header class="topbar">
       <button class="btn icon" id="settings-back" aria-label="뒤로">⬅️</button>
@@ -111,6 +125,13 @@
         <div class="row">
           <button class="btn" id="change-avatar">캐릭터 바꾸기</button>
         </div>
+        <h3>ℹ️ 버전</h3>
+        <p class="hint">받아 둔 파일의 번호예요. 새 내용이 안 보이면 이 번호를 확인해 주세요.</p>
+        <div class="row version-row">
+          <span class="version-tag" id="app-version">v0.0</span>
+          <button class="btn" id="version-refresh">🔄 새로 받기</button>
+        </div>
+        <p class="hint" id="version-note"></p>
       </div>
     </div>
   </section>
@@ -294,17 +315,18 @@
   </div>
   <div id="fx"></div>
 
-  <script src="js/data.js?v=v15"></script>
-  <script src="js/sentences.js?v=v15"></script>
-  <script src="js/audio.js?v=v15"></script>
-  <script src="js/textures.js?v=v15"></script>
-  <script src="js/app.js?v=v15"></script>
-  <script src="js/craft.js?v=v15"></script>
-  <script src="js/room.js?v=v15"></script>
-  <script src="js/battle-engine.js?v=v15"></script>
-  <script src="js/forest-art.js?v=v15"></script>
-  <script src="js/sentence.js?v=v15"></script>
-  <script src="js/battle.js?v=v15"></script>
+  <script src="js/data.js?v=v16"></script>
+  <script src="js/sentences.js?v=v16"></script>
+  <script src="js/audio.js?v=v16"></script>
+  <script src="js/textures.js?v=v16"></script>
+  <script src="js/app.js?v=v16"></script>
+  <script src="js/craft.js?v=v16"></script>
+  <script src="js/room.js?v=v16"></script>
+  <script src="js/battle-engine.js?v=v16"></script>
+  <script src="js/forest-art.js?v=v16"></script>
+  <script src="js/sentence.js?v=v16"></script>
+  <script src="js/shop.js?v=v16"></script>
+  <script src="js/battle.js?v=v16"></script>
   <script>
     // 허브 전체를 담당하는 서비스 워커를 등록 (HTTPS 또는 localhost에서만 동작)
     if ('serviceWorker' in navigator) {

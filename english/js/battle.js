@@ -107,6 +107,8 @@ function startBattle(stage) {
   const made = save.craft?.made || {};
   if (made.cat) battle.engine.spells.cat = 1;
   if (made.dog) battle.engine.spells.dog = 1;
+  // 빙글검은 용암에서만 힘을 쓴다 (무료인 숲을 반복해 별을 빨리 모으는 길을 막는다)
+  battle.engine.blade = world==='lava' ? equippedBlade() : null;
   battle.running=true; battle.paused=false; battle.finished=false;
   battle.words=[]; battle.mistakes=[]; battle.solved=[]; battle.last=0;
   $('#battle-pause-panel').hidden=true; $('#adventure-forge').hidden=true;
@@ -297,6 +299,13 @@ function renderAdventure() {
     c.fillStyle='#fff0b0'; c.fillRect(445,245,12,15);
     c.fillStyle='#fff'; c.font='bold 18px system-ui'; c.textAlign='center'; c.fillText('마법 보물',450,216);
   }
+  if(g.blade) g.bladeSpots().forEach(spot=>{
+    c.save(); c.translate(spot.x,spot.y); c.rotate(g.bladeAngle*2);
+    c.fillStyle='#cfe9ff'; c.fillRect(-4,-20,8,34);
+    c.fillStyle='#8fb7d6'; c.fillRect(-4,-20,3,34);
+    c.fillStyle='#6b4a2a'; c.fillRect(-9,12,18,6);
+    c.restore();
+  });
   g.enemies.forEach(e=>{
     const size=MONSTER_TYPES[e.kind].size;
     c.fillStyle='rgba(0,0,0,.2)'; c.fillRect(e.x-size/2,e.y+size/2-1,size,8);

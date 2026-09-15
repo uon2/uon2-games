@@ -175,3 +175,49 @@ test('숲에서는 이어서 시작이 동작하지 않는다', () => {
   assert.equal(g.resumeBossChest(), false);
   assert.equal(g.phase, 'fight');
 });
+
+test('빙글검은 닿은 적을 베지만 붙어만 있어서는 계속 베지 않는다', () => {
+  const { ctx, g } = setup(1, lcg());
+  const blade = vm.runInContext('BLADE_LEVELS[0]', ctx);
+  g.blade = { ...blade };
+  g.vents = [];                                  // 불기둥은 이 검사와 무관
+  const e = g.enemies[0];
+  g.enemies = [e];
+  e.hp = 99; e.maxHP = 99; e.speed = 0;
+  // 검이 도는 자리에 적을 세운다
+  g.update(0.016);
+  const spot = g.bladeSpots()[0];
+  e.x = spot.x; e.y = spot.y;
+  const before = e.hp;
+  g.update(0.016);
+  assert.equal(e.hp, before - blade.damage, '닿으면 한 번 벤다');
+
+  // 같은 자리에 계속 붙어 있어도 재충전 시간 전에는 다시 베지 않는다
+  const afterFirst = e.hp;
+  for (let i = 0; i < 10; i++) { const s = g.bladeSpots()[0]; e.x = s.x; e.y = s.y; g.update(0.016); }
+  assert.equal(e.hp, afterFirst, '재충전 전에는 다시 안 베요');
+
+  // 재충전 시간이 지나면 다시 벤다
+  for (let i = 0; i < Math.ceil(blade.recharge / 0.016) + 2; i++) {
+    const s = g.bladeSpots()[0]; e.x = s.x; e.y = s.y; g.update(0.016);
+  }
+  assert.ok(e.hp < afterFirst, '시간이 지나면 다시 베요');
+});
+
+test('빙글검을 안 찼으면 아무 일도 일어나지 않는다', () => {
+  const { g } = setup(1, lcg());
+  g.blade = null; g.vents = [];
+  const e = g.enemies[0];
+  g.enemies = [e]; e.hp = 9; e.speed = 0; e.x = g.player.x + 10; e.y = g.player.y;
+  for (let i = 0; i < 60; i++) g.update(0.016);
+  assert.equal(e.hp, 9);
+  assert.equal(g.bladeSpots().length, 0);   // 다른 realm 배열이라 길이로 본다
+});
+
+test('빙글검 자리 수는 단계마다 늘어난다', () => {
+  const { ctx, g } = setup(1, lcg());
+  [1, 2, 3].forEach(level => {
+    g.blade = vm.runInContext(`BLADE_LEVELS[${level - 1}]`, ctx);
+    assert.equal(g.bladeSpots().length, g.blade.orbs, `${level}단계는 검이 ${g.blade.orbs}개`);
+  });
+});

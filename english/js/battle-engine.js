@@ -13,6 +13,7 @@ class AdventureEngine {
     // 용암은 숲 뒤를 이어야 하므로 난이도 기준값을 지역 번호와 따로 둔다
     this.power = stage.power || stage.id;
     this.lava = stage.world === 'lava';
+    this.blade = null; this.bladeAngle = 0;
     this.bossDown = false;
     this.nextWave();
   }
@@ -131,6 +132,31 @@ class AdventureEngine {
     if (['bed','cup'].includes(word)) return 'bed';
     return 'dog';
   }
+  // 빙글검이 지금 어디에 있는지. 그림과 판정이 같은 자리를 쓴다.
+  bladeSpots() {
+    const b = this.blade;
+    if (!b) return [];
+    return Array.from({ length: b.orbs }, (_, i) => {
+      const a = this.bladeAngle + (Math.PI * 2 * i) / b.orbs;
+      return { x: this.player.x + Math.cos(a) * b.radius, y: this.player.y + Math.sin(a) * b.radius };
+    });
+  }
+  // 적마다 다시 맞기까지 시간을 둔다: 붙어 서 있기만 해서는 이기지 않는다.
+  updateBlade(dt) {
+    const b = this.blade;
+    if (!b) return;
+    this.bladeAngle = (this.bladeAngle + b.speed * dt) % (Math.PI * 2);
+    const spots = this.bladeSpots();
+    for (const e of this.enemies) {
+      if (e.dead) continue;
+      e.bladeCD = Math.max(0, (e.bladeCD || 0) - dt);
+      if (e.bladeCD > 0) continue;
+      if (spots.some(s => Math.hypot(e.x - s.x, e.y - s.y) < 34)) {
+        e.bladeCD = b.recharge;
+        this.hitEnemy(e, b.damage);
+      }
+    }
+  }
   // 보스만 잡고 나간 아이가 다시 들어오면 마지막 문장 상자부터 시작한다.
   // 보스를 또 잡게 만들지 않는다.
   resumeBossChest() {
@@ -245,7 +271,7 @@ class AdventureEngine {
     p.y = Math.max(45, Math.min(475,p.y+this.input.y*(sprint ? 560 : 180)*dt));
     if (this.input.x) p.facing = this.input.x > 0 ? 1 : -1;
     if (this.input.attack) this.attack();
-    if (this.lava && ['fight','boss'].includes(this.phase)) this.updateVents(dt);
+    if (this.lava && ['fight','boss'].includes(this.phase)) { this.updateVents(dt); this.updateBlade(dt); }
     for (const e of this.enemies) {
       if (e.dead || this.phase === 'lost') continue;
       e.flash=Math.max(0,e.flash-dt);
