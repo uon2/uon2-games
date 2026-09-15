@@ -398,6 +398,28 @@ function goMap() {
   });
   list.appendChild(nightCard);
 
+  // 용암 모험: 숲의 마지막 구역(안개 왕의 성)을 깨야 열린다
+  const lastForest = BATTLE_STAGES[BATTLE_STAGES.length - 1];
+  const lavaOpen = forestCleared();
+  const lavaDone = Object.keys((save.lava && save.lava.cleared) || {}).length;
+  const lavaCard = document.createElement('button');
+  lavaCard.className = 'stage' + (lavaOpen ? '' : ' locked');
+  lavaCard.innerHTML = `
+    <div class="stage-icon lava-icon">${lavaOpen ? '🌋' : '🔒'}</div>
+    <div class="stage-name">용암 모험</div>
+    <div class="stage-letters">${lavaOpen ? '낱말을 이어 문장 만들기' : `${lastForest.name}을 먼저 깨요`}</div>
+    ${lavaDone ? `<div class="stage-badge">🌋 ${lavaDone}</div>` : ''}`;
+  lavaCard.addEventListener('click', () => {
+    if (!lavaOpen) {
+      sfx.bonk();
+      $('#map-msg').textContent = `숲속 모험의 ${lastForest.name}을 깨면 용암 모험이 열려요! 🌋`;
+      return;
+    }
+    sfx.click();
+    goLava();
+  });
+  list.appendChild(lavaCard);
+
   show('screen-map');
 }
 

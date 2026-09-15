@@ -90,7 +90,11 @@ test('HTML script paths and SW core assets exist',()=>{
 function ui() {
   const ids=[...source('english/index.html').matchAll(/id="([^"]+)"/g)].map(m=>'#'+m[1]);
   class Element {
-    constructor(){this.hidden=false;this.style={};this.children=[];this.listeners={};this.textContent='';this.value='';}
+    constructor(){this.hidden=false;this.style={};this.children=[];this.listeners={};this.textContent='';this.value='';
+      this.classes=new Set();
+      this.classList={add:c=>this.classes.add(c),remove:c=>this.classes.delete(c),
+        contains:c=>this.classes.has(c),toggle:(c,on)=>{const want=on===undefined?!this.classes.has(c):!!on;
+          if(want)this.classes.add(c);else this.classes.delete(c);return want;}};}
     addEventListener(t,fn){this.listeners[t]=fn;}
     replaceChildren(...nodes){this.children=nodes;}
     appendChild(n){this.children.push(n);return n;}
@@ -107,6 +111,8 @@ function ui() {
     speech:{say:()=>Promise.resolve(),stop(){}},sfx:{click(){},bonk(){},pop(){},fanfare(){},hit(){}},ac(){},
     show:id=>{context.screen=id;},persist:()=>persisted.push(JSON.stringify(save)),
     goMap(){},goRoom(){},pick:arr=>arr[0],shuffle:arr=>[...arr],blockEl:()=>new Element(),
+    // 별 지갑과 문장 기록은 sentence.js 담당이다. 숲 화면 검사에는 최소 대역만 둔다.
+    wallet:()=>(save.wallet ||= {stars:0}),openSentence(){},sentenceSave:()=>(save.sentences ||= {paid:{}}),
   });
   vm.runInContext(source('english/js/data.js')+'\n'+source('english/js/battle-engine.js')+'\n'+source('english/js/battle.js'),context);
   return {context,nodes,save,persisted,run:s=>vm.runInContext(s,context)};

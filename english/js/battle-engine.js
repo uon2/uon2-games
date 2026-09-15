@@ -7,8 +7,13 @@ class AdventureEngine {
     this.player = { x: 190, y: 260, hp: 6, maxHP: 6, facing: 1, invincible: 0, dash: 0, dashCD: 0, attackCD: 0, swing: 0 };
     this.input = { x: 0, y: 0, attack: false };
     this.enemies = []; this.projectiles = []; this.drops = []; this.effects = []; this.events = [];
+    this.vents = [];
     this.phase = 'fight'; this.wave = 0; this.xp = 0; this.level = 1; this.kills = 0;
     this.spells = { cat: 0, bed: 0, dog: 0 }; this.shield = 0; this.time = 0;
+    // 용암은 숲 뒤를 이어야 하므로 난이도 기준값을 지역 번호와 따로 둔다
+    this.power = stage.power || stage.id;
+    this.lava = stage.world === 'lava';
+    this.bossDown = false;
     this.nextWave();
   }
   emit(type, extra = {}) { this.events.push({ type, ...extra }); }
@@ -17,22 +22,52 @@ class AdventureEngine {
     this.wave++; this.phase = this.wave >= this.stage.waves ? 'boss' : 'fight';
     this.enemies = []; this.projectiles = []; this.drops = [];
     const count = this.phase === 'boss' ? 1 : this.stage.perWave + this.wave - 1;
+    const power = this.power;
     for (let i = 0; i < count; i++) {
       const boss = this.phase === 'boss';
       // 2단계는 한 마리, 3단계부터 두 마리까지. 첫 사격은 시차를 둔다.
-      const archer = !boss && this.stage.id >= 2 && i < (this.stage.id >= 3 ? 2 : 1);
-      const charger = !boss && this.stage.id >= 3 && i === 2;
+      const archer = !boss && power >= 2 && i < (power >= 3 ? 2 : 1);
+      const charger = !boss && power >= 3 && i === 2;
       this.enemies.push({ x: 580 + this.rng() * 250, y: 90 + this.rng() * 330,
-        hp: boss ? 18 + this.stage.id * 4 : charger ? 4 : 2 + (this.stage.id >= 4 ? 1 : 0),
-        maxHP: boss ? 18 + this.stage.id * 4 : charger ? 4 : 2 + (this.stage.id >= 4 ? 1 : 0),
-        speed: boss ? 46 : charger ? 34 : 44 + this.stage.id * 7 + this.rng() * 16,
+        hp: boss ? 18 + power * 4 : charger ? 4 : 2 + (power >= 4 ? 1 : 0),
+        maxHP: boss ? 18 + power * 4 : charger ? 4 : 2 + (power >= 4 ? 1 : 0),
+        speed: boss ? 46 : charger ? 34 : 44 + power * 7 + this.rng() * 16,
         boss, kind: boss ? 'boss' : archer ? 'archer' : charger ? 'charger' : 'moss',
         chargeAim: null, chargeWindup: 0, chargeTime: 0, chargeCD: 2.4, recovery: 0,
         aim: null, shootWindup: 0, shootCD: 1.5 + i * 1.2,
         windup: 0, cooldown: boss ? 1.8 : 0, target: null, flash: 0, recoil: 0,
         color: ['#65cfaf', '#bc98e8', '#f1ac7b'][i % 3], dead: false });
     }
+    this.spawnVents();
     this.emit(this.phase === 'boss' ? 'boss' : 'wave', { wave: this.wave });
+  }
+  // 용암 분출구: 예고를 보고 피하면 맞지 않는다.
+  // 입구(왼쪽)와 문장 상자 자리(가운데)에는 놓지 않아 안전 지점을 남긴다.
+  spawnVents() {
+    this.vents = [];
+    if (!this.lava) return;
+    for (let i = 0; i < (this.stage.vents || 2); i++) {
+      let spot = null;
+      for (let tries = 0; tries < 8 && !spot; tries++) {
+        const x = 330 + this.rng() * 500, y = 80 + this.rng() * 350;
+        if (Math.hypot(x - 450, y - 260) > 145) spot = { x, y };
+      }
+      if (spot) this.vents.push({ x: spot.x, y: spot.y, r: 58, state: 'idle', t: 1.2 + this.rng() * 2.4 });
+    }
+  }
+  updateVents(dt) {
+    for (const v of this.vents) {
+      v.t -= dt;
+      if (v.t > 0) continue;
+      if (v.state === 'idle') { v.state = 'warn'; v.t = 1.1; this.emit('vent-warn'); }
+      else if (v.state === 'warn') {
+        v.state = 'erupt'; v.t = 0.5; this.emit('vent');
+        // 터지는 순간에만 판정한다. 예고를 보고 비켰으면 안전하다.
+        if (Math.hypot(this.player.x - v.x, this.player.y - v.y) < v.r) this.hurt();
+      }
+      else if (v.state === 'erupt') { v.state = 'cool'; v.t = 1.5; }
+      else { v.state = 'idle'; v.t = 1.4 + this.rng() * 2.2; }
+    }
   }
   move(x, y) { const length = Math.hypot(x, y); this.input.x = length > 1 ? x / length : x; this.input.y = length > 1 ? y / length : y; }
   attack() {
@@ -96,6 +131,20 @@ class AdventureEngine {
     if (['bed','cup'].includes(word)) return 'bed';
     return 'dog';
   }
+  // 보스만 잡고 나간 아이가 다시 들어오면 마지막 문장 상자부터 시작한다.
+  // 보스를 또 잡게 만들지 않는다.
+  resumeBossChest() {
+    if (!this.lava) return false;
+    this.wave = this.stage.waves; this.phase = 'chest'; this.bossDown = true;
+    this.enemies = []; this.projectiles = []; this.vents = [];
+    this.emit('chest', { boss: true, resumed: true });
+    return true;
+  }
+  // 용암 마지막 문장 상자를 풀면 여기서 구역이 끝난다
+  finish() {
+    if (this.phase === 'won' || this.phase === 'lost') return false;
+    this.phase = 'won'; this.emit('won'); return true;
+  }
   forge(word) {
     if (this.phase !== 'chest' || typeof word !== 'string' || !word) return false;
     this.spells[AdventureEngine.spellOf(word)]++;
@@ -113,7 +162,7 @@ class AdventureEngine {
       e.shootWindup = Math.max(0, e.shootWindup - dt);
       if (!e.shootWindup) {
         const dx = e.aim.x-e.x, dy = e.aim.y-e.y, len = Math.hypot(dx,dy)||1;
-        const speed = 185 + this.stage.id * 10;
+        const speed = 185 + this.power * 10;
         this.projectiles.push({x:e.x, y:e.y, vx:dx/len*speed, vy:dy/len*speed, ttl:5});
         e.aim = null; e.shootCD = 2.6;
         this.emit('arrow');
@@ -196,6 +245,7 @@ class AdventureEngine {
     p.y = Math.max(45, Math.min(475,p.y+this.input.y*(sprint ? 560 : 180)*dt));
     if (this.input.x) p.facing = this.input.x > 0 ? 1 : -1;
     if (this.input.attack) this.attack();
+    if (this.lava && ['fight','boss'].includes(this.phase)) this.updateVents(dt);
     for (const e of this.enemies) {
       if (e.dead || this.phase === 'lost') continue;
       e.flash=Math.max(0,e.flash-dt);
@@ -240,7 +290,9 @@ class AdventureEngine {
     });
     this.effects.forEach(e=>e.ttl-=dt); this.effects=this.effects.filter(e=>e.ttl>0);
     if (!this.enemies.length && ['fight','boss'].includes(this.phase)) {
-      if (this.phase==='boss') { this.phase='won'; this.emit('won'); }
+      // 용암은 보스를 잡아도 바로 끝나지 않는다: 마지막 문장 상자를 풀어야 구역이 끝난다
+      if (this.phase==='boss' && this.lava) { this.bossDown=true; this.vents=[]; this.phase='chest'; this.emit('chest',{ boss:true }); }
+      else if (this.phase==='boss') { this.phase='won'; this.emit('won'); }
       else { this.phase='chest'; this.emit('chest'); }
     }
   }

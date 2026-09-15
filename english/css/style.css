@@ -942,3 +942,15 @@ button:focus-visible { outline:3px solid #ffe18a; outline-offset:3px; }
 .sentence-token { font-size: clamp(16px, 2.6vmin, 24px); }
 .sentence-token.used { visibility: hidden; }
 .sentence-msg { margin: 0; min-height: 1.5em; font-size: clamp(15px, 2.3vmin, 21px); color: #241a0d; font-weight: 600; text-align: center; }
+
+/* ---------- 용암 모험 ---------- */
+/* 색만 바꾸지 않고 잠금 배지·지형 무늬로도 구분한다 */
+.lava-icon {
+  background: repeating-linear-gradient(135deg, #2a1418 0 10px, #3a1b18 10px 20px);
+  color: #ffd9a0;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, .6);
+}
+.night-card.lava-card { border-color: #a8452a; background: #2a1418; }
+.night-card.lava-card .stage-name { color: #ffd9a0; }
+.night-card.lava-card .stage-letters { color: #f0b98a; }
+.night-card.lava-card.locked { filter: grayscale(.45) brightness(.8); }

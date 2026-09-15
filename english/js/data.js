@@ -84,6 +84,21 @@ const BATTLE_STAGES = [
   { id: 5, name: '안개 왕의 성', letters: ['U','V','W','X','Y','Z'], waves: 4, perWave: 7, free: true },
 ];
 
+// 용암 모험: 안개 왕의 성을 깨야 열리는 문장 학습 지역.
+// 보물 대신 문장 상자가 나오고, 마지막 문장까지 풀어야 다음 구역이 열린다.
+// power 는 난이도 기준값. 숲 5구역(5)보다 세게 잡아 이어서 어려워지게 한다.
+const LAVA_STAGES = [
+  { id: 1, name: '불꽃 동굴 입구', world: 'lava', power: 4, waves: 3, perWave: 4, vents: 2,
+    hint: '바닥이 밝아지면 곧 불기둥이 솟아요. 옆으로 피해요!' },
+  { id: 2, name: '끓는 협곡',     world: 'lava', power: 5, waves: 3, perWave: 5, vents: 3,
+    hint: '불기둥이 늘었어요. 예고를 보고 미리 자리를 옮겨요.' },
+  { id: 3, name: '용암 왕좌',     world: 'lava', power: 6, waves: 4, perWave: 5, vents: 4,
+    hint: '마지막 구역이에요. 불기둥과 보스를 함께 조심해요!' },
+];
+
+// 문장 상자 보상: 중간 상자 40별, 보스 상자 70별
+const SENTENCE_STARS = { normal: 40, boss: 70 };
+
 // 직접 만든 블록 몬스터. 이름/크기/역할은 소개 화면과 전투에서 함께 사용.
 const MONSTER_TYPES = {
   moss: { name: '이끼콩', role: '근접형', size: 48 },
