@@ -102,3 +102,45 @@ test('나중에 하기로 닫으면 별을 주지 않는다', () => {
   assert.equal(u.run('wallet().stars'), before);
   assert.equal(u.nodes['#sentence-box'].hidden, true);
 });
+
+// 숲 보물에 문장을 섞는 시험용 규칙 (보물별로 한 번만 정해진다)
+function makeRule(madeWords) {
+  const made = Object.fromEntries(Array.from({ length: madeWords }, (_, i) => ['w' + i, 1]));
+  const save = { craft: { made } };
+  const battle = { chestCount: 0, chestKind: {} };
+  const fn = new Function('save', 'battle', 'key', `
+    const madeWords = Object.keys((save.craft && save.craft.made) || {}).length;
+    if (madeWords < 4) return false;
+    if (!battle.chestKind) battle.chestKind = {};
+    if (battle.chestKind[key] === undefined) {
+      battle.chestCount = (battle.chestCount || 0) + 1;
+      battle.chestKind[key] = battle.chestCount % 2 === 0;
+    }
+    return battle.chestKind[key];
+  `);
+  return (key) => fn(save, battle, key);
+}
+const openChests = (madeWords, n) => {
+  const rule = makeRule(madeWords);
+  return Array.from({ length: n }, (_, i) => rule('chest-' + i));
+};
+
+test('낱말 4개를 만들기 전에는 문장이 나오지 않는다', () => {
+  assert.deepEqual(openChests(0, 4), [false, false, false, false]);
+  assert.deepEqual(openChests(3, 4), [false, false, false, false]);
+  assert.ok(openChests(4, 4).includes(true));
+});
+
+test('문장은 보물 두 번에 한 번 나온다 (구역 길이와 무관)', () => {
+  assert.deepEqual(openChests(5, 6), [false, true, false, true, false, true]);
+});
+
+test('같은 보물을 다시 열어도 상자 종류가 바뀌지 않는다', () => {
+  const rule = makeRule(5);
+  rule('a');                                  // 첫 보물 = 낱말
+  const second = rule('b');                   // 두 번째 보물 = 문장
+  assert.equal(second, true);
+  assert.equal(rule('b'), true);              // 다시 열어도 문장 그대로
+  assert.equal(rule('a'), false);             // 첫 보물도 낱말 그대로
+  assert.equal(rule('c'), false);             // 새 보물은 이어서 낱말
+});

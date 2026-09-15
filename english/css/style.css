@@ -919,8 +919,11 @@ button:focus-visible { outline:3px solid #ffe18a; outline-offset:3px; }
   background: #3f6f9f;
   border: 3px solid #111;
   box-shadow: inset -3px -3px 0 #29506f, inset 3px 3px 0 #6fa3cd;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, .5);
   cursor: pointer;
 }
+/* 채워 둔 칸도 누를 수 없을 뿐 읽어야 하는 글자다: 흐리게 만들지 않는다 */
+.sentence-slot:disabled { opacity: 1; }
 /* 미리 채워 준 말은 노란 글자로, 아이가 놓을 칸은 또렷한 점선으로 구분 */
 .sentence-slot.fixed {
   background: #3b6d55;

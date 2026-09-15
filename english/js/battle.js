@@ -83,7 +83,7 @@ function startBattle(stage) {
   if (made.cat) battle.engine.spells.cat = 1;
   if (made.dog) battle.engine.spells.dog = 1;
   battle.running=true; battle.paused=false; battle.finished=false;
-  battle.words=[]; battle.mistakes=[]; battle.last=0;
+  battle.words=[]; battle.mistakes=[]; battle.last=0; battle.chestCount=0; battle.chestKind={};
   $('#battle-pause-panel').hidden=true; $('#adventure-forge').hidden=true;
   $('#adventure-help').textContent='이동: 원을 밀거나 바닥 터치 · 검: 공격 꾹 · PC: 방향키 / Space / Shift';
   $('#adventure-note').textContent='몬스터에게 다가가서 검을 휘둘러 보세요!';
@@ -259,10 +259,38 @@ function forgeCandidates() {
   return [...fresh,...owned].slice(0,3);
 }
 
+// [시험용] 용암 모험이 나오기 전까지 숲 보물에 문장 상자를 섞어 난이도를 재 본다.
+// 용암으로 옮길 때는 이 함수와 openForge 안의 분기만 떼면 된다.
+function sentenceTurn(key) {
+  const madeWords = Object.keys((save.craft && save.craft.made) || {}).length;
+  if (madeWords < 4) return false;              // 낱말에 익숙해진 뒤에 문장을 만난다
+  // 웨이브 번호가 아니라 '보물을 연 횟수'로 센다.
+  // 구역마다 웨이브 수가 달라서 번호로 세면 문장이 아예 안 나오는 구역이 생긴다.
+  if (!battle.chestKind) battle.chestKind = {};
+  if (battle.chestKind[key] === undefined) {    // 같은 보물은 다시 열어도 종류가 바뀌지 않는다
+    battle.chestCount = (battle.chestCount || 0) + 1;
+    battle.chestKind[key] = battle.chestCount % 2 === 0;   // 보물 두 번에 한 번은 문장
+  }
+  return battle.chestKind[key];
+}
+
 function openForge() {
   const g=battle.engine;
   if(!battle.running || g.phase!=='chest' || Math.hypot(g.player.x-450,g.player.y-260)>105) return;
   battle.paused=true; stopInput();
+  const chestKey = `forest-${g.stage.id}-${g.wave}`;
+  if (typeof openSentence === 'function' && sentenceTurn(chestKey)) {
+    return openSentence({
+      runId: battle.session,
+      checkpoint: chestKey,
+      stars: 40,
+      onClose: ({ solved }) => {
+        battle.paused = false; battle.last = 0; ac();
+        if (solved) { g.nextWave(); $('#adventure-note').textContent = '문장을 완성했어요! 다음 구역으로 가요.'; }
+        else $('#adventure-note').textContent = '보물은 그대로 있어요. 준비되면 다시 열어 봐요.';
+      },
+    });
+  }
   battle.forgeWord=null; battle.forgeFailed=false; battle.forgeComplete=false;
   battle.slots=[]; battle.bank=[]; battle.fixed=[];
   $('#forge-emoji').textContent='🎁';
