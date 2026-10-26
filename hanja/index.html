@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f4f0e4"><title>한자 낚시터 · 물빛 정원</title>
-<link rel="stylesheet" href="style.css?v=20261026-8"><script defer src="js/fishing-engine.js?v=20261026-8"></script><script defer src="js/fishing-geometry.js?v=20261026-8"></script><script defer src="js/study-engine.js?v=20261026-8"></script><script defer src="js/study-ui.js?v=20261026-8"></script><script defer src="js/art.js?v=20261026-8"></script><script defer src="js/game.js?v=20261026-8"></script>
+<link rel="stylesheet" href="style.css?v=20261027-1"><script defer src="js/fishing-engine.js?v=20261027-1"></script><script defer src="js/fishing-geometry.js?v=20261027-1"></script><script defer src="js/study-engine.js?v=20261027-1"></script><script defer src="js/study-ui.js?v=20261027-1"></script><script defer src="js/fish-kinds.js?v=20261027-1"></script><script defer src="js/art.js?v=20261027-1"></script><script defer src="js/game.js?v=20261027-1"></script>
 </head>
 <body>
 <header class="site-header"><a href="../" class="back-link">← 게임방</a><a href="./?preview=watercolor" class="brand"><span class="brand-leaf" aria-hidden="true"></span><span>한자 낚시터<small>물결 따라, 한 글자씩</small></span></a><button id="sound" class="quiet-button" aria-pressed="false">소리 켜기</button></header>
@@ -14,7 +14,7 @@
 <div class="scene-heading"><span id="phase-label" class="eyebrow">연못을 준비하고 있어요</span><h1 id="prompt" tabindex="-1">오늘은 어떤 물고기를 만날까요?</h1><p id="instruction">작은 물결에 찌를 던져 보세요.</p></div>
 <div id="water-spots" class="water-spots"><button class="cast-spot spot-one" data-x="0.59" data-y="0.48" aria-label="가운데 물결에 찌 던지기"><span></span></button><button class="cast-spot spot-two" data-x="0.76" data-y="0.62" aria-label="오른쪽 물결에 찌 던지기"><span></span></button><button class="cast-spot spot-three" data-x="0.43" data-y="0.63" aria-label="왼쪽 물결에 찌 던지기"><span></span></button></div>
 <img class="angler" src="assets/angler.webp" alt="" draggable="false">
-<div id="fish" class="fish-actor hidden" aria-hidden="true"><img src="assets/fish.webp" alt="" draggable="false"><span id="fish-character" class="hanja"></span></div>
+<div id="fish" class="fish-actor hidden" aria-hidden="true"><span id="fish-character" class="hanja"></span></div>
 <canvas id="effects" aria-hidden="true"></canvas>
 <div id="force-panel" class="force-panel hidden"><span id="force-label">물고기의 힘</span><div class="force-track" role="progressbar" aria-labelledby="force-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span id="force-fill"></span></div></div>
 <div id="impact-word" class="impact-word" aria-live="polite"></div>

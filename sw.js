@@ -2,7 +2,7 @@
 
 // 허브 전체(모든 게임)를 담당하는 서비스 워커
 // 네트워크 우선: 온라인이면 항상 최신 파일, 인터넷이 끊기면 마지막으로 받은 파일로 실행
-const CACHE = 'uon2-games-v16-hanja-grade-journey22';
+const CACHE = 'uon2-games-v16-hanja-fish-kinds';
 
 // index.html은 호스팅에서 폴더 주소로 리다이렉트될 수 있어 폴더 주소('./', 'english/')로만 캐시
 const CORE = [
@@ -22,6 +22,7 @@ const CORE = [
   'hanja/assets/pond.webp',
   'hanja/assets/angler.webp',
   'hanja/assets/fish.webp',
+  'hanja/js/fish-kinds.js',
   'hanja/js/art.js',
   'hanja/js/fishing-geometry.js',
   'hanja/js/study-engine.js',
