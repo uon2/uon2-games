@@ -1,0 +1,519 @@
+{
+  "version": 1,
+  "authorship": "게임용 자체 제작 문항. 공식 기출문제가 아닙니다.",
+  "words": [
+    {
+      "word": "學校",
+      "reading": "학교",
+      "meaning": "공부를 배우는 곳"
+    },
+    {
+      "word": "父母",
+      "reading": "부모",
+      "meaning": "아버지와 어머니"
+    },
+    {
+      "word": "兄弟",
+      "reading": "형제",
+      "meaning": "형과 아우"
+    },
+    {
+      "word": "韓國",
+      "reading": "한국",
+      "meaning": "우리나라의 이름"
+    },
+    {
+      "word": "國民",
+      "reading": "국민",
+      "meaning": "한 나라를 이루는 사람들"
+    },
+    {
+      "word": "國軍",
+      "reading": "국군",
+      "meaning": "나라를 지키는 군대"
+    },
+    {
+      "word": "東西",
+      "reading": "동서",
+      "meaning": "동쪽과 서쪽"
+    },
+    {
+      "word": "南北",
+      "reading": "남북",
+      "meaning": "남쪽과 북쪽"
+    },
+    {
+      "word": "大小",
+      "reading": "대소",
+      "meaning": "크고 작음"
+    },
+    {
+      "word": "中小",
+      "reading": "중소",
+      "meaning": "중간 크기와 작은 크기"
+    },
+    {
+      "word": "母女",
+      "reading": "모녀",
+      "meaning": "어머니와 딸"
+    },
+    {
+      "word": "父女",
+      "reading": "부녀",
+      "meaning": "아버지와 딸"
+    },
+    {
+      "word": "火山",
+      "reading": "화산",
+      "meaning": "땅속 물질이 뿜어 나와 생긴 산"
+    },
+    {
+      "word": "山水",
+      "reading": "산수",
+      "meaning": "산과 물이 어우러진 경치"
+    },
+    {
+      "word": "水門",
+      "reading": "수문",
+      "meaning": "물이 드나들게 여닫는 문"
+    },
+    {
+      "word": "校門",
+      "reading": "교문",
+      "meaning": "학교의 문"
+    },
+    {
+      "word": "學年",
+      "reading": "학년",
+      "meaning": "학교에서 배우는 한 해의 단계"
+    },
+    {
+      "word": "生日",
+      "reading": "생일",
+      "meaning": "태어난 날"
+    },
+    {
+      "word": "三月",
+      "reading": "삼월",
+      "meaning": "한 해의 셋째 달"
+    },
+    {
+      "word": "十月",
+      "reading": "시월",
+      "meaning": "한 해의 열째 달"
+    },
+    {
+      "word": "六月",
+      "reading": "유월",
+      "meaning": "한 해의 여섯째 달"
+    },
+    {
+      "word": "八月",
+      "reading": "팔월",
+      "meaning": "한 해의 여덟째 달"
+    },
+    {
+      "word": "靑年",
+      "reading": "청년",
+      "meaning": "젊은 나이의 사람"
+    },
+    {
+      "word": "家門",
+      "reading": "가문",
+      "meaning": "한 집안의 계통"
+    },
+    {
+      "word": "家長",
+      "reading": "가장",
+      "meaning": "한 집안을 이끄는 사람"
+    },
+    {
+      "word": "人力",
+      "reading": "인력",
+      "meaning": "사람의 힘"
+    },
+    {
+      "word": "男子",
+      "reading": "남자",
+      "meaning": "남성인 사람"
+    },
+    {
+      "word": "女子",
+      "reading": "여자",
+      "meaning": "여성인 사람"
+    },
+    {
+      "word": "父子",
+      "reading": "부자",
+      "meaning": "아버지와 아들"
+    },
+    {
+      "word": "農民",
+      "reading": "농민",
+      "meaning": "농사를 짓는 사람"
+    },
+    {
+      "word": "正直",
+      "reading": "정직",
+      "meaning": "마음에 거짓이나 꾸밈이 없음"
+    },
+    {
+      "word": "市民",
+      "reading": "시민",
+      "meaning": "도시에 사는 사람"
+    },
+    {
+      "word": "海水",
+      "reading": "해수",
+      "meaning": "바닷물"
+    },
+    {
+      "word": "空氣",
+      "reading": "공기",
+      "meaning": "우리를 둘러싼 기체"
+    },
+    {
+      "word": "食事",
+      "reading": "식사",
+      "meaning": "끼니로 음식을 먹음"
+    },
+    {
+      "word": "安全",
+      "reading": "안전",
+      "meaning": "위험이나 사고가 없음"
+    },
+    {
+      "word": "火力",
+      "reading": "화력",
+      "meaning": "불이 내는 힘"
+    },
+    {
+      "word": "電力",
+      "reading": "전력",
+      "meaning": "전기가 하는 일의 능력"
+    },
+    {
+      "word": "全力",
+      "reading": "전력",
+      "meaning": "가진 힘을 모두 다함"
+    },
+    {
+      "word": "手足",
+      "reading": "수족",
+      "meaning": "손과 발"
+    },
+    {
+      "word": "左右",
+      "reading": "좌우",
+      "meaning": "왼쪽과 오른쪽"
+    },
+    {
+      "word": "上下",
+      "reading": "상하",
+      "meaning": "위와 아래"
+    },
+    {
+      "word": "內外",
+      "reading": "내외",
+      "meaning": "안과 밖"
+    },
+    {
+      "word": "前後",
+      "reading": "전후",
+      "meaning": "앞과 뒤"
+    },
+    {
+      "word": "國語",
+      "reading": "국어",
+      "meaning": "한 나라에서 쓰는 말"
+    },
+    {
+      "word": "國旗",
+      "reading": "국기",
+      "meaning": "한 나라를 상징하는 깃발"
+    },
+    {
+      "word": "漢字",
+      "reading": "한자",
+      "meaning": "뜻을 나타내는 글자 체계의 글자"
+    },
+    {
+      "word": "問答",
+      "reading": "문답",
+      "meaning": "묻고 대답함"
+    },
+    {
+      "word": "登校",
+      "reading": "등교",
+      "meaning": "학교에 감"
+    },
+    {
+      "word": "下校",
+      "reading": "하교",
+      "meaning": "수업 뒤 학교에서 집으로 돌아감"
+    },
+    {
+      "word": "入口",
+      "reading": "입구",
+      "meaning": "들어가는 곳"
+    },
+    {
+      "word": "出入口",
+      "reading": "출입구",
+      "meaning": "들어가고 나오는 곳"
+    },
+    {
+      "word": "春夏秋冬",
+      "reading": "춘하추동",
+      "meaning": "봄과 여름과 가을과 겨울"
+    },
+    {
+      "word": "山林",
+      "reading": "산림",
+      "meaning": "산과 숲"
+    },
+    {
+      "word": "自然",
+      "reading": "자연",
+      "meaning": "사람이 만들지 않은 산과 들 등의 세계"
+    },
+    {
+      "word": "生活",
+      "reading": "생활",
+      "meaning": "살아가며 하는 여러 활동"
+    },
+    {
+      "word": "時間",
+      "reading": "시간",
+      "meaning": "어떤 때부터 다른 때까지의 동안"
+    },
+    {
+      "word": "每日",
+      "reading": "매일",
+      "meaning": "날마다"
+    },
+    {
+      "word": "姓名",
+      "reading": "성명",
+      "meaning": "성과 이름"
+    },
+    {
+      "word": "讀書",
+      "reading": "독서",
+      "meaning": "책을 읽음"
+    },
+    {
+      "word": "地圖",
+      "reading": "지도",
+      "meaning": "땅의 모습을 줄여 그린 그림"
+    },
+    {
+      "word": "運動",
+      "reading": "운동",
+      "meaning": "몸을 움직이는 활동"
+    },
+    {
+      "word": "新年",
+      "reading": "신년",
+      "meaning": "새해"
+    },
+    {
+      "word": "作家",
+      "reading": "작가",
+      "meaning": "문학 작품 등을 짓는 사람"
+    },
+    {
+      "word": "昨年",
+      "reading": "작년",
+      "meaning": "지난해"
+    },
+    {
+      "word": "神話",
+      "reading": "신화",
+      "meaning": "신이나 신비한 존재에 관한 옛이야기"
+    },
+    {
+      "word": "窓門",
+      "reading": "창문",
+      "meaning": "빛과 바람이 통하도록 벽에 낸 문"
+    },
+    {
+      "word": "天體",
+      "reading": "천체",
+      "meaning": "해와 달과 별 같은 우주의 물체"
+    },
+    {
+      "word": "春風",
+      "reading": "춘풍",
+      "meaning": "봄바람"
+    },
+    {
+      "word": "平和",
+      "reading": "평화",
+      "meaning": "싸움 없이 평온함"
+    },
+    {
+      "word": "家族",
+      "reading": "가족",
+      "meaning": "가정을 이루는 사람들"
+    },
+    {
+      "word": "反對",
+      "reading": "반대",
+      "meaning": "서로 거꾸로 됨"
+    },
+    {
+      "word": "祖父",
+      "reading": "조부",
+      "meaning": "할아버지"
+    },
+    {
+      "word": "祖母",
+      "reading": "조모",
+      "meaning": "할머니"
+    },
+    {
+      "word": "水中",
+      "reading": "수중",
+      "meaning": "물속"
+    },
+    {
+      "word": "手中",
+      "reading": "수중",
+      "meaning": "손 안"
+    },
+    {
+      "word": "日記",
+      "reading": "일기",
+      "meaning": "날마다 겪은 일을 적은 글"
+    },
+    {
+      "word": "日氣",
+      "reading": "일기",
+      "meaning": "그날의 기상 상태"
+    }
+  ],
+  "antonyms": [
+    [
+      "東",
+      "西"
+    ],
+    [
+      "南",
+      "北"
+    ],
+    [
+      "大",
+      "小"
+    ],
+    [
+      "左",
+      "右"
+    ],
+    [
+      "上",
+      "下"
+    ],
+    [
+      "內",
+      "外"
+    ],
+    [
+      "前",
+      "後"
+    ],
+    [
+      "長",
+      "短"
+    ],
+    [
+      "多",
+      "少"
+    ],
+    [
+      "強",
+      "弱"
+    ],
+    [
+      "新",
+      "古"
+    ],
+    [
+      "入",
+      "出"
+    ],
+    [
+      "生",
+      "死"
+    ],
+    [
+      "夜",
+      "晝"
+    ]
+  ],
+  "completions": [
+    {
+      "word": "東西南北",
+      "reading": "동서남북",
+      "meaning": "동쪽과 서쪽과 남쪽과 북쪽"
+    },
+    {
+      "word": "父母兄弟",
+      "reading": "부모형제",
+      "meaning": "아버지와 어머니, 형과 아우"
+    },
+    {
+      "word": "春夏秋冬",
+      "reading": "춘하추동",
+      "meaning": "봄과 여름과 가을과 겨울"
+    }
+  ],
+  "synonyms": [
+    [
+      "言",
+      "語"
+    ],
+    [
+      "敎",
+      "訓"
+    ]
+  ],
+  "homophones": [
+    [
+      "全力",
+      "電力"
+    ],
+    [
+      "水中",
+      "手中"
+    ],
+    [
+      "日氣",
+      "日記"
+    ]
+  ],
+  "strokeModels": [
+    {
+      "ch": "二",
+      "paths": [
+        "M22 28 L78 28",
+        "M14 72 L86 72"
+      ]
+    },
+    {
+      "ch": "三",
+      "paths": [
+        "M22 24 L78 24",
+        "M28 49 L72 49",
+        "M14 77 L86 77"
+      ]
+    },
+    {
+      "ch": "十",
+      "paths": [
+        "M17 42 L83 42",
+        "M50 14 L50 87"
+      ]
+    }
+  ]
+}

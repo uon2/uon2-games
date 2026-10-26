@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "checkedAt": "2026-10-26",
+  "note": "출제기준표는 기본지침으로 실제 출제 의도에 따라 차이가 있을 수 있습니다. 게임 문항은 자체 출제입니다.",
+  "sources": [
+    {
+      "url": "https://www.hanja.re.kr/kccpt/exam/questInfo.do",
+      "file": "docs/sources/hanja-official/2026-10-26/exam/questInfo.html",
+      "sha256": "877735f17370ab79c9fc15162013a6232d83824e7c38d8ad04470247b79aa725"
+    },
+    {
+      "url": "https://www.hanja.re.kr/kccpt/exam/successRule.do",
+      "file": "docs/sources/hanja-official/2026-10-26/exam/successRule.html",
+      "sha256": "1c7ec9695d7d17d622fe6ec9cab07e1d0f5bee9a058eea6cd72a1c849772eb05"
+    },
+    {
+      "url": "https://www.hanja.re.kr/kccpt/exam/examTime.do",
+      "file": "docs/sources/hanja-official/2026-10-26/exam/examTime.html",
+      "sha256": "4bfe207c443d0c70ec90c4e32fed902a7249d3c07f3c5c4e8cc459bbd7a5244b"
+    }
+  ],
+  "profiles": {
+    "intro9": {
+      "total": 10,
+      "passScore": 8,
+      "minutes": 0,
+      "official": false,
+      "counts": {
+        "sound": 5,
+        "name": 5
+      }
+    },
+    "grade8": {
+      "total": 50,
+      "passScore": 35,
+      "minutes": 50,
+      "official": true,
+      "counts": {
+        "sound": 24,
+        "name": 24,
+        "stroke": 2
+      }
+    },
+    "grade7_2": {
+      "total": 60,
+      "passScore": 42,
+      "minutes": 50,
+      "official": true,
+      "counts": {
+        "sound": 22,
+        "name": 30,
+        "antonym": 2,
+        "complete": 2,
+        "meaning": 2,
+        "stroke": 2
+      }
+    },
+    "grade7_1": {
+      "total": 70,
+      "passScore": 49,
+      "minutes": 50,
+      "official": true,
+      "counts": {
+        "sound": 32,
+        "name": 30,
+        "antonym": 2,
+        "complete": 2,
+        "meaning": 2,
+        "stroke": 2
+      }
+    },
+    "grade6_2": {
+      "total": 80,
+      "passScore": 56,
+      "minutes": 50,
+      "official": true,
+      "counts": {
+        "sound": 32,
+        "name": 29,
+        "antonym": 2,
+        "complete": 2,
+        "meaning": 2,
+        "writing": 10,
+        "stroke": 3
+      }
+    },
+    "grade6_1": {
+      "total": 90,
+      "passScore": 63,
+      "minutes": 50,
+      "official": true,
+      "counts": {
+        "sound": 33,
+        "name": 22,
+        "antonym": 3,
+        "complete": 3,
+        "synonym": 2,
+        "homophone": 2,
+        "meaning": 2,
+        "writing": 20,
+        "stroke": 3
+      }
+    }
+  }
+}

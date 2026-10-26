@@ -1,0 +1,81 @@
+{
+  "status": "pass",
+  "sourceFilesHashVerified": 6,
+  "uniqueCharacters": 300,
+  "stages": [
+    {
+      "stage": "grade8",
+      "hwpReadingCount": 50,
+      "xlsCumulativeCount": 50,
+      "membershipExactMatch": true,
+      "newInOfficialGrade": 50,
+      "newInGameProgression": 30,
+      "writingCount": 0
+    },
+    {
+      "stage": "grade7_2",
+      "hwpReadingCount": 100,
+      "xlsCumulativeCount": 100,
+      "membershipExactMatch": true,
+      "newInOfficialGrade": 50,
+      "newInGameProgression": 50,
+      "writingCount": 0
+    },
+    {
+      "stage": "grade7_1",
+      "hwpReadingCount": 150,
+      "xlsCumulativeCount": 150,
+      "membershipExactMatch": true,
+      "newInOfficialGrade": 50,
+      "newInGameProgression": 50,
+      "writingCount": 0
+    },
+    {
+      "stage": "grade6_2",
+      "hwpReadingCount": 225,
+      "xlsCumulativeCount": 225,
+      "membershipExactMatch": true,
+      "newInOfficialGrade": 75,
+      "newInGameProgression": 75,
+      "writingCount": 50
+    },
+    {
+      "stage": "grade6_1",
+      "hwpReadingCount": 300,
+      "xlsCumulativeCount": 300,
+      "membershipExactMatch": true,
+      "newInOfficialGrade": 75,
+      "newInGameProgression": 75,
+      "writingCount": 150
+    }
+  ],
+  "introCount": 20,
+  "compatibilityNormalization": [
+    {
+      "sourceCh": "車",
+      "ch": "車",
+      "id": "hanja-8ECA"
+    },
+    {
+      "sourceCh": "金",
+      "ch": "金",
+      "id": "hanja-91D1"
+    },
+    {
+      "sourceCh": "樂",
+      "ch": "樂",
+      "id": "hanja-6A02"
+    },
+    {
+      "sourceCh": "不",
+      "ch": "不",
+      "id": "hanja-4E0D"
+    }
+  ],
+  "notes": [
+    "6급II writing scope exactly matches 8급 reading 50",
+    "6급 writing scope exactly matches 7급 reading 150",
+    "훈음 六 is 여섯 륙; the watercolor game uses the official reading",
+    "Dataset readiness does not imply playable stages or verified font/stroke-order/audio assets"
+  ]
+}

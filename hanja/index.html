@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f4f0e4"><title>한자 낚시터 · 물빛 정원</title>
+<link rel="stylesheet" href="style.css?v=20261026-8"><script defer src="js/fishing-engine.js?v=20261026-8"></script><script defer src="js/fishing-geometry.js?v=20261026-8"></script><script defer src="js/study-engine.js?v=20261026-8"></script><script defer src="js/study-ui.js?v=20261026-8"></script><script defer src="js/art.js?v=20261026-8"></script><script defer src="js/game.js?v=20261026-8"></script>
+</head>
+<body>
+<header class="site-header"><a href="../" class="back-link">← 게임방</a><a href="./?preview=watercolor" class="brand"><span class="brand-leaf" aria-hidden="true"></span><span>한자 낚시터<small>물결 따라, 한 글자씩</small></span></a><button id="sound" class="quiet-button" aria-pressed="false">소리 켜기</button></header>
+<main>
+<div class="above-scene"><span>햇살이 머무는 작은 물가</span><span class="edition">수채 낚시 시안 · 02</span></div>
+<section id="scene" class="scene" data-phase="loading" aria-label="한자 낚시 연못">
+<img class="landscape" src="assets/pond.webp" alt="" draggable="false"><div class="scene-shade"></div>
+<div class="scene-top"><button id="map" class="location-pill"><span class="location-icon" aria-hidden="true">⌁</span><span><small id="stage-label">9급 · 입문</small><b id="region-label">마당 연못</b></span><span class="chevron">⌄</span></button><div class="weather"><span class="sun-icon" aria-hidden="true"></span> 맑음 · 느긋한 하루</div><button id="pause" class="round-button" aria-label="잠깐 쉬기">Ⅱ</button></div>
+<div class="scene-heading"><span id="phase-label" class="eyebrow">연못을 준비하고 있어요</span><h1 id="prompt" tabindex="-1">오늘은 어떤 물고기를 만날까요?</h1><p id="instruction">작은 물결에 찌를 던져 보세요.</p></div>
+<div id="water-spots" class="water-spots"><button class="cast-spot spot-one" data-x="0.59" data-y="0.48" aria-label="가운데 물결에 찌 던지기"><span></span></button><button class="cast-spot spot-two" data-x="0.76" data-y="0.62" aria-label="오른쪽 물결에 찌 던지기"><span></span></button><button class="cast-spot spot-three" data-x="0.43" data-y="0.63" aria-label="왼쪽 물결에 찌 던지기"><span></span></button></div>
+<img class="angler" src="assets/angler.webp" alt="" draggable="false">
+<div id="fish" class="fish-actor hidden" aria-hidden="true"><img src="assets/fish.webp" alt="" draggable="false"><span id="fish-character" class="hanja"></span></div>
+<canvas id="effects" aria-hidden="true"></canvas>
+<div id="force-panel" class="force-panel hidden"><span id="force-label">물고기의 힘</span><div class="force-track" role="progressbar" aria-labelledby="force-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span id="force-fill"></span></div></div>
+<div id="impact-word" class="impact-word" aria-live="polite"></div>
+<div id="fishing-controls" class="fishing-controls"><div id="timing" class="timing hidden"><div class="timing-caption"><span>누르면 바늘이 움직여요</span><b id="timing-hint">표시 안에서 놓아요</b></div><div class="timing-track" aria-hidden="true"><span class="good-zone"></span><span class="perfect-zone">딱!</span><span id="needle" class="needle"></span></div></div><button id="cast" class="fishing-button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19 19 4M18 5c-2 5 3 7 1 12-2 4-7 2-6-1"/></svg><span>찌 던지기</span></button><button id="hold" class="fishing-button hold-button hidden"><span class="button-ripple"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11a4 4 0 1 1-8 0v-2l3 2M9 3h6"/></svg><span id="hold-label">누르고 있다가 놓기</span></button><button id="auto" class="auto-button hidden">자동으로 끌어올리기</button></div>
+<div class="outing-meter"><span>이번 낚시</span><div id="catch-dots" aria-label="이번 낚시 0마리, 목표 5마리"><i></i><i></i><i></i><i></i><i></i></div></div>
+<nav class="scene-nav" aria-label="낚시 메뉴"><button id="fishing-tab" class="active"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 20 15-16M18 5v11a3 3 0 0 1-6 0v-2"/></svg><span>낚시</span></button><button id="collection"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-3-2-6-2-9-1v14c3-1 6-1 9 1 3-2 6-2 9-1V5c-3-1-6-1-9 1Zm0 0v14"/></svg><span>도감</span></button><button id="aquarium"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10M7 3v4c-8 6-5 14 5 14s13-8 5-14V3M4 12h16M9 16c2-2 4-2 6 0-2 2-4 2-6 0Z"/></svg><span>내 어항</span></button></nav>
+</section>
+<div class="below-scene"><span id="collection-count">도감 0 / 300자</span><p id="status" role="status" aria-live="polite">기록은 이 기기에 저장됩니다.</p><span class="tiny-leaf" aria-hidden="true">⌁</span></div>
+<section class="study-journey" aria-label="급수 합격을 향한 학습"><div><span class="eyebrow"><b id="journey-stage">9급 · 입문</b> · 만나고, 기억하고, 도전해요</span><h2 id="journey-title">물고기를 만나고, 급수 합격까지</h2><p id="journey-progress">배움의 물길을 준비하고 있어요.</p></div><button id="journey-open" class="primary" disabled>급수 도전 →</button></section><p id="study-save-warning" class="save-warning hidden">학습·시험 기록을 저장하지 못했어요. 이 화면을 닫으면 새 기록이 사라질 수 있어요.</p>
+<p id="save-warning" class="save-warning hidden">기록을 저장하지 못했어요. 이 화면에서는 계속 놀 수 있지만 브라우저를 닫으면 기록이 사라질 수 있어요.</p>
+<p class="scope-note">9급은 게임의 입문 단계입니다. 급수 도전은 자체 제작 연습이며 공식 합격 판정이 아닙니다. 지역별 새 풍경은 준비 중입니다.</p>
+</main>
+<dialog id="modal"><div id="modal-body"></div></dialog>
+</body></html>
