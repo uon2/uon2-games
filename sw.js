@@ -2,7 +2,7 @@
 
 // 허브 전체(모든 게임)를 담당하는 서비스 워커
 // 네트워크 우선: 온라인이면 항상 최신 파일, 인터넷이 끊기면 마지막으로 받은 파일로 실행
-const CACHE = 'uon2-games-v16-hanja-fish-kinds';
+const CACHE = 'uon2-games-v16-hanja-expedition-strike1';
 
 // index.html은 호스팅에서 폴더 주소로 리다이렉트될 수 있어 폴더 주소('./', 'english/')로만 캐시
 const CORE = [
@@ -16,6 +16,17 @@ const CORE = [
   'math/audio.js',
   'hanja/',
   'hanja/style.css',
+  'hanja/expedition.css',
+  'hanja/js/expedition-engine.js',
+  'hanja/js/expedition-art.js',
+  'hanja/assets/fish-natural/crucian-v1.png',
+  'hanja/assets/fish-natural/carp-v1.png',
+  'hanja/assets/fish-natural/catfish-v1.png',
+  'hanja/data/fish-atlas.json',
+  'hanja/assets/atlas/crucian.jpg',
+  'hanja/assets/atlas/carp.jpg',
+  'hanja/assets/atlas/catfish.jpg',
+  'hanja/assets/atlas/ATTRIBUTION.md',
   'hanja/js/engine.js',
   'hanja/js/fishing-engine.js',
   'hanja/data/catalog.json',

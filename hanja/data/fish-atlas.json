@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "checkedAt": "2026-11-02",
+  "species": [
+    {
+      "id": "crucian",
+      "image": "assets/atlas/crucian.jpg",
+      "title": "Carassius auratus (taken in China).jpg",
+      "creator": "DeborahY",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Carassius_auratus_(taken_in_China).jpg",
+      "downloadUrl": "https://upload.wikimedia.org/wikipedia/commons/0/07/Carassius_auratus_%28taken_in_China%29.jpg",
+      "license": "Public domain · PD-self",
+      "licenseUrl": "https://commons.wikimedia.org/wiki/File:Carassius_auratus_(taken_in_China).jpg#Licensing",
+      "infoUrl": "https://www.nifs.go.kr/portal/bt/frctA/actionSpeciesSearchView.do?taxonId=9895",
+      "modification": "원본 JPEG 그대로 저장. 화면 표시 크기만 조정했습니다.",
+      "identification": "파일 설명의 Carassius auratus 동정에 근거. 근연종 전문가 재동정은 하지 않았습니다.",
+      "sha256": "6d2e0950a479748d4ef2ff8256e005f40a194815491b128903f04718eff21fec",
+      "checkedAt": "2026-11-02",
+      "rightsStatus": "permitted-with-stated-conditions"
+    },
+    {
+      "id": "carp",
+      "image": "assets/atlas/carp.jpg",
+      "title": "Carpe (Cyprinus carpio).jpg",
+      "creator": "Gzen92 · 색보정 Togabi",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Carpe_(Cyprinus_carpio).jpg",
+      "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/Carpe_%28Cyprinus_carpio%29.jpg/960px-Carpe_%28Cyprinus_carpio%29.jpg",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "infoUrl": "https://www.nifs.go.kr/board/actionBoard0008View.do?BBS_CL_ALL=ABCDEFG&BBS_CL_CD=ALL&BBS_ID=20240729091127521MHQ&MENU_ID=M0000054",
+      "modification": "Wikimedia 제공 960px 축소본. 별도 자르기·색보정 없음. 이 사진은 CC BY-SA 4.0으로 제공합니다.",
+      "identification": "촬영자 설명 Cyprinus carpio. 사진의 전경 개체입니다.",
+      "sha256": "fcee829a13c421e5570d2ed0beb0fd878185e85c008cf74e29174e33d8155289",
+      "checkedAt": "2026-11-02",
+      "rightsStatus": "permitted-with-stated-conditions"
+    },
+    {
+      "id": "catfish",
+      "image": "assets/atlas/catfish.jpg",
+      "title": "Silurus.jpg",
+      "creator": "rhosoi / Ryosuke Hosoi",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Silurus.jpg",
+      "downloadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/Silurus.jpg/960px-Silurus.jpg",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+      "infoUrl": "https://commons.wikimedia.org/wiki/File:Silurus.jpg",
+      "modification": "Wikimedia 제공 960px 축소본. 별도 자르기·색보정 없음.",
+      "identification": "촬영자 설명 Silurus asotus. 비와호 포획 개체입니다.",
+      "sha256": "e5f9e2be789c5e9c9ce6fcc37186704cfcbdb4f313b7ec59b642a89ee54e9c58",
+      "checkedAt": "2026-11-02",
+      "rightsStatus": "permitted-with-stated-conditions"
+    }
+  ]
+}
