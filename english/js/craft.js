@@ -11,16 +11,18 @@ function craftSave() {
 // 만든 개수에 따라 난이도가 올라감
 // 1: 빈칸 1개 / 2: 빈칸 2개 / 3: 전부 빈칸 / 4: 그림 없이 소리만
 function craftLevel() {
-  const total = craftSave().total;
-  if (total < 3) return 1;
-  if (total < 6) return 2;
-  if (total < 12) return 3;
+  const cs=craftSave(), word=craft.order?.word;
+  if(word && typeof wordLearning==='function') return wordLearning().spellingLevel(word);
+  const total=word ? (cs.practice?.[word]?.ok || 0) : 0;
+  if (total < 1) return 1;
+  if (total < 3) return 2;
+  if (total < 5) return 3;
   return 4;
 }
 
 function unlockedRecipes() {
   const kinds = Object.keys(craftSave().made).length;
-  return RECIPES.filter(r => r.tier === 1 || kinds >= 4);
+  return RECIPES.filter(r => isTestMode() || r.tier === 1 || kinds >= 4);
 }
 
 function needOf(recipe) {
@@ -38,6 +40,8 @@ function missingOf(recipe) {
 // 아직 안 만든 것을 먼저, 재료가 있는 것 중에서 고름
 function pickOrder() {
   const doable = unlockedRecipes().filter(r => !missingOf(r).length);
+  const review=typeof wordLearning==='function'?wordLearning().due(doable):[];
+  if(review.length) return review[0];
   const fresh = doable.filter(r => !craftSave().made[r.word]);
   if (fresh.length) return pick(fresh);
   return doable.length ? pick(doable) : null;
@@ -213,6 +217,11 @@ async function checkWord() {
     save.blocks[letter] = Math.max(0, (save.blocks[letter] || 0) - n);
   });
   const cs = craftSave();
+  cs.practice ||= {};
+  const practice=cs.practice[recipe.word] ||= {ok:0,helped:0};
+  practice[craft.wrong || craft.hint ? 'helped' : 'ok']++;
+  if(typeof wordLearning==='function') wordLearning().record(recipe.word,
+    craft.slots.some(s=>s.fixed)?'partial':'spelling',!!(craft.wrong || craft.hint));
   cs.made[recipe.word] = (cs.made[recipe.word] || 0) + 1;
   cs.total++;
   const unlockedNow = Object.keys(cs.made).length === 4 && cs.made[recipe.word] === 1;
@@ -223,7 +232,8 @@ async function checkWord() {
   if (sess !== craft.session) return;
   sfx.fanfare();
   updateCraftBag();
-  const spellGot = { cat: '🐱 숲속 모험에서 모두 공격!', bed: '🛏️ 숲속 모험에서 하트 회복!', dog: '🛡️ 숲속 모험에서 2번 보호!' }[AdventureEngine.spellOf(recipe.word)];
+  const spellGot = typeof SwarmEngine==='function' ? '🏡 내 방에 놓고, 모험에서 다시 만나요!'
+    : { cat: '🐱 숲속 모험에서 모두 공격!', bed: '🛏️ 숲속 모험에서 하트 회복!', dog: '🛡️ 숲속 모험에서 2번 보호!' }[AdventureEngine.spellOf(recipe.word)];
   setCraftMsg(`${recipe.ko} 완성! 🎉 ${spellGot}`);
   await showCraftCard(recipe);
   if (sess !== craft.session) return;
@@ -276,30 +286,32 @@ function goBook() {
   grid.innerHTML = '';
   RECIPES.forEach(r => {
     const count = craftSave().made[r.word] || 0;
+    const visible = isTestMode() || count > 0;
     const card = document.createElement('button');
-    card.className = 'book-item' + (count ? '' : ' unknown');
+    card.className = 'book-item' + (visible ? '' : ' unknown');
     const spell = AdventureEngine.spellOf(r.word);
-    const effect = { cat: '🐱 모두 공격', bed: '🛏️ 하트 회복', dog: '🛡️ 2번 보호' }[spell];
+    const effect = typeof SwarmEngine==='function' ? '🏡 내 방에서 다시 만나요' : { cat: '🐱 모두 공격', bed: '🛏️ 하트 회복', dog: '🛡️ 2번 보호' }[spell];
     card.innerHTML = `
-      <div class="book-emoji">${count ? r.emoji : '❓'}</div>
-      <div class="book-word">${count ? r.word : '＿ ＿ ＿'}</div>
+      <div class="book-emoji">${visible ? r.emoji : '❓'}</div>
+      <div class="book-word">${visible ? r.word : '＿ ＿ ＿'}</div>
       <div class="book-ko">${r.ko}${count > 1 ? ` ×${count}` : ''}</div>
-      <div class="book-effect">${count ? effect : '숲속 모험 효과 ?'}</div>`;
+      <div class="book-effect">${visible ? effect : '모험과 작업대에서 만나요'}</div>`;
     card.addEventListener('click', () => {
-      if (!count) { sfx.bonk(); return; }
+      if (!visible) { sfx.bonk(); return; }
       sfx.click();
       speech.say(r.word);
     });
     grid.appendChild(card);
   });
   const done = Object.keys(craftSave().made).length;
-  $('#book-count').textContent = `${done} / ${RECIPES.length}`;
+  $('#book-count').textContent = `${done} / ${RECIPES.length}` + (isTestMode() ? ' · 테스트 전체 보기' : '');
   show('screen-book');
 }
 
 // ---------- 들어가기 / 나가기 ----------
 function goCraft() {
   craft.session++;
+  if(typeof wordLearning==='function') wordLearning().beginSession();
   craftSave();
   show('screen-craft');
   nextOrder();

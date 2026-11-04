@@ -7,7 +7,7 @@ function battleSave() {
   return save.battle;
 }
 
-function isPremium() { return !!save.premium; }
+function isPremium() { return isTestMode() || !!save.premium; }
 
 // ---------- 용암 진행 ----------
 // cleared: 구역을 끝냈는지 · chest: 마지막 문장 상자까지 풀었는지(보스만 잡고 나간 경우와 구분)
@@ -19,7 +19,7 @@ function lavaSave() {
 // 용암은 숲 마지막 구역(안개 왕의 성)을 깨야 열린다
 function forestCleared() {
   const last = BATTLE_STAGES[BATTLE_STAGES.length - 1];
-  return !!battleSave().cleared[last.id];
+  return isTestMode() || !!battleSave().cleared[last.id];
 }
 function stagesOf(world) { return world === 'lava' ? LAVA_STAGES : BATTLE_STAGES; }
 function clearedOf(world) { return world === 'lava' ? lavaSave().cleared : battleSave().cleared; }
@@ -31,8 +31,8 @@ function goNights(world) {
   const stages = stagesOf(battle.world), cleared = clearedOf(battle.world);
   $('#nights-title').textContent = lava ? '🌋 용암 모험' : '⚔️ 숲속 모험';
   $('#nights-msg').textContent = lava
-    ? '싸우다 만나는 문장 상자를 풀면 다리가 열려요. 마지막 문장까지 풀어야 구역이 끝나요!'
-    : '움직이고, 공격하고, 보물의 마법을 열어요. 마지막에는 보스가 기다려요!';
+    ? '자동 무기로 몰려오는 적을 잡아요! 영어 문장으로 무기를 진화시키고 별을 모아요.'
+    : '무기는 자동 공격! 보석을 모아 힘을 고르고, 낱말 보물로 무기를 진화시켜요.';
   $('#nights-stars').textContent = wallet().stars;
   $('#forest-friends').hidden = lava;
   $('#forest-friends').replaceChildren(...Object.entries(MONSTER_TYPES).map(([kind,info])=>{
@@ -49,14 +49,14 @@ function goNights(world) {
 
   stages.forEach((stage, i) => {
     const prev = stages[i - 1];
-    const needClear = prev && !cleared[prev.id];
+    const needClear = !isTestMode() && prev && !cleared[prev.id];
     const needPay = !lava && !stage.free && !isPremium();
     const card = document.createElement('button');
     card.className = 'stage night-card' + (lava ? ' lava-card' : '') + (needClear || needPay ? ' locked' : '');
     card.innerHTML = `
       <div class="stage-icon ${lava ? 'lava-icon' : 'night-icon'}">${needPay ? '🔒' : needClear ? (lava ? '🪨' : '🌑') : (lava ? '🌋' : '🌙')}</div>
       <div class="stage-name">${stage.name}</div>
-      <div class="stage-letters">${lava ? '문장 상자 ' + stage.waves + '개' : stage.id>=3 ? '돌쿵 · 돌진 피하기' : stage.id>=2 ? '나무활 · 화살 피하기' : '이끼콩 · 검 연습'}</div>
+      <div class="stage-letters">${lava ? '문장 상자 ' + (typeof SwarmEngine==='function'?3:stage.waves) + '개' : stage.id>=3 ? '돌쿵 · 돌진 피하기' : stage.id>=2 ? '나무활 · 화살 피하기' : '이끼콩 · 자동 무기 연습'}</div>
       ${cleared[stage.id] ? '<div class="stage-badge">⭐</div>' : ''}`;
     card.addEventListener('click', () => {
       if (needPay) { sfx.bonk(); showLocked(stage); return; }
@@ -93,33 +93,50 @@ function askParent(onPass) {
 
 function startBattle(stage) {
   const world = stage.world === 'lava' ? 'lava' : 'forest';
-  const stages = stagesOf(world), cleared = clearedOf(world), i = stages.indexOf(stage);
+  const stages = stagesOf(world), cleared = clearedOf(world), i = stages.findIndex(s=>s.id===stage.id);
   battle.world = world;
-  if(i<0 || (world==='forest' && !stage.free && !isPremium()) || (i>0 && !cleared[stages[i-1].id])) return goNights(world);
+  if(i<0 || (world==='forest' && !stage.free && !isPremium()) || (!isTestMode() && i>0 && !cleared[stages[i-1].id])) return goNights(world);
   if(world==='lava' && !forestCleared()) return goNights('forest');
-  // 작업대에서 만든 낱말이 모험의 재료 → 하나도 없으면 작업대로 돌려보냄
-  if(!Object.keys((save.craft&&save.craft.made)||{}).length) {
+  // 이전 전투 엔진을 쓰는 캐시에서만 옛 작업대 입장 조건을 유지한다.
+  if(!isTestMode() && typeof SwarmEngine==='undefined' && !Object.keys((save.craft&&save.craft.made)||{}).length) {
     $('#nights-msg').textContent='작업대에서 낱말을 만들고 오면 모험을 떠날 수 있어요! 🔨';
     return goNights(world);
   }
   leaveBattle();
-  battle.engine=new AdventureEngine(stage);
+  const learningRoute=world==='forest' && stage.id===1 && typeof SwarmEngine==='function' && typeof prepareLearningRoute==='function';
+  battle.engine=typeof SwarmEngine==='function'?new SwarmEngine({...stage,learningRoute}):new AdventureEngine(stage);
+  battle.learningPlan=null;
+  if(!learningRoute && typeof wordLearning==='function') wordLearning().beginSession();
+  if(battle.engine.swarm) battle.engine.configureLoadout(swarmLoadout());
+  battle.runId = Date.now().toString(36) + '-' + Math.random().toString(36).slice(2) + '-' + battle.session;
+  battle.selectedBoon = 'heart';
   const made = save.craft?.made || {};
   if (made.cat) battle.engine.spells.cat = 1;
   if (made.dog) battle.engine.spells.dog = 1;
-  // 빙글검은 용암에서만 힘을 쓴다 (무료인 숲을 반복해 별을 빨리 모으는 길을 막는다)
-  battle.engine.blade = world==='lava' ? equippedBlade() : null;
+  // 새 전투는 구매한 시작 무기를 두 세계에서 모두 사용한다.
+  if(!battle.engine.swarm) battle.engine.blade = world==='lava' ? equippedBlade() : null;
   battle.running=true; battle.paused=false; battle.finished=false;
-  battle.words=[]; battle.mistakes=[]; battle.solved=[]; battle.last=0;
+  battle.words=[]; battle.mistakes=[]; battle.solved=[]; battle.last=0; battle.earnedForest=0; battle.hitSoundAt=-1; battle.pickupSoundAt=-1;
   $('#battle-pause-panel').hidden=true; $('#adventure-forge').hidden=true;
-  $('#adventure-help').textContent='이동: 원을 밀거나 바닥 터치 · 검: 공격 꾹 · PC: 방향키 / Space / Shift';
-  $('#adventure-note').textContent = world==='lava' ? stage.hint : '몬스터에게 다가가서 검을 휘둘러 보세요!';
+  $('#adventure-help').textContent=battle.engine.swarm?'무기는 자동 공격 · 이동하며 보석을 모아요 · Space 필살기 · Shift 대시':'이동: 원을 밀거나 바닥 터치 · 검: 공격 꾹 · PC: 방향키 / Space / Shift';
+  $('#swarm-upgrade').hidden=true;
+  $('#swarm-hud').hidden=!battle.engine.swarm;
+  $('#spell-row').hidden=!!battle.engine.swarm;
+  $('#adventure-note').textContent = battle.engine.swarm?'무기는 자동 공격해요! 움직이며 보석을 모으면 새 힘을 고를 수 있어요.':world==='lava' ? stage.hint : '몬스터에게 다가가서 검을 휘둘러 보세요!';
   $('#screen-battle').classList.toggle('lava-world', world==='lava');
-  if(world==='lava' && lavaSave().pending[stage.id]) {
+  const pendingStore=world==='lava'?lavaSave():battleSave();
+  if(pendingStore.pending?.[stage.id]) {
+    const pending=pendingStore.pending[stage.id];
+    if(pending.runId) battle.runId=pending.runId;
+    if(learningRoute && wordLearning().validRoute(pending.learningPlan)) battle.learningPlan=pending.learningPlan;
     battle.engine.resumeBossChest();
-    $('#adventure-note').textContent='보스는 이미 물리쳤어요! 마지막 문장만 완성하면 돼요.';
+    $('#adventure-note').textContent='보스는 이미 물리쳤어요! 마지막 영어 보물부터 이어서 열어요.';
   }
   show('screen-battle');
+  if(learningRoute) {
+    if(!battle.engine.bossDown || !battle.learningPlan) prepareLearningRoute();
+    else $('#adventure-note').textContent='마지막 쉼터에서 친구의 목소리를 다시 기억해요.';
+  }
   const sess=battle.session;
   battle.raf=requestAnimationFrame(t=>adventureLoop(t,sess));
 }
@@ -132,16 +149,40 @@ function leaveBattle() {
   battle.session++; battle.running=false; battle.paused=false;
   cancelAnimationFrame(battle.raf); stopInput(); speech.stop();
   $('#battle-pause-panel').hidden=true; $('#adventure-forge').hidden=true;
+  $('#swarm-upgrade').hidden=true;
+  $('#learning-camp').hidden=true;
 }
 function pauseBattle() {
-  if(!battle.running || !$('#adventure-forge').hidden) return;
+  if(!battle.running || !$('#learning-camp').hidden || !$('#adventure-forge').hidden || !$('#sentence-box').hidden || !$('#swarm-upgrade').hidden) return;
   battle.paused=true; stopInput(); speech.stop();
   $('#battle-pause-panel').hidden=false;
   $('#battle-resume').focus();
 }
 function resumeBattle() {
+  if(!$('#learning-camp').hidden || !$('#adventure-forge').hidden || !$('#sentence-box').hidden || !$('#swarm-upgrade').hidden) return;
   battle.paused=false; battle.last=0; ac();
   $('#battle-pause-panel').hidden=true;
+}
+function showSwarmUpgrade() {
+  const g=battle.engine;
+  if(!battle.running || !g?.swarm || !(g.pendingLevels>0)) return;
+  battle.paused=true;stopInput();speech.stop();
+  $('#swarm-upgrade').hidden=false;
+  $('#upgrade-title').textContent=`Lv.${g.level} · 이번 모험의 힘을 골라요`+(g.pendingLevels>1?` (${g.pendingLevels}개 남음)`:'');
+  $('#upgrade-choices').replaceChildren(...g.upgradeChoices().map(option=>{
+    const b=document.createElement('button');b.className='upgrade-card';
+    const icon=document.createElement('span');icon.className='upgrade-icon';icon.textContent=option.icon||'✦';
+    const title=document.createElement('strong');title.textContent=option.title;
+    const desc=document.createElement('small');desc.textContent=option.desc;
+    [icon,title,desc].forEach(el=>b.appendChild(el));
+    b.addEventListener('click',()=>{
+      if(!g.chooseUpgrade(option.id)) return;
+      sfx.pop();
+      if(g.pendingLevels>0) return showSwarmUpgrade();
+      $('#swarm-upgrade').hidden=true;battle.paused=false;battle.last=0;
+    });return b;
+  }));
+  $('#upgrade-choices').children[0]?.focus();
 }
 function adventureLoop(ts,sess) {
   if(!battle.running || sess!==battle.session) return;
@@ -165,25 +206,34 @@ function adventureLoop(ts,sess) {
   if(battle.running) battle.raf=requestAnimationFrame(t=>adventureLoop(t,sess));
 }
 function adventureEvent(event) {
-  if(event.type==='hit') sfx.hit();
-  if(event.type==='pickup') sfx.pop();
-  if(event.type==='shieldup') { sfx.fanfare(); $('#adventure-note').textContent='🛡️ 방패를 얻었어요! 공격을 한 번 막아 줘요.'; }
-  if(event.type==='shield') $('#adventure-note').textContent='🛡️ 방패가 막아 줬어요!';
+  if(event.type==='hit' && battle.engine.time-(battle.hitSoundAt||-1)>.07) { sfx.hit();battle.hitSoundAt=battle.engine.time; }
+  if(event.type==='pickup' && battle.engine.time-(battle.pickupSoundAt||-1)>.1) { sfx.pop();battle.pickupSoundAt=battle.engine.time; }
+  if(event.type==='shieldup') { sfx.fanfare(); $('#adventure-note').textContent='🛡️ 보호막을 얻었어요! 공격을 한 번 막아 줘요.'; }
+  if(event.type==='shield') $('#adventure-note').textContent='🛡️ 보호막이 막아 줬어요!';
   if(event.type==='hurt') sfx.bonk();
+  if(event.type==='special') sfx.fanfare();
+  if(event.type==='rescue-ready') $('#adventure-note').textContent='✨ 빛나는 구출 원 안에 잠깐 머물러요! 위험하면 나왔다가 다시 가도 괜찮아요.';
+  if(event.type==='rescued') { sfx.pop(); $('#adventure-note').textContent='구출했어요! 남은 무리를 돌파하면 안전한 영어 쉼터가 열려요.'; }
+  if(event.type==='elite') $('#adventure-note').textContent='✨ 구출 원으로 가요! 별표 정예의 예고선을 피하고, 필살기로 공격을 끊어봐요.';
+  if(event.type==='interrupt') $('#adventure-note').textContent='✦ 공격 준비를 끊었어요! 지금이 돌파할 기회예요.';
   if(event.type==='boss') $('#adventure-note').textContent = battle.world==='lava'
-    ? '용암 수호자 등장! 붉은 원이 생기면 대시로 피해요!'
-    : '안개왕 등장! 붉은 원이 생기면 대시로 피해요!';
-  if(event.type==='chest' && event.boss && battle.world==='lava' && !event.resumed) {
+    ? '용암 수호자 등장! 붉은 원과 화살을 피해요. 필살기도 아껴 뒀다 써 봐요!'
+    : '안개왕 등장! 붉은 원과 화살을 피해요. 필살기도 아껴 뒀다 써 봐요!';
+  if(event.type==='boss-angry') $('#adventure-note').textContent='보스가 힘을 모아요! 화살이 늘어나고 부하가 나타나요. 대시로 빈틈을 찾아요!';
+  if(event.type==='chest' && event.boss && !event.resumed) {
     // 여기서 나가도 보스는 다시 잡지 않게 표시해 둔다
-    lavaSave().pending[battle.engine.stage.id]=true; persist();
+    const progress=battle.world==='lava'?lavaSave():battleSave();
+    progress.pending ||= {};progress.pending[battle.engine.stage.id]={runId:battle.runId,learningPlan:battle.learningPlan};
+    if(battle.engine.swarm) grantFirstClearChoice();
+    persist();
   }
   if(event.type==='chest') $('#adventure-note').textContent = battle.world==='lava'
     ? (event.boss ? '보스를 물리쳤어요! 가운데 문을 열려면 마지막 문장을 완성해요.' : '문장 상자가 나타났어요! 가운데로 가서 열어 보세요.')
-    : '보물을 찾았어요! 가운데 상자에 다가가서 열어 보세요.';
+    : event.boss ? '마지막 영어 쉼터예요! 다시 기억하고 별과 도감 보물을 받아요.' : '안전한 영어 쉼터예요! 배운 영어로 친구를 찾고 무기를 진화시켜요.';
   if(event.type==='vent-warn' && battle.world==='lava') $('#adventure-note').textContent='바닥이 밝아졌어요! 곧 불기둥이 솟아요.';
-  if(event.type==='wave' && battle.world==='lava') $('#adventure-note').textContent=battle.engine.stage.hint;
-  else if(event.type==='wave') $('#adventure-note').textContent=battle.engine.stage.id>=3?'돌쿵이 몸을 낮추면 주황색 길 옆으로 피해요! 돌진 후가 공격 기회예요.':battle.engine.stage.id>=2?'나무활은 노란 선을 따라 화살을 쏴요. 옆으로 피하거나 대시로 다가가요!':'이끼콩을 피하며 싸워요. 보석을 주우면 강해져요!';
-  if(event.type==='level') { sfx.fanfare(); $('#adventure-note').textContent=battle.engine.level>=3?'레벨 업! 검의 공격력이 강해졌어요!':'레벨 업! 보석을 더 모아 보세요.'; }
+  if(event.type==='wave' && battle.world==='lava') $('#adventure-note').textContent=battle.engine.swarm?'몰려오는 적을 잡고 문장 상자를 찾아요. 한국어 뜻을 읽고 문장으로 무기를 진화시켜요.':battle.engine.stage.hint;
+  else if(event.type==='wave') $('#adventure-note').textContent=battle.engine.swarm?'몰려오는 적을 자동 무기로 잡아요! 보석을 주우면 레벨 업 선택이 열려요.':battle.engine.stage.id>=3?'돌쿵이 몸을 낮추면 주황색 길 옆으로 피해요! 돌진 후가 공격 기회예요.':battle.engine.stage.id>=2?'나무활은 노란 선을 따라 화살을 쏴요. 옆으로 피하거나 대시로 다가가요!':'이끼콩을 피하며 싸워요. 보석을 주우면 강해져요!';
+  if(event.type==='level') { sfx.fanfare(); if(battle.engine.swarm) showSwarmUpgrade(); else $('#adventure-note').textContent=battle.engine.level>=3?'레벨 업! 검의 공격력이 강해졌어요!':'레벨 업! 보석을 더 모아 보세요.'; }
   if(event.type==='magic') { speech.say(event.word); $('#adventure-note').textContent=event.word==='cat'?'고양이 동료가 몬스터를 공격했어요!':event.word==='bed'?'침대 마법으로 하트가 회복됐어요!':'강아지 동료가 두 번 지켜줘요!'; }
   if(event.type==='won' || event.type==='lost') endAdventure(event.type==='won');
 }
@@ -249,16 +299,35 @@ function drawVents(c,g) {
 function renderAdventure() {
   const g=battle.engine; if(!g) return;
   const canvas=$('#adventure-canvas'), c=canvas.getContext('2d');
-  if(g.lava) drawLavaGround(c,g); else {
-  c.clearRect(0,0,900,520); c.fillStyle='#162e36'; c.fillRect(0,0,900,520);
-  c.fillStyle='#203f42';
-  for(let y=0;y<520;y+=40) for(let x=0;x<900;x+=40) if((x/40+y/40)%3===0) c.fillRect(x+2,y+2,36,36);
-  c.fillStyle=['#2a5050','#34465d','#355341','#49435a','#373654'][g.stage.id-1]; c.fillRect(34,40,832,436);
-  c.strokeStyle='#426963'; c.lineWidth=4; c.strokeRect(34,40,832,436);
-  for(let i=0;i<13;i++) {
-    const x=24+i*70; c.fillStyle='#172e32'; c.fillRect(x,12,20,32); c.fillRect(x,478,20,32);
-    c.fillStyle='#407567'; c.fillRect(x-8,5,36,24); c.fillRect(x-8,490,36,24);
+  drawAdventureGround(c,g);
+  if((g.rescue?.active || g.rescue?.done) && g.phase==='fight') {
+    const r=g.rescue;
+    c.save(); c.fillStyle=r.done?'rgba(131,213,171,.2)':'rgba(255,226,123,.22)';
+    c.beginPath();c.arc(r.x,r.y,68,0,Math.PI*2);c.fill();
+    c.strokeStyle=r.done?'#a8edc2':'#496c46';c.lineWidth=4;
+    c.beginPath();c.arc(r.x,r.y,68,0,Math.PI*2);c.stroke();
+    c.strokeStyle=r.done?'#a8edc2':'#ffe295';c.lineWidth=6;
+    c.beginPath();c.arc(r.x,r.y,68,-Math.PI/2,-Math.PI/2+Math.PI*2*Math.min(1,r.progress/1.2));c.stroke();
+    c.font='bold 22px system-ui';c.textAlign='center';c.fillStyle='#fff7d2';
+    c.strokeStyle='#274332';c.lineWidth=5;c.strokeText(r.done?'✓ 구출 완료':'✨ 여기서 구출',r.x,r.y-78);
+    c.fillText(r.done?'✓ 구출 완료':'✨ 여기서 구출',r.x,r.y-78);
+    if(!r.done) { c.fillStyle='#725139';c.fillRect(r.x-25,r.y-27,50,54);c.strokeStyle='#e4c686';c.lineWidth=4;c.strokeRect(r.x-25,r.y-27,50,54); }
+    c.font='32px system-ui';c.fillText(r.done?'🌟':'❔',r.x,r.y+12);c.restore();
   }
+  if(g.swarm) {
+    (g.spawnWarnings||[]).forEach(w=>{
+      c.strokeStyle='#f9d78d';c.lineWidth=2;c.setLineDash([5,4]);c.beginPath();c.arc(w.x,w.y,17,0,Math.PI*2);c.stroke();c.setLineDash([]);
+    });
+    (g.fields||[]).forEach(field=>{
+      c.save();c.globalAlpha=Math.min(.55,Math.max(.1,field.ttl));
+      c.fillStyle=field.kind==='bomb'?'#ff9c4c':'#bfeec3';c.beginPath();c.arc(field.x,field.y,field.r||40,0,Math.PI*2);c.fill();c.restore();
+      c.strokeStyle='#ffdf94';c.lineWidth=3;c.beginPath();c.arc(field.x,field.y,field.r||40,0,Math.PI*2);c.stroke();
+    });
+    (g.shots||[]).forEach(shot=>{
+      c.save();c.translate(shot.x,shot.y);c.rotate(Math.atan2(shot.vy||0,shot.vx||1));
+      c.fillStyle=shot.kind==='fire'?'#ffb25b':'#d6f796';c.fillRect(-10,-4,20,8);
+      c.fillStyle='#fff5c9';c.fillRect(0,-2,11,4);c.restore();
+    });
   }
   if(g.lava) drawVents(c,g);
   g.enemies.filter(e=>e.target).forEach(e=>{
@@ -308,13 +377,23 @@ function renderAdventure() {
   });
   g.enemies.forEach(e=>{
     const size=MONSTER_TYPES[e.kind].size;
+    if(e.elite) { c.strokeStyle='#ffd879';c.lineWidth=3;c.beginPath();c.ellipse(e.x,e.y+size/2,size*.7,12,0,0,Math.PI*2);c.stroke();
+      c.fillStyle='#ffe7a2';c.font='bold 16px system-ui';c.textAlign='center';c.fillText('★ 정예',e.x,e.y-size-10); }
     c.fillStyle='rgba(0,0,0,.2)'; c.fillRect(e.x-size/2,e.y+size/2-1,size,8);
     drawForestCharacter(c,e.kind,e.x,e.y,size/80,g.time,e.flash>0,
       {facing:e.x<g.player.x?1:-1,aiming:e.shootWindup>0,charging:e.chargeTime>0,preparing:e.chargeWindup>0});
-    c.fillStyle='#15212c'; c.fillRect(e.x-size/2,e.y-size*0.7-12,size,5);
-    c.fillStyle='#f7aa80'; c.fillRect(e.x-size/2,e.y-size*0.7-12,size*Math.max(0,e.hp/e.maxHP),5);
+    if(!g.swarm || e.boss || e.hp<e.maxHP) {
+      c.fillStyle='#15212c'; c.fillRect(e.x-size/2,e.y-size*0.7-12,size,5);
+      c.fillStyle='#f7aa80'; c.fillRect(e.x-size/2,e.y-size*0.7-12,size*Math.max(0,e.hp/e.maxHP),5);
+    }
   });
   const p=g.player;
+  c.fillStyle='rgba(4,14,19,.28)';c.beginPath();c.ellipse(p.x,p.y+29,21,7,0,0,Math.PI*2);c.fill();
+  if(p.dash>0) {
+    c.save();c.globalAlpha=.22;
+    drawForestCharacter(c,'player',p.x-p.facing*27,p.y,.9,g.time,false,{facing:p.facing,avatar:save.profile?.avatar ?? 0});
+    c.restore();
+  }
   c.save(); c.translate(p.x,p.y);
   if(p.invincible>0 && Math.floor(g.time*15)%2) c.globalAlpha=.55;
   // 방패를 들고 있으면 몸을 감싸는 보호막 (남은 횟수만큼 진해지고 숨 쉬듯 커졌다 작아짐)
@@ -330,32 +409,54 @@ function renderAdventure() {
     }
   }
   drawForestCharacter(c,'player',0,0,0.9,g.time,false,{facing:p.facing,avatar:save.profile?.avatar ?? 0});
-  c.fillStyle='#eaf1f1'; c.fillRect(p.facing*24-3,-16,6,33); c.fillStyle='#ffcc64'; c.fillRect(p.facing*24-9,12,18,5);
-  // 검 반대쪽 손에 방패를 들고, 남은 횟수를 방패에 적어 준다
-  if(g.shield) {
-    const sx=-p.facing*20, sy=2;
-    c.fillStyle='#2f4f75'; c.fillRect(sx-11,sy-16,22,26);
-    c.beginPath(); c.moveTo(sx-11,sy+10); c.lineTo(sx,sy+20); c.lineTo(sx+11,sy+10); c.closePath(); c.fill();
-    c.fillStyle='#9fd8f5'; c.fillRect(sx-7,sy-12,14,18);
-    c.beginPath(); c.moveTo(sx-7,sy+6); c.lineTo(sx,sy+14); c.lineTo(sx+7,sy+6); c.closePath(); c.fill();
-    c.fillStyle='#ffd166'; c.fillRect(sx-3,sy-6,6,6);
-    c.fillStyle='#123'; c.font='bold 11px system-ui'; c.textAlign='center'; c.fillText(String(g.shield),sx,sy+4);
+  if(g.swarm) {
+    // 자동 원거리 전투에서는 손에 든 검 대신 블록형 마법 발사기를 보여 준다.
+    // 실제 투사체와 같은 방향을 바라보며, 기존 아바타의 블록 감성은 유지한다.
+    const wx=p.facing*22;
+    c.save();c.translate(wx,2);c.scale(p.facing,1);
+    c.fillStyle='#355c4b';c.fillRect(-2,-9,26,17);
+    c.fillStyle='#86bf55';c.fillRect(1,-6,18,10);
+    c.fillStyle='#d7f39a';c.fillRect(20,-4,8,7);
+    c.fillStyle='#6b4a2a';c.fillRect(5,7,7,12);
+    c.fillStyle='#ffe47a';c.fillRect(5,-3,6,5);
+    c.restore();
+  } else {
+    c.fillStyle='#eaf1f1'; c.fillRect(p.facing*24-3,-16,6,33); c.fillStyle='#ffcc64'; c.fillRect(p.facing*24-9,12,18,5);
+    // 기존 근접 전투에서는 방패를 직접 든 모습으로 유지한다.
+    if(g.shield) {
+      const sx=-p.facing*20, sy=2;
+      c.fillStyle='#2f4f75'; c.fillRect(sx-11,sy-16,22,26);
+      c.beginPath(); c.moveTo(sx-11,sy+10); c.lineTo(sx,sy+20); c.lineTo(sx+11,sy+10); c.closePath(); c.fill();
+      c.fillStyle='#9fd8f5'; c.fillRect(sx-7,sy-12,14,18);
+      c.beginPath(); c.moveTo(sx-7,sy+6); c.lineTo(sx,sy+14); c.lineTo(sx+7,sy+6); c.closePath(); c.fill();
+      c.fillStyle='#ffd166'; c.fillRect(sx-3,sy-6,6,6);
+    }
   }
-  if(p.swing>0) { c.beginPath(); c.arc(0,0,80,p.facing>0?-1.15:2,p.facing>0?1.15:4.3); c.strokeStyle='#fff2a3'; c.lineWidth=9; c.stroke(); }
+  if(p.swing>0) { c.beginPath(); c.arc(0,0,60+Math.min(24,g.boons.reach*8),p.facing>0?-1.15:2,p.facing>0?1.15:4.3); c.strokeStyle='#fff2a3'; c.lineWidth=7; c.stroke(); }
   // 방패가 막은 직후 번쩍임
   if(g.shield && p.invincible>0.6) {
     c.beginPath(); c.arc(0,0,44,0,Math.PI*2);
     c.strokeStyle=`rgba(255,255,255,${(p.invincible-0.6)*2})`; c.lineWidth=6; c.stroke();
   }
   c.restore();
+  drawAdventureSparks(c,g);
   g.effects.forEach(e=>{ c.globalAlpha=Math.min(1,e.ttl*2); c.fillStyle='#fff6b7'; c.textAlign='center'; c.font='bold 26px system-ui'; c.fillText(e.text,e.x,e.y-(1-e.ttl)*20); }); c.globalAlpha=1;
   $('#hearts').textContent='❤️'.repeat(Math.max(0,p.hp))+'♡'.repeat(Math.max(0,p.maxHP-p.hp));
   $('#adventure-level').textContent=`Lv.${g.level} · 💎 ${g.xp}`+(g.shield?` · 🛡️ ${g.shield}`:'');
-  $('#battle-progress').textContent=`${g.stage.name} · ${g.phase==='boss'?'보스':g.wave+' / '+g.stage.waves+' 구역'}`;
+  $('#battle-progress').textContent=`${g.stage.name} · ${g.phase==='boss'?'보스':g.wave+' / '+(g.totalWaves||g.stage.waves)+' 구역'}`+(g.swarm&&g.phase==='fight'?` · ${g.waveRemaining>0?Math.ceil(g.waveRemaining)+'초':'목표를 채우면 보물!'} · 처치 ${Math.min(g.waveKills,g.waveGoal)}/${g.waveGoal}`:'');
+  if(g.swarm) {
+    const names={seed:'🌱 새싹 발사기',blade:'⚔️ 빙글검',fire:'🔥 관통',bomb:'💥 폭발'};
+    $('#swarm-loadout').textContent=Object.entries(g.weapons).map(([id,level],i)=>`${i?'보조':'주무기'} ${names[id]||id} ${level}${g.evolved[id]?' ✦':''}`).join(' · ');
+    $('#swarm-xp').max=Math.max(1,g.nextXP);$('#swarm-xp').value=g.xp;
+    $('#adventure-attack').textContent=g.specialCharge>=100?'✦ 필살기':`✦ ${Math.floor(g.specialCharge)}%`;
+    $('#adventure-attack').disabled=g.specialCharge<100 || g.phase==='chest';
+  } else { $('#adventure-attack').disabled=false;$('#adventure-attack').textContent='⚔️ 공격'; }
   $('#adventure-dash').textContent=p.dashCD>0?'💨 '+p.dashCD.toFixed(1):'💨 대시';
   $('#adventure-dash').disabled=p.dashCD>0;
   const chest=g.phase==='chest'; $('#adventure-open').hidden=!chest;
-  $('#adventure-open').disabled=Math.hypot(p.x-450,p.y-260)>105;
+  $('#adventure-open').textContent=battle.learningPlan?'🌿 영어 쉼터 열기':g.lava?'📜 문장 상자 열기':'🎁 보물 열기';
+  if(g.rescue && g.phase==='fight') $('#battle-progress').textContent+=g.rescue.done?' · 구출 ✓':g.rescue.active?' · 빛나는 원에서 구출':' · 친구를 찾는 중';
+  $('#adventure-open').disabled=battle.paused || g.pendingLevels>0 || Math.hypot(p.x-450,p.y-260)>105;
   const boss=g.enemies.find(e=>e.boss);
   $('#boss-panel').hidden=!boss;
   if(boss) { $('#boss-health').max=boss.maxHP; $('#boss-health').value=Math.max(0,boss.hp); }
@@ -365,14 +466,42 @@ function renderAdventure() {
   });
 }
 
-// 보물에서 고를 낱말 3개: 도감에 아직 없는 낱말을 먼저 보여 준다
+// 복습할 낱말 한 자리를 먼저 확보하고 새 낱말을 섞는다.
 function forgeCandidates() {
   const made=(save.craft&&save.craft.made)||{};
   const tierMax=battle.engine.stage.id>=3?2:1;
   const pool=RECIPES.filter(r=>r.tier<=tierMax);
   const fresh=shuffle(pool.filter(r=>!made[r.word]));
   const owned=shuffle(pool.filter(r=>made[r.word]));
-  return [...fresh,...owned].slice(0,3);
+  const review=typeof wordLearning==='function'?wordLearning().due(pool).slice(0,1):[];
+  return [...review,...fresh,...owned].filter((r,i,all)=>all.findIndex(x=>x.word===r.word)===i).slice(0,3);
+}
+
+// 영어를 완성하면 다음 전투의 보상을 직접 고른다. 선택 제한 시간은 없다.
+function offerAdventureBoon(container) {
+  const options = battle.engine.swarm?battle.engine.evolutionChoices().map(o=>({...o,ko:o.title})):[
+    { id:'heart', ko:'숲의 손길', desc:'하트 2개 회복 · 최대 하트 +1', icon:'♥' },
+    { id:'reach', ko:'빛나는 검', desc:'검의 사거리가 조금 더 길어져요', icon:'✦' },
+    { id:'swift', ko:'바람 신발', desc:'대시를 더 자주 쓸 수 있어요', icon:'➜' },
+  ];
+  battle.selectedBoon = options[0]?.id || 'heart';
+  container.hidden = false;
+  const title = document.createElement('p');
+  title.textContent = battle.engine.swarm?'영어로 연 진화! 이번 모험의 무기를 바꿔 봐요.':'영어로 연 힘! 이번 모험의 선물 하나를 골라요.';
+  const buttons = options.map(option => {
+    const b = document.createElement('button'); b.className='boon-choice';
+    b.setAttribute('aria-pressed',String(option.id===battle.selectedBoon));
+    const name=document.createElement('strong'); name.textContent=option.icon+' '+option.ko;
+    const desc=document.createElement('small'); desc.textContent=option.desc;
+    b.appendChild(name);b.appendChild(desc);
+    b.addEventListener('click',()=>{
+      battle.selectedBoon=option.id;
+      buttons.forEach((button,i)=>button.setAttribute('aria-pressed',String(options[i].id===option.id)));
+      sfx.click();
+    });
+    return b;
+  });
+  container.replaceChildren(title,...buttons);
 }
 
 // 용암 문장 상자: 보스 상자는 70별, 중간 상자는 40별.
@@ -380,9 +509,10 @@ function forgeCandidates() {
 function openLavaSentence() {
   const g = battle.engine, boss = !!g.bossDown;
   openSentence({
-    runId: battle.session,
+    runId: battle.runId,
     checkpoint: `lava-${g.stage.id}-${boss ? 'boss' : g.wave}`,
     stars: boss ? SENTENCE_STARS.boss : SENTENCE_STARS.normal,
+    onSolved: () => { if(!boss) offerAdventureBoon($('#sentence-boons')); },
     onClose: ({ solved, gained }) => {
       battle.paused = false; battle.last = 0; ac();
       if (!solved) {
@@ -393,25 +523,38 @@ function openLavaSentence() {
       }
       battle.solved = (battle.solved || []).concat([sentence.current.id]);
       if (boss) { const ls=lavaSave(); ls.chest[g.stage.id]=true; delete ls.pending[g.stage.id]; persist(); g.finish(); }
-      else { g.nextWave(); $('#adventure-note').textContent = `문장을 완성했어요! ⭐${gained ? '+' + SENTENCE_STARS.normal : ''} 다리가 열렸어요.`; }
+      else { g.grantBoon(battle.selectedBoon || 'heart'); g.nextWave(); $('#adventure-note').textContent = `문장을 완성했어요! ⭐${gained ? '+' + SENTENCE_STARS.normal : ''} 다리가 열렸어요.`; }
     },
   });
 }
 
 function openForge() {
   const g=battle.engine;
-  if(!battle.running || g.phase!=='chest' || Math.hypot(g.player.x-450,g.player.y-260)>105) return;
+  if(!battle.running || battle.paused || g.pendingLevels>0 || g.phase!=='chest' || Math.hypot(g.player.x-450,g.player.y-260)>105) return;
   battle.paused=true; stopInput();
+  if(battle.learningPlan && typeof openLearningCheckpoint==='function') return openLearningCheckpoint();
   // 용암에서는 보물 대신 문장 상자가 나온다. 문장을 풀어야 다음 구역이 열린다.
   if (battle.world === 'lava') return openLavaSentence();
   battle.forgeWord=null; battle.forgeFailed=false; battle.forgeComplete=false;
+  $('#forge-boons').hidden=true;
+  $('#forge-boons').replaceChildren();
   battle.slots=[]; battle.bank=[]; battle.fixed=[];
   $('#forge-emoji').textContent='🎁';
+  $('#forge-model').hidden=true;
   $('#forge-title').textContent='어떤 보물을 열까요?';
   $('#forge-message').textContent='새 낱말을 고르면 도감에도 모여요!';
   $('#forge-leave').hidden=true; $('#forge-bank').hidden=true;
   $('#adventure-forge').hidden=false;
+  const remembered=typeof wordLearning==='function'?wordLearning().store.forgeTasks?.[forestLearningKey()]:null;
+  if(remembered && RECIPES.some(r=>r.word===remembered.word)) return chooseForgeWord(remembered.word);
   renderForgeChoices();
+}
+
+function forestLearningKey() { return `${battle.runId}:forest-${battle.engine.stage.id}-${battle.engine.wave}`; }
+
+function markForgeHelped() {
+  battle.forgeFailed=true;
+  if(battle.forgeTask) { battle.forgeTask.helped=true; persist(); }
 }
 
 function renderForgeChoices() {
@@ -419,7 +562,7 @@ function renderForgeChoices() {
   $('#forge-slots').replaceChildren();
   $('#forge-choices').replaceChildren(...forgeCandidates().map(r=>{
     const isNew=!made[r.word];
-    const effect=({cat:'🐱 모두 공격',bed:'🛏️ 하트 회복',dog:'🛡️ 2번 보호'})[AdventureEngine.spellOf(r.word)];
+    const effect=battle.engine.swarm?(battle.engine.bossDown?'⭐ 별 · 도감 보물':'✦ 무기 진화 · 별 보물'):({cat:'🐱 모두 공격',bed:'🛏️ 하트 회복',dog:'🛡️ 2번 보호'})[AdventureEngine.spellOf(r.word)];
     const b=document.createElement('button');
     b.className='forge-choice'+(isNew?' fresh':'');
     b.innerHTML=`<span class="fc-emoji">${r.emoji}</span><span class="fc-ko">${r.ko}</span>`
@@ -430,18 +573,33 @@ function renderForgeChoices() {
 }
 
 function chooseForgeWord(word) {
-  const g=battle.engine, r=RECIPES.find(x=>x.word===word);
+  const g=battle.engine;
+  if(!g) return;
+  const memory=typeof wordLearning==='function'?wordLearning().store:null;
+  if(memory) memory.forgeTasks ||= {};
+  const task=memory?.forgeTasks[forestLearningKey()];
+  if(task) word=task.word;
+  const r=RECIPES.find(x=>x.word===word);
   if(!g || !r) return;
-  battle.forgeWord=r; battle.forgeFailed=false; battle.forgeComplete=false;
-  const fixedCount=g.stage.id===1?2:g.stage.id===2?1:0;
-  battle.fixed=shuffle([...r.word].map((_,i)=>i)).slice(0,fixedCount);
+  battle.forgeWord=r; battle.forgeFailed=!!task?.helped; battle.forgeComplete=false;
+  const stat=battleSave().words?.[word];
+  battle.forgeModel=task?task.model:!!g.swarm && (typeof wordLearning==='function'?!wordLearning().stat(word).introduced:!((stat?.ok||0)+(stat?.helped||0)));
+  if(battle.forgeModel) { battle.forgeFailed=true; if(typeof wordLearning==='function') wordLearning().teach(word); }
+  const level=typeof wordLearning==='function'?wordLearning().spellingLevel(word):g.stage.id;
+  const fixedCount=level===1?2:level===2?1:0;
+  battle.fixed=task?[...task.fixed]:shuffle([...r.word].map((_,i)=>i)).slice(0,fixedCount);
+  battle.forgeTask=memory?(memory.forgeTasks[forestLearningKey()] ||= {word,model:battle.forgeModel,helped:battle.forgeFailed,fixed:[...battle.fixed]}):null;
+  if(memory) { Object.keys(memory.forgeTasks).slice(0,-60).forEach(key=>delete memory.forgeTasks[key]); persist(); }
   battle.slots=r.word.split('').map((ch,i)=>battle.fixed.includes(i)?ch:null);
   battle.bank=shuffle([...r.word.split('').filter((_,i)=>!battle.fixed.includes(i)),...shuffle(['a','b','c','d','e','g','o','t'].filter(ch=>!r.word.includes(ch))).slice(0,3)]);
   $('#forge-choices').replaceChildren();
   $('#forge-emoji').textContent=r.emoji;
   $('#forge-title').textContent=`${r.ko}의 마법을 열어요`;
-  $('#forge-message').textContent='빈칸을 채우면 마법이 되고 도감에도 들어가요!';
+  $('#forge-message').textContent=battle.forgeModel?'새 낱말이에요! 소리와 뜻을 익히고, 보고 만들어 봐요.':'소리를 듣고 빈칸을 채워요. 어려우면 낱말 보기를 눌러도 별은 같아요!';
+  $('#forge-model').hidden=!battle.forgeModel;
+  $('#forge-model').textContent=`${r.word} · ${r.ko}`;
   $('#forge-leave').hidden=true; $('#forge-bank').hidden=false;
+  $('#forge-leave').textContent=g.swarm?(g.bossDown?'🏆 모험 마무리':'✦ 진화하고 출발'):'✨ 마법 받고 출발';
   renderForge(); speech.say(r.word);
 }
 function renderForge() {
@@ -467,11 +625,12 @@ function checkForge() {
   const r=battle.forgeWord;
   if(!r || battle.forgeComplete) return;
   if(battle.slots.join('')!==r.word) {
-    battle.forgeFailed=true; if(!battle.mistakes.includes(r.word)) battle.mistakes.push(r.word);
+    markForgeHelped(); if(!battle.mistakes.includes(r.word)) battle.mistakes.push(r.word);
     $('#forge-message').textContent=`${r.word} · 잘 봤어요. 다른 글자를 눌러 빼고 다시 놓아봐요.`;
     sfx.bonk(); speech.say(r.word); return;
   }
   battle.forgeComplete=true;
+  const earned=battle.engine.swarm?claimForestLearningStars():0;
   battle.words.push(r.word);
   // 도감에 없던 낱말이면 모험에서 새로 획득 → 도감과 내 방 아이템에 추가
   const cs=(save.craft=save.craft||{total:0,made:{}});
@@ -479,23 +638,36 @@ function checkForge() {
   if(!cs.made[r.word]) { cs.made[r.word]=1; cs.total=(cs.total||0)+1; battle.forgeNew=true; }
   else battle.forgeNew=false;
   const bs=battleSave(); bs.words ||= {}; const stat=bs.words[r.word] ||= {ok:0,helped:0};
-  stat[battle.forgeFailed?'helped':'ok']++; persist();
+  const learned=typeof wordLearning==='function'?wordLearning().record(r.word,battle.fixed.length?'partial':'spelling',battle.forgeFailed,wordLearning().store.session,forestLearningKey()):true;
+  if(learned) stat[battle.forgeFailed?'helped':'ok']++; persist();
   const spell=AdventureEngine.spellOf(r.word);
   $('#forge-message').textContent=(battle.forgeNew?`✨ ${r.word} 새 낱말을 도감에 모았어요! `:`${r.word} 완성! `)
-    +({cat:'🐱 버튼으로 몬스터를 한꺼번에 공격해요.',bed:'🛏️ 버튼으로 하트를 회복해요.',dog:'🐶 버튼으로 두 번 보호받아요.'})[spell];
+    +(battle.engine.swarm?`⭐ ${earned}별! `+(battle.engine.bossDown?'모험을 마무리할 수 있어요.':'다음 전투에 쓸 무기의 진화를 골라요.'):({cat:'🐱 버튼으로 몬스터를 한꺼번에 공격해요.',bed:'🛏️ 버튼으로 하트를 회복해요.',dog:'🐶 버튼으로 두 번 보호받아요.'})[spell]);
   $('#forge-leave').hidden=false; $('#forge-bank').hidden=true;
+  $('#forge-model').hidden=false;
+  if(!battle.engine.swarm || !battle.engine.bossDown) offerAdventureBoon($('#forge-boons'));
   renderForge(); sfx.pop(); speech.say(r.word);
 }
 function endAdventure(won) {
   if(battle.finished) return;
-  battle.finished=true; battle.running=false; stopInput();
+  battle.finished=true; battle.running=false; battle.paused=false; stopInput();
+  $('#swarm-upgrade').hidden=true;$('#adventure-forge').hidden=true;$('#battle-pause-panel').hidden=true;$('#learning-camp').hidden=true;
   const g=battle.engine, bs=battleSave(), lava=battle.world==='lava';
-  bs.stars+=g.xp;
+  // 먼저 기존 잔액을 이관한 뒤 새 보상을 더한다. 용암 경험치는 별로 중복 환산하지 않는다.
+  wallet();
+  if(!g.swarm && !lava && g.xp>0) addStars(g.xp,'forest-'+battle.runId);
+  if(g.swarm) bs.gems=(bs.gems||0)+g.xp;
+  else bs.stars+=g.xp;
   const rewards=won && !lava ? Array.from({length:3},()=>pick(g.stage.letters||['C','A','T','B','E','D'])) : [];
   if(won && lava) { const ls=lavaSave(); ls.cleared[g.stage.id]=true; }
   if(won && !lava) {
     bs.cleared[g.stage.id]=true; bs.trophies ||= {}; bs.trophies[g.stage.id]=true;
     rewards.forEach(l=>save.blocks[l]=(save.blocks[l]||0)+1);
+  }
+  if(won && g.swarm) {
+    grantFirstClearChoice();
+    const progress=lava?lavaSave():battleSave();
+    if(progress.pending) delete progress.pending[g.stage.id];
   }
   persist(); speech.stop();
   $('#br-title').textContent=won?(lava?'🌋 구역을 지나갔어요!':'🏆 안개왕을 물리쳤어요!'):'🌙 잠깐 쉬고 다시 도전해요';
@@ -505,25 +677,39 @@ function endAdventure(won) {
   $('#br-rewards').replaceChildren(...rewards.map(l=>blockEl(l,'ore:gold')));
   $('#br-unlock').textContent = won
     ? (lava ? '문장을 모두 완성했어요! 별은 상점에서 쓸 수 있게 모아 둘게요.' : '트로피가 내 방에 놓였어요! 글자 블록 3개도 얻었어요.')
-    : (lava ? '이미 푼 문장의 별은 그대로 남아요. 하트는 다시 채워져요.' : '모은 보석과 낱말 기록은 저장했어요. 하트는 다시 채워져요.');
+    : (lava ? '이미 푼 문장의 별은 그대로 남아요. 하트는 다시 채워져요.' : '영어 보물의 별과 낱말은 남아요. 새 무기 조합으로 다시 도전할 수 있어요.');
+  if(won && g.swarm && gearSave().weaponVoucher) $('#br-unlock').textContent+=' 상점에 새 무기 선택권이 기다려요!';
   if(lava) {
-    const solved=Object.keys(sentenceSave().paid).filter(k=>k.startsWith(battle.session+':'));
+    const solved=Object.keys(sentenceSave().paid).filter(k=>k.startsWith(battle.runId+':'));
     $('#battle-review-title').textContent=solved.length?'오늘 완성한 문장 · 눌러서 다시 듣기':'문장 상자를 열면 문장을 배울 수 있어요.';
     $('#battle-review').replaceChildren(...[...new Set(battle.solved||[])].map(id=>{
       const item=SENTENCES.find(x=>x.id===id); if(!item) return document.createTextNode('');
       const b=document.createElement('button'); b.className='btn';
-      b.textContent=item.emoji+' '+item.text;
+      b.textContent=item.emoji+' '+item.text+' · '+item.ko;
       b.addEventListener('click',()=>speech.say(item.id)); return b;
     }));
     show('screen-battle-result'); if(won) sfx.fanfare();
     return;
   }
-  $('#battle-review-title').textContent=battle.words.length?'오늘 마법으로 쓴 낱말 · 눌러서 다시 듣기':'보물 상자에서 영어 마법을 얻을 수 있어요.';
+  $('#battle-review-title').textContent=battle.words.length?'오늘 배운 낱말 · 눌러서 다시 듣기':'보물 상자에서 영어를 배우고 무기를 진화시킬 수 있어요.';
   $('#battle-review').replaceChildren(...[...new Set([...battle.words,...battle.mistakes])].map(word=>{
     const r=RECIPES.find(r=>r.word===word), b=document.createElement('button'); b.className='btn';
-    b.textContent=r.emoji+' '+word+(battle.mistakes.includes(word)?' · 다시 연습':''); b.addEventListener('click',()=>speech.say(word)); return b;
+    b.textContent=r.emoji+' '+word+' · '+r.ko+(battle.mistakes.includes(word)?' · 다시 연습':''); b.addEventListener('click',()=>speech.say(word)); return b;
   }));
   show('screen-battle-result'); if(won) sfx.fanfare();
+}
+function claimForestLearningStars() {
+  const g=battle.engine;
+  if(!g?.swarm || battle.world==='lava' || !battle.forgeComplete) return 0;
+  const key=battle.runId+':forest-'+g.stage.id+'-'+g.wave;
+  save.forestRewards ||= {};
+  if(save.forestRewards[key]) return 0;
+  const cap=[10,12,14,14,25][g.stage.id-1]||10;
+  const normal=Math.floor(cap*.2),total=g.totalWaves||3;
+  const amount=g.bossDown?cap-normal*(total-1):normal;
+  const w=wallet();save.forestRewards[key]=amount;w.stars+=amount;persist();
+  battle.earnedForest=(battle.earnedForest||0)+amount;
+  return amount;
 }
 function initBattle() {
   $('#nights-back').addEventListener('click',()=>{ speech.stop(); goMap(); });
@@ -531,18 +717,21 @@ function initBattle() {
   $('#battle-pause').addEventListener('click',pauseBattle);
   $('#battle-resume').addEventListener('click',resumeBattle);
   $('#battle-exit').addEventListener('click',()=>{ leaveBattle(); persist(); goNights(battle.world); });
-  document.addEventListener('visibilitychange',()=>{ if(document.hidden) { stopInput(); if(!$('#adventure-forge').hidden) speech.stop(); else pauseBattle(); } });
+  document.addEventListener('visibilitychange',()=>{ if(document.hidden) { stopInput(); speech.stop(); pauseBattle(); } });
   window.addEventListener('blur',()=>{ stopInput(); pauseBattle(); });
   $('#adventure-open').addEventListener('click',openForge);
-  $('#forge-listen').addEventListener('click',()=>speech.say(battle.forgeWord.word));
+  $('#forge-listen').addEventListener('click',()=>{ if(battle.forgeWord) speech.say(battle.forgeWord.word); });
   $('#forge-hint').addEventListener('click',()=>{
-    if (battle.forgeComplete) return;
-    battle.forgeFailed=true;
+    if(!battle.forgeWord || battle.forgeComplete) return;
+    markForgeHelped();
     if(!battle.mistakes.includes(battle.forgeWord.word)) battle.mistakes.push(battle.forgeWord.word);
-    $('#forge-message').textContent='이 낱말을 만들어봐요: '+battle.forgeWord.word;
+    $('#forge-model').hidden=false;
+    $('#forge-model').textContent=battle.forgeWord.word+' · '+battle.forgeWord.ko;
+    $('#forge-message').textContent='보고 만들어도 괜찮아요. 별과 무기 진화 보상은 같아요!';
   });
   $('#forge-leave').addEventListener('click',()=>{
     if(!battle.forgeComplete) return;
+    battle.engine.grantBoon(battle.selectedBoon || 'heart');
     battle.engine.forge(battle.forgeWord.word); battle.paused=false; battle.last=0;
     $('#adventure-forge').hidden=true; speech.stop();
   });
@@ -571,10 +760,11 @@ function initBattle() {
   const attack=$('#adventure-attack');
   attack.addEventListener('pointerdown',event=>{
     if(!battle.running||battle.paused) return;
+    if(battle.engine.swarm) {ac();return;}
     ac(); attack.setPointerCapture(event.pointerId); battle.engine.input.attack=true; battle.engine.attack();
   });
   ['pointerup','pointercancel','lostpointercapture'].forEach(type=>attack.addEventListener(type,()=>{ if(battle.engine) battle.engine.input.attack=false; }));
-  attack.addEventListener('click',()=>{ if(battle.running&&!battle.paused) battle.engine.attack(); });
+  attack.addEventListener('click',()=>{ if(battle.running&&!battle.paused) { if(battle.engine.swarm) battle.engine.special(); else battle.engine.attack(); } });
   $('#adventure-dash').addEventListener('click',()=>{ if(battle.running&&!battle.paused) battle.engine.dash(); });
   ['cat','bed','dog'].forEach(word=>$('#spell-'+word).addEventListener('click',()=>{ if(battle.running&&!battle.paused) battle.engine.cast(word); }));
   document.addEventListener('keydown',event=>{
@@ -582,7 +772,7 @@ function initBattle() {
     const key=event.key.length===1?event.key.toLowerCase():event.key;
     if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d',' ','Shift'].includes(key)) {
       event.preventDefault(); battle.destination=null; battle.keys.add(key);
-      if(key===' ') battle.engine.input.attack=true;
+      if(key===' ') {if(battle.engine.swarm && !event.repeat) battle.engine.special();else if(!battle.engine.swarm) battle.engine.input.attack=true;}
       if(key==='Shift') battle.engine.dash();
     }
     if(key==='Escape') pauseBattle();
@@ -593,8 +783,9 @@ function initBattle() {
     if(battle.engine) { if(key===' ') battle.engine.input.attack=false; if(!battle.keys.size && battle.pointer===null) battle.engine.move(0,0); }
   });
   $('#br-again').addEventListener('click',()=>startBattle(battle.engine.stage));
-  $('#br-back').addEventListener('click',()=>{ speech.stop(); goNights(); });
+  $('#br-back').addEventListener('click',()=>{ speech.stop(); goNights(battle.world); });
   $('#br-room').addEventListener('click',()=>{ speech.stop(); goRoom(); });
+  $('#br-shop').addEventListener('click',()=>{speech.stop();goShop();});
   $('#locked-back').addEventListener('click',goNights);
   $('#locked-parent').addEventListener('click',()=>askParent(()=>{ save.premium=true; persist(); goNights(); }));
   $('#gate-ok').addEventListener('click',()=>{

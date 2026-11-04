@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>영어 모험 · 장비와 웨이브 전투 검토</title>
+<style>
+:root{color-scheme:light;--bg:#f5f4ee;--paper:#fffefa;--ink:#203730;--muted:#5d7068;--line:#d4dcd2;--green:#28664d;--soft:#e6eddf;--warm:#a85b32}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 system-ui,-apple-system,'Apple SD Gothic Neo',sans-serif}main{max-width:1080px;margin:auto;padding:42px 24px 70px}header{border-bottom:1px solid var(--line);padding-bottom:22px}h1{font-size:clamp(26px,4vw,36px);line-height:1.35;margin:12px 0}h2{font-size:23px;margin:0 0 14px}h3{font-size:18px;margin:22px 0 8px}p{margin:8px 0}.eyebrow{font-size:12px;letter-spacing:.12em;font-weight:700;color:var(--green)}.note{font-size:14px;color:var(--muted)}.decision{padding:22px;background:var(--soft);border-left:4px solid var(--green);margin:25px 0}.decision strong{font-size:21px}nav{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}button{font:inherit;border:1px solid var(--line);padding:9px 16px;border-radius:5px;cursor:pointer;background:var(--paper);color:var(--ink)}button[aria-pressed=true]{color:white;background:var(--green);border-color:var(--green)}button:focus-visible,input:focus-visible{outline:3px solid #a85b32;outline-offset:3px}[hidden]{display:none!important}section{margin:28px 0}.table-wrap{overflow-x:auto;border:1px solid var(--line);background:var(--paper)}table{border-collapse:collapse;width:100%;min-width:650px;font-size:14px}td,th{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--line)}th{background:#ebeee5}tr:last-child td{border:0}.steps{list-style:none;padding:0;counter-reset:step}.steps>li{padding:16px 18px;border-left:3px solid var(--green);margin:12px 0;background:var(--paper)}.steps strong{display:block}.inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:18px 0}.inputs label{font-size:14px}.inputs input{display:block;width:100%;padding:10px;margin-top:5px;border:1px solid var(--line);font:inherit;color:var(--ink);background:white}.result{background:var(--soft);padding:18px;margin:18px 0}.result p:first-child{font-size:19px;font-weight:700}.debate{padding:18px 0;border-top:1px solid var(--line)}.debate b{color:var(--green)}li{margin:6px 0}footer{border-top:1px solid var(--line);padding-top:22px;margin-top:30px;color:var(--muted);font-size:14px}a{color:var(--green)}@media print{nav{display:none}main{padding:0}.pane[hidden]{display:block!important}.pane{break-before:page}.table-wrap{overflow:visible}table{min-width:0}}
+</style>
+</head>
+<body><main>
+<header><div class="eyebrow">UON2 GAMES / DESIGN REVIEW / 2026.11.02</div><h1>장비가 주인공이 되는<br>짧은 웨이브 영어 모험</h1><p class="note">전투·장비 검토자 Hooke, 학습·경제 검토자 Curie와 총괄 교차 검토. 현재 v0.17 소스 기준이며, 아래는 미구현 제안·미실측 수치입니다.</p></header>
+<div class="decision"><strong>몰려오는 적을 장비로 정리하고,<br>영어를 완성해 이번 모험의 무기를 진화시킵니다.</strong><p>상점에서는 무기의 종류와 출발 구성을 준비합니다. 영어 학습은 전투 중간의 안전한 쉼터에서 이루어집니다.</p></div>
+<nav aria-label="검토 내용 선택"><button data-pane="verdict" aria-pressed="true">최종 제안</button><button data-pane="run" aria-pressed="false">한 판의 흐름</button><button data-pane="shop" aria-pressed="false">상점과 보상</button><button data-pane="debate" aria-pressed="false">토론과 검증</button></nav>
+<section id="verdict" class="pane"><h2>몬스터 수보다 먼저 바꿔야 하는 것</h2>
+<div class="table-wrap"><table><thead><tr><th>현재 코드</th><th>새 방향</th><th>아이의 선택</th></tr></thead><tbody>
+<tr><td>검은 가까운 적 한 마리씩 공격</td><td>장비가 다수의 적을 자동 공격</td><td>적을 모으고 공격 범위로 유도하기</td></tr>
+<tr><td>한 묶음을 전멸해야 다음 구역</td><td>시간에 따라 적이 계속 등장하는 짧은 웨이브</td><td>안전한 길 찾기·대시·위험 예고 피하기</td></tr>
+<tr><td>상점은 빙글검 1종의 수치 강화</td><td>무기별로 다른 공격 형태를 소유·선택</td><td>이번에는 가까이 싸울지, 멀리서 잡을지 고르기</td></tr>
+<tr><td>영어 뒤 작은 회복·사거리 보상</td><td>영어 뒤 무기의 눈에 보이는 판내 진화</td><td>연쇄·범위·공격 수 중 무엇을 키울지 선택</td></tr>
+</tbody></table></div>
+<h3>상점의 주무기 3종</h3><ul><li><b>빙글검:</b> 몸 둘레의 적을 넓게 벱니다. 무리 가장자리를 따라 움직입니다. 진화하면 회전검이 늘어납니다.</li><li><b>관통 지팡이:</b> 적이 많은 방향으로 관통 불꽃을 쏩니다. 적을 줄로 모으며 뒤로 이동합니다. 진화하면 탄이 갈라집니다.</li><li><b>폭발 봉:</b> 적이 뭉친 곳으로 폭발탄을 던집니다. 무리를 모았다 터뜨립니다. 진화하면 범위가 넓어지고 추가 폭발이 생깁니다.</li></ul>
+<p><b>별도 기본 씨앗봉과 기본 방패를 무료로 지급</b>합니다. 씨앗봉은 가까운 부채꼴로 여러 잡몹을 자동 공격하는 장비입니다. 별 0·제작 기록 0에서도 새 모드를 시작할 수 있고 기본 장비로도 첫 구역을 완주할 수 있습니다. 빙글검과 이름·공격 모양을 구분해 기존 구매를 무료 지급품과 혼동하지 않게 합니다. 기존 빙글검의 소유·등급은 유지합니다.</p>
+<p>주무기 1칸·보조 1칸은 처음부터 제공합니다. 보조는 우선 기본 방패로 고정하고, 구매 보조 장비·외형·추가 슬롯은 첫 시제품에 넣지 않습니다. 공격과 학습의 연결부터 검증합니다.</p>
+<h3>왜 상점에 가고 싶어지는가</h3><p>300별을 더 모으면 공격력 숫자만 오르는 것이 아니라, 가까이 다가가지 않고 관통탄을 쏘거나 무리를 한꺼번에 터뜨릴 수 있습니다. 각 장비는 미리보기에서 같은 적 배치에 대한 공격 모양을 보여줍니다. 주무기 1칸·보조 1칸을 처음부터 제공하고, 선택하지 않은 무기까지 모두 자동 장착하지 않습니다.</p>
+<h3>기존 게임과 진도</h3><p>숲·용암의 학습 구분, 낱말·문장·별·소유 장비는 보존합니다. 먼저 별도 시험 전투 한 구역에서 새 방식을 검증하고, 아이들 반응과 패드 성능을 본 뒤 기본 전투에 반영합니다.</p>
+</section>
+<section id="run" class="pane" hidden><h2>약 4~5분에 시작·성장·결말이 있는 한 판</h2><p class="note">시간은 설계 목표이며 실측값이 아닙니다. 문제를 푸는 시간은 제한하지 않습니다.</p>
+<ol class="steps"><li><strong>0:00~0:15 · 바로 첫 손맛</strong>지급 장비로 작은 무리를 바로 처치합니다. 첫 전투를 하기 위해 광산을 반복하도록 요구하지 않습니다.</li><li><strong>0:15~1:00 · 첫 웨이브</strong>3초마다 2마리씩 생성, 동시 6~8마리 목표. 잡몹은 정상 공격 1~2타로 처치합니다. 뒤로 갈수록 잡몹 체력을 무한히 올리지 않습니다.</li><li><strong>쉼터 1 · 뜻을 익히고 첫 진화</strong>예: 고양이를 발견하고 It is a cat. / 고양이예요.를 배웁니다. 완성 문장을 보고 따라 만드는 도움도 제공합니다. 숲은 낱말, 용암은 문장을 사용합니다.</li><li><strong>두 번째 전투 · 새 공격을 써보기</strong>약 45초, 3초마다 3마리, 동시 10~16마리 목표. 새로 생긴 회전검·갈라지는 탄을 충분히 써봅니다. 원거리형과 엘리트는 소수만 섞습니다.</li><li><strong>쉼터 2 · 같은 표현을 다른 상황에 사용</strong>새 동물을 발견하거나 다른 주인의 물건을 구분합니다. 뜻을 확인한 뒤 이번 판의 두 번째 진화를 고릅니다. 정답 횟수만으로 이해했다고 표시하지 않습니다.</li><li><strong>마지막 무리 → 보스</strong>약 55초, 2초마다 4마리, 동시 최대 24마리부터 시험합니다. 이후 보스 1마리+잡몹 최대 6마리로 시야를 정리합니다. 보스 목표 시간은 약 45초이지만 시간 초과 패배는 없습니다.</li><li><strong>마지막 상자와 결과</strong>보스 처치 진도는 즉시 저장합니다. 영어를 완성하면 마지막 별을 받습니다. 나중에 하기를 골라도 이미 얻은 보상과 보스 처치는 남고, 해당 상자는 다시 열 수 있습니다.</li></ol>
+<h3>조작은 단순하게, 판단은 남깁니다</h3><p>왼손 이동과 대시, 큰 스킬 버튼 하나를 중심으로 합니다. 자동 공격이라도 적이 모인 방향, 공격 범위, 회피 경로는 아이가 선택합니다. 가만히 서서 모든 적을 잡는 구조는 검증에서 탈락시킵니다.</p>
+<p>아이에게는 선택 결과를 바로 보여줍니다. 회전검 개수 증가, 관통탄 갈라짐, 넓은 폭발처럼 보이는 변화가 중요합니다. 기존 회복·사거리·대시 축복과 cat/bed/dog 전투 버튼까지 동시에 늘리지 않고, 새 모드에서는 회복은 하트, 보호는 보조장비, 진화는 영어 쉼터에 맡깁니다. 낱말·도감·내 방 기록은 그대로 남깁니다.</p>
+</section>
+<section id="shop" class="pane" hidden><h2>영구 소유와 이번 판 성장을 구분합니다</h2>
+<div class="table-wrap"><table><thead><tr><th>구분</th><th>얻는 곳</th><th>역할</th></tr></thead><tbody><tr><td>무기 소유·출발 구성</td><td>상점 / 별</td><td>이번 모험에서 사용할 공격 방식을 고름</td></tr><tr><td>이번 모험의 진화</td><td>영어 쉼터</td><td>공격 갈라짐·범위·검 개수 등 눈에 보이는 성장, 다음 판 초기화</td></tr><tr><td>필살기 충전</td><td>몬스터 / 보석</td><td>보석을 주워 큰 스킬을 충전. 처치 수만큼 별 지급하지 않음</td></tr><tr><td>학습 기록</td><td>뜻 이해·문장 조립·복습</td><td>무힌트 이해와 도움받은 완성을 따로 기록. 도움을 벌하지 않음</td></tr></tbody></table></div>
+<h3>가격보다 중요한 최초 획득 경험</h3><p>기존 빙글검 300별, 강화 450·750별은 현재 코드 값입니다. 추가 주무기 해금은 우선 300별씩을 가안으로 비교하되 실제 출시 가격은 미확정입니다. 기존 별 0 기준으로, 300별 장비의 첫 별 구매까지 용암 완주 약 2판을 목표로 합니다.</p><p><b>총괄 선택: 새 전투 첫 완주에는 무기 선택권 1장을 별도로 줍니다.</b> 보유하지 않은 기본 주무기 하나를 바로 영구 해금하고 다음 판에서 써봅니다. 이 보상은 한 번뿐이며 기존 사용자도 새 모드 첫 완주 시 동일하게 받습니다. 전부 소유했다면 선택권을 소비하지 않고 보관합니다. 기존 구매를 회수하거나 같은 무기를 중복 구매시키지 않습니다. 이후 무기는 학습으로 모은 별로 구매합니다.</p>
+<h3>보상 속도 비교</h3><p class="note">용암 기본 구역의 현재 문장 보상은 40+40+70=150별입니다. 아래는 성공해서 해당 보상을 받은 경우의 계산이며, 오답·실패·재도전 시간까지 포함한 실측이 아닙니다.</p>
+<div class="inputs"><label>숲 한 판 별<input id="forest-stars" type="number" min="1" max="25" value="25"></label><label>숲 한 판 시간(분)<input id="forest-time" type="number" min="0.5" step="0.5" value="4"></label><label>용암 한 판 시간(분)<input id="lava-time" type="number" min="0.5" step="0.5" value="5"></label><label>새 무기 가격(별·가정)<input id="gear-price" type="number" min="1" value="300"></label></div><div class="result" id="economy" aria-live="polite"></div>
+<p>신규 웨이브 숲은 기존 단계별 보상 규모인 10/12/14/14/25별을 상한으로 학습 체크포인트에 배분하는 안입니다. 25별 구역의 예시는 낱말 상자 5+5+마지막 상자 15별입니다. 정확한 표는 첫 시제품에서 검증합니다. 기존 별은 삭감하지 않으며, 기존 모드의 수급과 새 모드의 상한을 혼동하지 않습니다.</p><p>용암 첫 구역은 40+40+70=150별을 기준으로 시작합니다. 가장 빠른 숲 반복과 실패·도움까지 포함한 실측 별/분을 비교해 2~3배 이상 차이가 나는지 검증합니다. 쉬운 숲을 빨리 반복하는 것이 더 유리하면 용암 보상·전투 길이·도움을 조정합니다.</p><p>힌트나 시범을 따라 완성해도 같은 별과 진화를 받습니다. 나중에 하기를 선택해도 기존 보상과 진행은 보존하되, 미완료 문제의 별을 자동 지급하지는 않습니다. 새 모드에서 전투 보석은 필살기 충전용으로 우선 설계하고, 처치 수만큼 영구 별을 환산하지 않습니다.</p>
+</section>
+<section id="debate" class="pane" hidden><h2>검토 에이전트와 교차 토론</h2><div id="review-rounds">
+<div class="debate"><b>전투 검토 · Hooke</b><p>몬스터 수만 늘리면 단일 공격의 피로만 커집니다. 자동 다중 공격, 움직임으로 적 유도, 짧은 웨이브와 눈에 보이는 장비 진화를 제안했습니다. 동시 적 24마리·저성능 16마리부터 시험하고 계속 보충해 몰려오는 느낌을 만듭니다.</p></div>
+<div class="debate"><b>학습·경제 검토 · Curie</b><p>장비가 없어서 첫 판에 막히거나, 문장 순서만 외워서 보상받는 구조를 지적했습니다. 학습은 상황·한국어 뜻·정상 발음을 함께 제공하고, 모방·도움 없는 배열·새 상황 이해를 다른 기록으로 남겨야 한다고 제안했습니다. 12문장은 초기 콘텐츠이지 무한한 학습량이 아니라는 점도 지적했습니다.</p></div>
+<div class="debate"><b>총괄 반론 1 · 같은 별 보상은 채택하지 않음</b><p>숲과 용암에 모두 150별을 주는 안은 쉬운 숲만 반복할 동기를 만듭니다. 사용자의 기존 요구대로 낱말 숲의 수급은 보존하고, 문장 용암의 보상 속도가 높게 설계합니다.</p></div>
+<div class="debate"><b>총괄 반론 2 · 도착만으로 영어 보상 자동 지급은 채택하지 않음</b><p>영어를 쓰지 않아도 같은 보상을 주면 학습과 게임 목표가 약해집니다. 도움받아 완성한 경우도 동일 보상, 건너뛸 경우 해당 문제 보상은 보류하는 안으로 조정합니다. 보스 처치·이미 얻은 별은 지키고 나중에 문제를 재개합니다.</p></div>
+<div class="debate"><b>총괄 반론 3 · 기존 빙글검을 단순 무료화하지 않음</b><p>기존 구매와 강화 기록은 유지합니다. 새 모드에 기본 씨앗봉을 별도로 지급하면 기존 장비를 잃게 하거나 복잡한 환불을 만들지 않고도 첫날부터 재미를 줄 수 있습니다. 신규 추가 무기는 실제 첫 사용감 검증 후 확정합니다.</p></div>
+<div class="debate"><b>남은 이견 · 첫 새 무기를 언제 주는가</b><p>전투 검토자는 별 300개를 모아 두 판 뒤 구매하게 하고 미리보기로 기대감을 주자는 안을 냈습니다. 학습 검토자는 첫 완주에 무료 선택권을 주자는 안을 유지했습니다. 총괄은 첫 판의 성취와 다음 판의 변화를 빠르게 보여주기 위해 1회 선택권을 채택했습니다. 그 이후의 별 구매 목표와 구분합니다. 이 결정은 세 검토자가 모두 동의한 사실이 아니라 총괄의 선택입니다.</p></div>
+<div class="debate"><b>교차 검토 후 수정된 의견</b><p>학습 검토자는 숲·용암 동일 보상과 도착만으로 별을 주는 안을 철회하고, 힌트로 완성해도 동일 보상·미완료 과제 재개에 동의했습니다. 전투 검토자는 기본 빙글검 무료화 대신 별도 씨앗봉 지급과 기존 구매 보존, 숲보다 높은 용암 보상에 동의했습니다.</p></div>
+</div>
+<h3>시제품에서 탈락시킬 조건</h3><ul><li>아이 혼자 시작했는데 무기 살 별이 없어 막힘</li><li>가만히 있어도 전투가 끝나거나 기본 장비로는 지나갈 수 없음</li><li>영어 뜻은 보지 않고 같은 답만 눌러 보상 획득</li><li>전투를 자주 끊거나 긴 학습으로 장비 성장의 재미를 잊음</li><li>빠른 숲 반복이나 고의 실패가 용암 학습보다 유리함</li><li>패드에서 적·화살·위험 표시가 겹쳐 읽을 수 없음</li></ul>
+<h3>기술 검증</h3><p>동시 몬스터는 24마리, 저성능은 16마리를 시작점으로 검증합니다. 활/돌진/바닥 등 위험 예고는 겹쳐 읽을 수 없지 않게 2개 이내로 조율합니다. 적을 계속 보충하되 상한에서는 생성을 늦추고, 웨이브 종료 시 남은 일반 적은 보상 없이 퇴장시킵니다.</p><p>투사체·피해 숫자·드롭·파편·동시 타격음을 제한합니다. 생성 위치는 플레이어와 떨어진 가장자리에 예고하며 피할 통로를 보장합니다. 문장 풀이·일시정지·앱 전환 때 생성 시계도 멈춥니다. 저성능 대응은 먼저 장식 효과를 줄이고, 학습 보상이나 성공 조건을 기기별로 바꾸지 않습니다. FPS는 실기기 검증 전까지 보장하지 않습니다.</p>
+<h3>첫 시제품 범위</h3><p>한 구역, 기본 씨앗봉과 빙글검, 세 웨이브와 보스, 두 학습 쉼터와 마지막 상자, 첫 구매까지 연결합니다. 현재 소스와 별도 시험 진도로 플레이하고 기존 저장을 덮어쓰지 않습니다. 관통·폭발 무기는 손맛과 학습 흐름을 검증한 다음 확장합니다.</p><p>관찰: 첫 15초에 여러 적을 잡고 싶어 하는지, 장비 바뀜을 알아채는지, 뜻을 읽고 새 상황에서 표현을 쓰는지, 다음 판에 다른 장비를 고르고 싶어 하는지. 아이 두 명은 초기 체험이며 다른 아이 전체의 재미나 교육 효과를 입증하지는 않습니다.</p>
+</section>
+<footer><p>이 페이지는 토론을 종합하는 설계안입니다. 기존 게임·저장·상점 수치는 변경하지 않았습니다.</p><p>소스 근거: battle-engine.js의 단일 대상 검 공격·일괄 웨이브·빙글검 처리, data.js의 장비 3레벨과 가격, shop.js의 소유/강화 조건, sentence.js의 문장 보상.</p></footer>
+</main><script>
+document.querySelectorAll('[data-pane]').forEach(button=>button.addEventListener('click',()=>{
+ document.querySelectorAll('[data-pane]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+ document.querySelectorAll('.pane').forEach(section=>section.hidden=section.id!==button.dataset.pane);
+}));
+function updateEconomy(){
+ const read=(id,min,max)=>{const x=document.getElementById(id).valueAsNumber;return Number.isFinite(x)?Math.max(min,Math.min(max,x)):min;};
+ const stars=read('forest-stars',1,25),forestTime=read('forest-time',.5,60),lavaTime=read('lava-time',.5,60),price=read('gear-price',1,99999);
+ const ratio=(150/lavaTime)/(stars/forestTime);
+ const lines=[`숲 ${(stars/forestTime).toFixed(1)}별/분 · 용암 ${(150/lavaTime).toFixed(1)}별/분 → ${ratio.toFixed(1)}배`,`${price}별 장비: 숲 ${Math.ceil(price/stars)}판 / 용암 완주 ${Math.ceil(price/150)}판 (기존 별 0 기준)`,ratio<2?'이 가정에서는 차이가 작습니다. 용암 보상·실패 시간·학습 도움을 다시 검토해야 합니다.':'이 가정에서는 용암에 보상 우위가 있습니다. 실제 실패와 도움 시간을 포함해 다시 검증합니다.'];
+ document.getElementById('economy').replaceChildren(...lines.map(text=>{const p=document.createElement('p');p.textContent=text;return p;}));
+}
+document.querySelectorAll('input').forEach(input=>input.addEventListener('input',updateEconomy));updateEconomy();
+</script></body></html>

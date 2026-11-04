@@ -9,7 +9,7 @@
   <link rel="icon" href="../icons/icon-192.png">
   <link rel="apple-touch-icon" href="../icons/icon-180.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/galmuri.css">
-  <link rel="stylesheet" href="css/style.css?v=v16">
+  <link rel="stylesheet" href="css/style.css?v=v23">
 </head>
 <body>
 
@@ -43,14 +43,19 @@
   <section id="screen-map" class="screen sky" hidden>
     <div class="cloud c1"></div><div class="cloud c2"></div>
     <header class="topbar">
-      <div class="who"><span id="map-avatar"></span><b id="map-name"></b></div>
+      <button class="who profile-trigger" id="map-profile" type="button" aria-label="나의 프로필"><span id="map-avatar"></span><b id="map-name"></b><span class="test-badge" id="map-test-badge" hidden>테스트</span></button>
       <div class="row">
         <a class="btn icon" href="../" aria-label="게임 목록">🎮</a>
         <button class="btn" id="bag-btn">🎒 창고</button>
         <button class="btn icon" id="settings-btn" aria-label="설정">⚙️</button>
       </div>
     </header>
+    <div class="test-mode-notice" id="test-mode-notice" role="status" hidden>
+      <div><strong>🧪 테스트 모드 · 전체 개방</strong><small>테스트 중 얻은 별과 학습 기록은 따로 저장돼요. 종료하면 원래 기록으로 돌아와요.</small></div>
+      <button class="btn" id="test-mode-exit">테스트 종료</button>
+    </div>
     <p class="msg" id="map-msg">어느 광산으로 갈까요?</p>
+    <div id="journey-card" class="journey-card" aria-label="나의 다음 모험"></div>
     <div class="stage-list" id="stage-list"></div>
     <div class="ground"></div>
   </section>
@@ -103,6 +108,8 @@
     </header>
     <p class="msg" id="shop-msg"></p>
     <div class="shop-body">
+      <div id="shop-gift"></div>
+      <div id="shop-weapons" class="weapon-store"></div>
       <div id="shop-owned"></div>
       <div id="shop-next"></div>
     </div>
@@ -132,6 +139,11 @@
           <button class="btn" id="version-refresh">🔄 새로 받기</button>
         </div>
         <p class="hint" id="version-note"></p>
+        <div id="test-mode-settings" hidden>
+          <h3>🧪 테스트 모드 켜짐</h3>
+          <p class="hint">모든 지역·무기·꾸미기를 시험할 수 있어요. 종료하면 원래 플레이 기록으로 돌아와요.</p>
+          <button class="btn" id="settings-test-exit">테스트 종료하고 돌아가기</button>
+        </div>
       </div>
     </div>
   </section>
@@ -193,7 +205,7 @@
     <div class="stage-list" id="night-list"></div>
   </section>
 
-  <!-- 액션 탐험: 이동/검/회피와 보물 마법 -->
+  <!-- 액션 탐험: 이동/자동 무기/회피와 보물 마법 -->
   <section id="screen-battle" class="screen night" hidden>
     <header class="topbar adventure-top">
       <button class="btn icon" id="battle-quit" aria-label="탐험 메뉴">🏠</button>
@@ -202,12 +214,13 @@
       <button class="btn" id="battle-pause">⏸ 쉬기</button>
     </header>
     <div class="battle-status" id="battle-progress"></div>
+    <div id="swarm-hud" class="swarm-hud" hidden><span id="swarm-loadout"></span><progress id="swarm-xp" aria-label="다음 레벨까지 경험치" max="6" value="0"></progress></div>
     <div id="boss-panel" class="boss-panel" hidden><span>👑 안개왕</span><progress id="boss-health" max="12" value="12" aria-label="보스 체력"></progress></div>
     <p id="adventure-note" class="adventure-note" aria-live="polite"></p>
     <div class="adventure-world"><canvas id="adventure-canvas" width="900" height="520" aria-label="몬스터가 있는 숲. 이동 조이스틱 또는 방향키로 움직이고 공격과 대시 버튼을 사용하세요."></canvas>
       <button class="btn green" id="adventure-open" hidden>🎁 보물 열기</button>
     </div>
-    <div class="spell-row"><button class="btn" id="spell-cat" disabled>🐱 cat 공격 ×0</button><button class="btn" id="spell-bed" disabled>🛏️ bed 회복 ×0</button><button class="btn" id="spell-dog" disabled>🐶 dog 보호 ×0</button></div>
+    <div class="spell-row" id="spell-row"><button class="btn" id="spell-cat" disabled>🐱 cat 공격 ×0</button><button class="btn" id="spell-bed" disabled>🛏️ bed 회복 ×0</button><button class="btn" id="spell-dog" disabled>🐶 dog 보호 ×0</button></div>
     <div class="adventure-controls">
       <div id="adventure-stick" role="group" aria-label="이동 조이스틱"><span>이동</span><i id="stick-knob"></i></div>
       <p id="adventure-help"></p>
@@ -215,16 +228,41 @@
       <button class="btn attack-button" id="adventure-attack">⚔️ 공격</button>
     </div>
   </section>
+  <div id="swarm-upgrade" class="overlay" hidden>
+    <div class="panel upgrade-panel" role="dialog" aria-modal="true" aria-labelledby="upgrade-title">
+      <h2 id="upgrade-title">레벨 업! 어떤 힘을 고를까요?</h2>
+      <p>전투는 잠시 멈췄어요. 이번 모험의 무기를 골라 키워요.</p>
+      <div id="upgrade-choices" class="upgrade-choices"></div>
+      <p class="hint">이번 모험에서만 적용돼요. 새 모험에서는 다시 조합할 수 있어요.</p>
+    </div>
+  </div>
   <div id="battle-pause-panel" class="overlay" hidden>
     <div class="panel" role="dialog" aria-modal="true" aria-labelledby="pause-title">
       <h2 id="pause-title">잠깐 쉬어도 괜찮아요 🌙</h2><p>모험을 잠시 멈췄어요.</p>
       <div class="row"><button class="btn green" id="battle-resume">▶ 이어하기</button><button class="btn" id="battle-exit">🌙 밤 고르기</button></div>
     </div>
   </div>
+  <div id="learning-camp" class="overlay" hidden>
+    <div class="panel camp-panel" role="dialog" aria-modal="true" aria-labelledby="camp-title">
+      <p id="camp-phase" class="camp-phase"></p>
+      <h2 id="camp-title"></h2>
+      <div id="camp-scene" class="camp-scene meadow" aria-hidden="true"></div>
+      <p id="camp-model" class="camp-model" hidden></p>
+      <p id="camp-message" aria-live="polite"></p>
+      <div class="row camp-tools"><button class="btn" id="camp-listen">🔊 다시 듣기</button><button class="btn" id="camp-hint">💡 낱말 보기</button></div>
+      <div id="camp-slots" class="row"></div>
+      <div id="camp-choices" class="camp-choices"></div>
+      <div id="camp-boons" class="boon-choices" hidden></div>
+      <button class="btn green big" id="camp-next" hidden></button>
+      <button class="btn camp-exit" id="camp-exit">나중에 다시 하기</button>
+    </div>
+  </div>
   <div id="adventure-forge" class="overlay" hidden>
     <div class="panel forge-panel" role="dialog" aria-modal="true" aria-labelledby="forge-title">
       <div id="forge-emoji" class="forge-emoji"></div><h2 id="forge-title"></h2>
       <p id="forge-message" aria-live="polite"></p>
+      <p id="forge-model" class="sentence-model" lang="en" hidden></p>
+      <div id="forge-boons" class="boon-choices" hidden></div>
       <div id="forge-choices" class="forge-choices"></div>
       <div class="row"><button class="btn" id="forge-listen">🔊 낱말 듣기</button><button class="btn" id="forge-hint">💡 낱말 보기</button></div>
       <div id="forge-slots" class="row"></div><div id="forge-bank" class="row"></div>
@@ -237,9 +275,12 @@
       <div class="sentence-scene"><span id="sentence-emoji"></span></div>
       <p class="sentence-ko" id="sentence-ko"></p>
       <p class="sentence-teach" id="sentence-teach"></p>
+      <p id="sentence-purpose" class="sentence-purpose"></p>
+      <p id="sentence-model" class="sentence-model" lang="en" hidden></p>
       <div class="sentence-slots" id="sentence-slots"></div>
       <div class="sentence-bank" id="sentence-bank"></div>
       <p class="sentence-msg" id="sentence-msg" aria-live="polite"></p>
+      <div id="sentence-boons" class="boon-choices" hidden></div>
       <div class="row">
         <button class="btn listen" id="sentence-listen">🔊 다시 듣기</button>
         <button class="btn" id="sentence-show">👀 문장 보기</button>
@@ -256,6 +297,7 @@
       <p id="br-stats"></p>
       <div class="mined-row" id="br-rewards"></div>
       <p class="unlock" id="br-unlock"></p>
+      <button class="btn green" id="br-shop">🛒 상점에서 다음 장비 보기</button>
       <p id="battle-review-title"></p><div id="battle-review" class="row"></div>
       <div class="row">
         <button class="btn" id="br-again">⚔️ 한 번 더</button>
@@ -315,18 +357,23 @@
   </div>
   <div id="fx"></div>
 
-  <script src="js/data.js?v=v16"></script>
-  <script src="js/sentences.js?v=v16"></script>
-  <script src="js/audio.js?v=v16"></script>
-  <script src="js/textures.js?v=v16"></script>
-  <script src="js/app.js?v=v16"></script>
-  <script src="js/craft.js?v=v16"></script>
-  <script src="js/room.js?v=v16"></script>
-  <script src="js/battle-engine.js?v=v16"></script>
-  <script src="js/forest-art.js?v=v16"></script>
-  <script src="js/sentence.js?v=v16"></script>
-  <script src="js/shop.js?v=v16"></script>
-  <script src="js/battle.js?v=v16"></script>
+  <script src="js/data.js?v=v23"></script>
+  <script src="js/sentences.js?v=v23"></script>
+  <script src="js/audio.js?v=v23"></script>
+  <script src="js/textures.js?v=v23"></script>
+  <script src="js/save-session.js?v=v23"></script>
+  <script src="js/app.js?v=v23"></script>
+  <script src="js/word-learning.js?v=v23"></script>
+  <script src="js/craft.js?v=v23"></script>
+  <script src="js/room.js?v=v23"></script>
+  <script src="js/battle-engine.js?v=v23"></script>
+  <script src="js/swarm-engine.js?v=v23"></script>
+  <script src="js/forest-art.js?v=v23"></script>
+  <script src="js/world-art.js?v=v23"></script>
+  <script src="js/sentence.js?v=v23"></script>
+  <script src="js/shop.js?v=v23"></script>
+  <script src="js/learning-camp.js?v=v23"></script>
+  <script src="js/battle.js?v=v23"></script>
   <script>
     // 허브 전체를 담당하는 서비스 워커를 등록 (HTTPS 또는 localhost에서만 동작)
     if ('serviceWorker' in navigator) {

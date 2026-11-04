@@ -1,10 +1,12 @@
 'use strict';
 
 // 버전은 여기 한 곳에서만 올린다.
-// 같이 올려야 하는 곳: index.html 의 ?v=v15, sw.js 의 CACHE 이름.
+// 같이 올려야 하는 곳: index.html 의 ?v=v23, sw.js 의 CACHE 이름.
 // tests/version.test.cjs 가 세 곳이 어긋나면 잡아 준다.
-const BUILD = 16;
+const BUILD = 23;
 const APP_VERSION = 'v0.' + BUILD;
+
+function isTestMode() { return typeof playSession !== 'undefined' && playSession.testMode === true; }
 
 // 알파벳별 예시 단어 (첫소리 위주, 그림은 이모지)
 const LETTERS = {

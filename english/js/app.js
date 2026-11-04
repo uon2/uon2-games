@@ -16,19 +16,43 @@ const shuffle = arr => {
 const SAVE_KEY = 'ebw-save-v1';
 const newSave = () => ({ profile: null, unlocked: 1, clears: {}, blocks: {}, stats: {} });
 
-function loadSave() {
-  try {
-    const s = JSON.parse(localStorage.getItem(SAVE_KEY));
-    if (s) return { ...newSave(), ...s };
-  } catch (e) { /* 저장소를 못 쓰면 새로 시작 */ }
-  return newSave();
-}
+function gameStorage(kind) { try { return window[kind]; } catch (_) { return null; } }
+
+let playSession = new PlaySession(gameStorage('localStorage'), gameStorage('sessionStorage'), newSave, SAVE_KEY);
+let save = playSession.current;
+const profileTestTaps = new ProfileTapGate();
 
 function persist() {
-  try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) { /* 무시 */ }
+  playSession.persist(save);
 }
 
-let save = loadSave();
+function prepareTestSave(copy) {
+  copy.blocks ||= {};
+  Object.keys(LETTERS).forEach(letter => { copy.blocks[letter] = Math.max(99, copy.blocks[letter] || 0); });
+  copy.wallet = { ...copy.wallet, stars: Math.max(10000, copy.wallet?.stars || copy.battle?.stars || 0), migrated: true };
+  copy.gear = { ...copy.gear, blade: Math.max(1, copy.gear?.blade || 0), fire: true, bomb: true };
+  // Starting a separate test must not resume an unfinished normal-play boss.
+  if (copy.battle) copy.battle.pending = {};
+  if (copy.lava) copy.lava.pending = {};
+  return copy;
+}
+
+function renderTestMode() {
+  const active = isTestMode();
+  $('#map-test-badge').hidden = !active;
+  $('#test-mode-notice').hidden = !active;
+  $('#test-mode-settings').hidden = !active;
+}
+
+function toggleTestMode() {
+  profileTestTaps.reset();
+  speech.stop(); hideWordCard();
+  const wasTesting = isTestMode();
+  save = wasTesting ? playSession.exit() : playSession.enter(save, prepareTestSave);
+  sfx.pop(); goMap();
+  $('#map-msg').textContent = wasTesting ? '테스트를 마쳤어요. 원래 플레이 기록으로 돌아왔어요.'
+    : '🧪 모든 지역과 아이템이 열렸어요. 테스트용 별 10,000개로 자유롭게 시험해 보세요.';
+}
 
 function recordStat(letter, ok) {
   const s = save.stats[letter] || (save.stats[letter] = { ok: 0, miss: 0 });
@@ -39,6 +63,7 @@ const totalBlocks = () => Object.values(save.blocks).reduce((a, b) => a + b, 0);
 
 // ---------- 화면 전환 ----------
 function show(id) {
+  if (id !== 'screen-map') profileTestTaps.reset();
   document.querySelectorAll('.screen').forEach(s => { s.hidden = s.id !== id; });
 }
 
@@ -313,17 +338,42 @@ function leaveMine() {
 }
 
 // ---------- 지도 ----------
+function renderJourney() {
+  const words=RECIPES.filter(r=>save.craft?.made?.[r.word]).length;
+  const sentences=Object.keys(save.sentences?.seen || {}).length;
+  const goal = typeof SwarmEngine==='function' && !save.battle?.cleared?.[1]
+    ? {title:'몰려오는 숲에서 첫 모험!',detail:'무료 새싹 발사기가 자동 공격해요. 보석으로 레벨 업하고 영어로 무기를 진화시켜요.',action:'바로 모험',go:()=>startBattle(BATTLE_STAGES[0])}
+    : !Object.keys(save.clears).length
+    ? { title:'첫 글자 블록을 찾아요', detail:'풀밭 광산에서 소리를 듣고 알파벳을 모아 봐요.', action:'광산으로', go:()=>startMine(0) }
+    : !words
+    ? { title:'내 첫 낱말을 만들어요', detail:'모은 글자로 낱말을 익히고 도감과 내 방 아이템을 채워요.', action:'작업대로', go:goCraft }
+    : !forestCleared()
+    ? { title:'숲의 보물을 찾아요', detail:'영어를 완성하면 다음 전투에 쓸 선물도 고를 수 있어요.', action:'숲으로', go:()=>goNights('forest') }
+    : { title: sentences < 12 ? '문장으로 용암의 문을 열어요' : '문장 마법으로 다음 장비를 키워요', detail:'한국어 뜻과 영어를 함께 익혀요. 문장 보상의 별은 상점에서 쓸 수 있어요.', action:'용암으로', go:goLava };
+  const box=$('#journey-card');box.replaceChildren();
+  const content=document.createElement('div');
+  const caption=document.createElement('small');caption.textContent='나의 탐험 수첩';
+  const title=document.createElement('strong');title.textContent=goal.title;
+  const detail=document.createElement('p');detail.textContent=goal.detail;
+  const progress=document.createElement('small');progress.textContent=`낱말 ${words}/30 · 문장 ${sentences}/12 · 별 ${wallet().stars}`;
+  [caption,title,detail,progress].forEach(el=>content.appendChild(el));
+  const button=document.createElement('button');button.className='btn green';button.textContent=goal.action;
+  button.addEventListener('click',()=>{sfx.click();goal.go();});
+  box.appendChild(content);box.appendChild(button);
+}
 function goMap() {
+  renderTestMode();
   const who = $('#map-avatar');
   who.innerHTML = '';
   who.appendChild(avatarEl(save.profile.avatar, 48));
   $('#map-name').textContent = save.profile.name;
   $('#map-msg').textContent = `${save.profile.name}, 어디로 모험을 떠날까요?`;
+  renderJourney();
 
   const list = $('#stage-list');
   list.innerHTML = '';
   STAGES.forEach((st, i) => {
-    const locked = i + 1 > save.unlocked;
+    const locked = !isTestMode() && i + 1 > save.unlocked;
     const card = document.createElement('button');
     card.className = 'stage' + (locked ? ' locked' : '');
     const clears = save.clears[st.id];
@@ -345,7 +395,7 @@ function goMap() {
   });
 
   // 작업대 (광산을 한 번 다녀와야 열림)
-  const craftLocked = !Object.keys(save.clears).length;
+  const craftLocked = !isTestMode() && !Object.keys(save.clears).length;
   const madeTotal = (save.craft && save.craft.total) || 0;
   const craftCard = document.createElement('button');
   craftCard.className = 'stage' + (craftLocked ? ' locked' : '');
@@ -379,14 +429,14 @@ function goMap() {
 
   // 숲속 모험: 작업대에서 낱말을 만들어야 열림 (글자 → 낱말 → 모험 순서)
   const madeWords = Object.keys((save.craft && save.craft.made) || {});
-  const nightLocked = !madeWords.length;
+  const nightLocked = !isTestMode() && typeof SwarmEngine==='undefined' && !madeWords.length;
   const nightCard = document.createElement('button');
   nightCard.className = 'stage' + (nightLocked ? ' locked' : '');
   nightCard.innerHTML = `
     <div class="stage-icon night-icon">${nightLocked ? '🔒' : '⚔️'}</div>
     <div class="stage-name">숲속 모험</div>
-    <div class="stage-letters">${nightLocked ? '낱말을 먼저 만들어요' : `만든 낱말 ${madeWords.length}개로 모험`}</div>
-    ${(save.battle && save.battle.stars) ? `<div class="stage-badge">⭐ ${save.battle.stars}</div>` : ''}`;
+    <div class="stage-letters">${nightLocked ? '낱말을 먼저 만들어요' : '자동 무기 · 몰려오는 적 · 영어 진화'}</div>
+    ${wallet().stars ? `<div class="stage-badge">⭐ ${wallet().stars}</div>` : ''}`;
   nightCard.addEventListener('click', () => {
     if (nightLocked) {
       sfx.bonk();
@@ -422,14 +472,13 @@ function goMap() {
 
   // 상점: 문장으로 모은 별을 쓰는 곳. 살 게 없어도 목표를 볼 수 있게 항상 열어 둔다.
   const stars = wallet().stars;
-  const blade = gearSave().blade;
-  const nextPrice = BLADE_PRICES[blade + 1];
+  const gear = gearSave(), loadout=swarmLoadout();
   const shopCard = document.createElement('button');
   shopCard.className = 'stage';
   shopCard.innerHTML = `
     <div class="stage-icon shop-icon">🛒</div>
     <div class="stage-name">상점</div>
-    <div class="stage-letters">${blade ? BLADE_LEVELS[blade-1].name + ' 가지고 있어요' : nextPrice ? `빙글검 ⭐${nextPrice}별` : '장비 구경하기'}</div>
+    <div class="stage-letters">${gear.weaponVoucher>0?'🎁 무기 선택권을 사용해요':`자동 무기 ${loadout.available.length}종 · 다음 조합 준비`}</div>
     <div class="stage-badge">⭐ ${stars}</div>`;
   shopCard.addEventListener('click', () => { sfx.click(); goShop(); });
   list.appendChild(shopCard);
@@ -512,6 +561,13 @@ function init() {
   });
 
   $('#settings-btn').addEventListener('click', () => { sfx.click(); show('screen-settings'); });
+  $('#map-profile').addEventListener('click', () => {
+    if (profileTestTaps.tap()) { toggleTestMode(); return; }
+    if (profileTestTaps.count >= 3) $('#map-msg').textContent = `${isTestMode() ? '테스트 종료' : '테스트 모드'}까지 ${5 - profileTestTaps.count}번 더 눌러 주세요.`;
+  });
+  ['test-mode-exit', 'settings-test-exit'].forEach(id => {
+    $('#' + id).addEventListener('click', () => { if (isTestMode()) toggleTestMode(); });
+  });
   $('#settings-back').addEventListener('click', () => { sfx.click(); speech.stop(); hideWordCard(); goMap(); });
   $('#sound-test').addEventListener('click', () => playWordCard('A'));
   $('#change-avatar').addEventListener('click', () => { sfx.click(); goProfile(); });

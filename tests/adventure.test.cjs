@@ -52,6 +52,23 @@ test('dog protection blocks exactly two hits',()=>{
   for(let i=0;i<3;i++){g.player.invincible=0;g.hurt();}
   assert.equal(g.player.hp,5);assert.equal(g.shield,0);
 });
+
+test('학습 보상은 상자마다 한 번만 선택하며 새 모험으로 넘어가지 않는다',()=>{
+  const g=setup();assert.equal(g.grantBoon('reach'),false);
+  nextChest(g);assert.equal(g.grantBoon('reach'),true);assert.equal(g.grantBoon('swift'),false);
+  assert.equal(g.grantBoon('bad'),false);
+  g.forge('cat');nextChest(g);assert.equal(g.grantBoon('swift'),true);
+  g.forge('cat');g.dash();assert.ok(g.player.dashCD<1.8);
+  const next=setup();assert.equal(next.boons.reach,0);assert.equal(next.boons.swift,0);
+});
+
+test('회복 선물은 최대 체력과 현재 체력을 올리며 검 선물은 실제 사거리를 늘린다',()=>{
+  const g=setup();nextChest(g);g.player.hp=3;assert.equal(g.grantBoon('heart'),true);
+  assert.equal(g.player.maxHP,7);assert.equal(g.player.hp,5);
+  g.forge('cat');nextChest(g);g.grantBoon('reach');g.forge('cat');
+  const e=g.enemies[0];e.x=g.player.x+65;e.y=g.player.y;
+  const hp=e.hp;g.attack();assert.ok(e.hp<hp);
+});
 test('boss telegraph locks attack position and can be escaped with movement',()=>{
   const g=setup();g.wave=g.stage.waves-1;g.nextWave();const boss=g.enemies[0];
   boss.cooldown=0;g.update(.01);assert.ok(boss.target);const target={...boss.target};
@@ -87,7 +104,7 @@ test('HTML script paths and SW core assets exist',()=>{
   swctx.core.forEach(f=>assert.ok(fs.existsSync(path.join(root,f)),f));
 });
 
-function ui() {
+function ui(swarm=false) {
   const ids=[...source('english/index.html').matchAll(/id="([^"]+)"/g)].map(m=>'#'+m[1]);
   class Element {
     constructor(){this.hidden=false;this.style={};this.children=[];this.listeners={};this.textContent='';this.value='';
@@ -101,6 +118,7 @@ function ui() {
     setAttribute(){} focus(){} animate(){return{};} getContext(){return{};}
   }
   const nodes=Object.fromEntries(ids.map(id=>[id,new Element()]));
+  nodes['#sentence-box'].hidden=true;
   let queued=[];const persisted=[];
   const save={profile:{avatar:0,name:'test'},blocks:{A:2},clears:{},craft:{made:{cat:1}},battle:{stars:4,cleared:{}}};
   const context=vm.createContext({
@@ -112,9 +130,12 @@ function ui() {
     show:id=>{context.screen=id;},persist:()=>persisted.push(JSON.stringify(save)),
     goMap(){},goRoom(){},pick:arr=>arr[0],shuffle:arr=>[...arr],blockEl:()=>new Element(),
     // 별 지갑과 문장 기록은 sentence.js 담당이다. 숲 화면 검사에는 최소 대역만 둔다.
-    wallet:()=>(save.wallet ||= {stars:0}),openSentence(){},sentenceSave:()=>(save.sentences ||= {paid:{}}),
+    wallet:()=>(save.wallet ||= {stars:save.battle.stars}),addStars:n=>{save.wallet.stars+=n;},openSentence(){},sentenceSave:()=>(save.sentences ||= {paid:{}}),
+    swarmLoadout:()=>({available:['seed','blade','fire','bomb'],start:'seed',bladeLevel:1}),
+    grantFirstClearChoice:()=>{save.gear ||= {};if(!save.gear.firstClearGift){save.gear.firstClearGift=true;save.gear.weaponVoucher=1;}},
+    gearSave:()=>(save.gear ||= {blade:0,equipped:false}),
   });
-  vm.runInContext(source('english/js/data.js')+'\n'+source('english/js/battle-engine.js')+'\n'+source('english/js/battle.js'),context);
+  vm.runInContext(source('english/js/data.js')+'\n'+source('english/js/battle-engine.js')+'\n'+(swarm?source('english/js/swarm-engine.js')+'\n':'')+source('english/js/battle.js'),context);
   return {context,nodes,save,persisted,run:s=>vm.runInContext(s,context)};
 }
 test('new adventure respects paid and progression gates; existing save and companion survive',()=>{
@@ -142,6 +163,75 @@ test('pause clears controls, stale frame cannot update a new adventure, results 
   u.run('endAdventure(true); endAdventure(true)');
   assert.equal(u.save.blocks.A,5);assert.equal(u.save.battle.trophies[1],true);
   assert.equal(u.save.battle.stars,4);
+});
+
+test('새 숲 보상은 기존 별과 함께 지갑에 한 번만 반영된다',()=>{
+  const u=ui();u.run('startBattle(BATTLE_STAGES[0]);battle.engine.xp=7;endAdventure(false);endAdventure(false);');
+  assert.equal(u.save.wallet.stars,11);assert.equal(u.save.battle.stars,11);
+});
+
+test('새 전투는 낱말 제작 기록이 없어도 무료 장비로 시작하며 다음 지역 잠금은 유지한다',()=>{
+  const u=ui(true);u.save.craft.made={};u.run('startBattle(BATTLE_STAGES[0]);');
+  assert.equal(u.context.screen,'screen-battle');assert.equal(u.run('battle.engine.swarm'),true);
+  assert.equal(u.run('battle.engine.weapons.seed'),1);assert.equal(u.nodes['#spell-row'].hidden,true);
+  u.run('leaveBattle();startBattle(BATTLE_STAGES[1]);');assert.equal(u.context.screen,'screen-nights');
+});
+
+test('새 전투의 정답 보상은 한 번이고 처치 경험치를 별로 중복 환산하지 않는다',()=>{
+  const u=ui(true);u.run("startBattle(BATTLE_STAGES[0]);battle.engine.phase='chest';battle.engine.wave=1;chooseForgeWord('cat');battle.slots=['c','a','t'];checkForge();checkForge();");
+  assert.equal(u.save.wallet.stars,6);
+  u.nodes['#forge-leave'].listeners.click();u.nodes['#forge-leave'].listeners.click();
+  assert.equal(u.run('battle.engine.wave'),2);
+  u.run('battle.engine.xp=100;endAdventure(false);');assert.equal(u.save.wallet.stars,6);
+  assert.equal(u.save.battle.stars,4);assert.equal(u.save.battle.gems,100);
+});
+test('새 낱말은 뜻과 본보기를 먼저 배우고 도움 기록으로 남으며 별은 그대로 받는다',()=>{
+  const u=ui(true);u.run("startBattle(BATTLE_STAGES[0]);battle.engine.phase='chest';chooseForgeWord('cat');");
+  assert.equal(u.nodes['#forge-model'].hidden,false);
+  assert.equal(u.nodes['#forge-model'].textContent,'cat · 고양이');
+  u.run("battle.slots=['c','a','t'];checkForge();");
+  assert.equal(u.save.battle.words.cat.helped,1);assert.equal(u.save.battle.words.cat.ok,0);
+  assert.equal(u.save.wallet.stars,6);
+  u.run("chooseForgeWord('cat');");
+  assert.equal(u.nodes['#forge-model'].hidden,true);
+});
+test('보스 승리는 보관하지만 마지막 영어 보물 전에는 다음 구역을 열지 않는다',()=>{
+  const u=ui(true);u.run("startBattle(BATTLE_STAGES[0]);battle.engine.resumeBossChest();adventureEvent({type:'chest',boss:true});");
+  assert.ok(u.save.battle.pending[1]);assert.equal(u.save.gear.weaponVoucher,1);
+  assert.equal(u.save.battle.cleared[1],undefined);
+  u.run('leaveBattle();startBattle(BATTLE_STAGES[0]);');
+  assert.equal(u.run('battle.engine.phase'),'chest');assert.equal(u.run('battle.engine.bossDown'),true);
+  u.run("chooseForgeWord('cat');battle.slots=['c','a','t'];checkForge();");
+  u.nodes['#forge-leave'].listeners.click();u.run('battle.engine.events.splice(0).forEach(adventureEvent);');
+  assert.equal(u.save.battle.cleared[1],true);assert.equal(u.save.battle.pending[1],undefined);
+  assert.equal(u.save.gear.weaponVoucher,1);
+});
+
+test('레벨 업 선택은 전투를 멈추고 선택 후에만 재개한다',()=>{
+  const u=ui(true);u.run('startBattle(BATTLE_STAGES[0]);battle.engine.drops=Array.from({length:20},()=>({kind:"gem",x:190,y:260}));battle.engine.update(.01);showSwarmUpgrade();');
+  assert.equal(u.run('battle.paused'),true);assert.equal(u.nodes['#swarm-upgrade'].hidden,false);
+  assert.equal(u.nodes['#upgrade-choices'].children.length,3);
+  let limit=10;while(u.run('battle.engine.pendingLevels')>0 && limit--) u.nodes['#upgrade-choices'].children[0].listeners.click();
+  assert.ok(limit>0);assert.equal(u.run('battle.paused'),false);assert.equal(u.nodes['#swarm-upgrade'].hidden,true);
+});
+test('상자에서 레벨 선택이 남아 있으면 뒤쪽 학습 화면을 열 수 없고 종료 시 선택 창을 닫는다',()=>{
+  const u=ui(true);u.run(`startBattle(BATTLE_STAGES[0]);
+    battle.engine.drops=Array.from({length:4},()=>({kind:'gem',x:800,y:450}));
+    battle.engine.resumeBossChest();battle.engine.player.x=450;battle.engine.player.y=260;
+    battle.engine.events.splice(0).forEach(adventureEvent);openForge();`);
+  assert.equal(u.run('battle.engine.pendingLevels'),1);
+  assert.equal(u.nodes['#swarm-upgrade'].hidden,false);
+  assert.equal(u.nodes['#adventure-forge'].hidden,true);
+  u.run('battle.paused=false;openForge();'); // pendingLevels 자체도 진입을 막는다.
+  assert.equal(u.nodes['#adventure-forge'].hidden,true);
+  u.run('endAdventure(false);');assert.equal(u.nodes['#swarm-upgrade'].hidden,true);
+  assert.equal(u.context.screen,'screen-battle-result');
+});
+
+test('문장 풀이 중에는 전투 재개 버튼이 전투를 다시 움직이지 않는다',()=>{
+  const u=ui();u.run('startBattle(BATTLE_STAGES[0]);battle.paused=true;');
+  u.nodes['#sentence-box'].hidden=false;u.run('resumeBattle();');
+  assert.equal(u.run('battle.paused'),true);
 });
 
 test('30 unique beginner recipes retain the original collection and map new spells',()=>{

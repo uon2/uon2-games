@@ -15,7 +15,21 @@ class AdventureEngine {
     this.lava = stage.world === 'lava';
     this.blade = null; this.bladeAngle = 0;
     this.bossDown = false;
+    this.boons = { reach: 0, swift: 0, heart: 0 };
+    this.boonWaves = {};
     this.nextWave();
+  }
+  // 배운 낱말/문장의 보상. 이번 모험에만 적용하고 같은 상자에서는 하나만 고른다.
+  grantBoon(kind) {
+    if (this.phase !== 'chest' || !Object.hasOwn(this.boons, kind) || this.boonWaves[this.wave]) return false;
+    this.boonWaves[this.wave] = kind;
+    this.boons[kind]++;
+    if (kind === 'heart') {
+      this.player.maxHP = Math.min(10, this.player.maxHP + 1);
+      this.player.hp = Math.min(this.player.maxHP, this.player.hp + 2);
+    }
+    this.emit('boon', { kind });
+    return true;
   }
   emit(type, extra = {}) { this.events.push({ type, ...extra }); }
   nextWave() {
@@ -75,7 +89,7 @@ class AdventureEngine {
     if (!['fight', 'boss'].includes(this.phase) || this.player.attackCD > 0) return false;
     this.player.attackCD = 0.42; this.player.swing = 0.2;
     // 검 사거리를 좁혀서 바짝 붙어야 벨 수 있게 한다 (서서 휘두르기만 하면 안 되도록)
-    const target = this.enemies.filter(e => !e.dead && Math.hypot(e.x - this.player.x, e.y - this.player.y) < (e.boss ? 78 : 60))
+    const target = this.enemies.filter(e => !e.dead && Math.hypot(e.x - this.player.x, e.y - this.player.y) < (e.boss ? 78 : 60) + Math.min(24, this.boons.reach * 8))
       .sort((a, b) => Math.hypot(a.x-this.player.x, a.y-this.player.y) - Math.hypot(b.x-this.player.x,b.y-this.player.y))[0];
     if (target) {
       this.player.facing = target.x >= this.player.x ? 1 : -1;
@@ -86,7 +100,7 @@ class AdventureEngine {
   dash() {
     const p = this.player;
     if (!['fight','boss'].includes(this.phase) || p.dashCD > 0) return false;
-    p.dash = 0.19; p.dashCD = 1.8; p.invincible = Math.max(p.invincible, 0.32);
+    p.dash = 0.19; p.dashCD = Math.max(0.9, 1.8 - this.boons.swift * 0.3); p.invincible = Math.max(p.invincible, 0.32);
     this.emit('dash'); return true;
   }
   hitEnemy(e, damage) {

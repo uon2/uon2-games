@@ -85,13 +85,42 @@ test('힌트를 써도 별은 같고, 같은 상자는 한 번만 지급한다',
 });
 
 test('도움 없이 풀면 혼자 해냄으로 기록되고, 힌트를 쓰면 기록되지 않는다', () => {
-  const u = ui();
+  const u = ui({sentences:{seen:{'itis-cat':1},solo:{},paid:{},turn:0}});
+  u.run('sentenceSave().seen=Object.fromEntries(SENTENCES.map(s=>[s.id,1]));');
   u.run("openSentence({runId:'r2',checkpoint:'c1',stars:40}); sentence.slots[3]={token:sentence.current.noun,fixed:false}; checkSentence();");
   const id = u.run('sentence.current.id');
   assert.equal(u.run(`save.sentences.solo['${id}']`), 1);
   u.run("openSentence({runId:'r2',checkpoint:'c2',stars:40}); sentence.helped = true; sentence.slots[3]={token:sentence.current.noun,fixed:false}; checkSentence();");
   const id2 = u.run('sentence.current.id');
   assert.equal(u.run(`save.sentences.solo['${id2}'] || 0`), 0, '도움 받으면 혼자 해냄 아님');
+});
+
+test('첫 문장 모방은 혼자 이해한 것으로 세지 않고 영어와 한국어를 함께 보여 준다',()=>{
+  const u=ui();u.run("openSentence({runId:'learn',checkpoint:'1',stars:40});");
+  assert.equal(u.nodes['#sentence-model'].hidden,false);
+  assert.ok(u.nodes['#sentence-model'].textContent.endsWith('.'));
+  assert.ok(u.nodes['#sentence-ko'].textContent);
+  const id=u.run('sentence.current.id');
+  u.run('sentence.slots[3]={token:sentence.current.noun,fixed:false};checkSentence();checkSentence();');
+  assert.equal(u.save.sentences.seen[id],1);
+  assert.equal(u.save.sentences.solo[id]||0,0);
+  assert.equal(u.save.sentences.assisted[id],1);
+});
+
+test('풀지 않은 문장으로 별을 받을 수 없고 나중에 다시 열어도 문장이 바뀌지 않는다',()=>{
+  const u=ui();u.run("openSentence({runId:'fixed',checkpoint:'c',stars:40});");
+  const id=u.run('sentence.current.id'),stars=u.run('wallet().stars');
+  u.run('closeSentence(true);claimSentenceStars(40);');
+  assert.equal(u.run('wallet().stars'),stars);
+  assert.equal(u.nodes['#sentence-box'].hidden,false);
+  u.run("closeSentence(false);save.sentences.seen[sentence.current.id]=1;openSentence({runId:'fixed',checkpoint:'c',stars:40});");
+  assert.equal(u.run('sentence.current.id'),id);
+});
+
+test('새 문장 두 번 뒤에는 이미 익힌 문장을 복습한다',()=>{
+  const u=ui();
+  u.run("save.sentences={seen:{'itis-cat':1,'itis-dog':1},solo:{},paid:{},turn:2,last:'itis-dog'};");
+  assert.equal(u.run('pickSentence().id'),'itis-cat');
 });
 
 test('나중에 하기로 닫으면 별을 주지 않는다', () => {
@@ -101,6 +130,40 @@ test('나중에 하기로 닫으면 별을 주지 않는다', () => {
   u.nodes['#sentence-leave'].listeners.click();
   assert.equal(u.run('wallet().stars'), before);
   assert.equal(u.nodes['#sentence-box'].hidden, true);
+});
+
+test('도움받은 완료가 쌓여도 문장 배열 난도가 올라가지 않는다',()=>{
+  const u=ui({sentences:{seen:{'itis-cat':20},solo:{},paid:{},assisted:{'itis-cat':20}}});
+  assert.equal(u.run("helpLevel('itis-cat')"),0);
+  u.run("save.sentences.steps={'itis-cat':{noun:2,tail:0,full:0}};");
+  assert.equal(u.run("helpLevel('itis-cat')"),1);
+  u.run("save.sentences.steps['itis-cat'].tail=2;");
+  assert.equal(u.run("helpLevel('itis-cat')"),2);
+});
+
+test('이미 배운 낱말이 있으면 그 낱말의 문장을 먼저 고르고 모르는 명사를 오답으로 내지 않는다',()=>{
+  const u=ui({craft:{made:{dog:1,cat:1}}});
+  assert.ok(['cat','dog'].includes(u.run('pickSentence().noun')));
+  u.run("openSentence({runId:'familiar',checkpoint:'c',stars:40});");
+  assert.equal(u.run("sentence.bank.every(b=>['cat','dog'].includes(b.token))"),true);
+});
+
+test('같은 문장 상자를 다시 열어도 힌트 기록과 과제 단계가 남고 학습 실적은 한 번만 쌓인다',()=>{
+  for(const helped of [false,true]) {
+    const u=ui({craft:{made:{cat:1,dog:1}},sentences:{seen:{'itis-cat':1},solo:{},paid:{},tasks:{'retry:boss':'itis-cat'}}});
+    const open="openSentence({runId:'retry',checkpoint:'boss',stars:70});";
+    u.run(open);
+    if(helped) u.nodes['#sentence-show'].listeners.click();
+    u.run('closeSentence(false);'+open);
+    assert.equal(u.run('sentence.helped'),helped);
+    u.run('sentence.slots=sentence.slots.map(s=>s||{token:sentence.current.noun,fixed:false});checkSentence();');
+    const seen=u.run("save.sentences.seen['itis-cat']"),level=u.run('sentence.taskLevel');
+    u.run('closeSentence(false);'+open);
+    assert.equal(u.run('sentence.taskLevel'),level);
+    u.run('sentence.slots=sentence.slots.map(s=>s||{token:sentence.current.noun,fixed:false});checkSentence();');
+    assert.equal(u.run("save.sentences.seen['itis-cat']"),seen);
+    assert.equal(u.run("save.sentences.steps['itis-cat'].noun"),helped?0:1);
+  }
 });
 
 // 숲 보물에 문장을 섞는 시험용 규칙 (보물별로 한 번만 정해진다)

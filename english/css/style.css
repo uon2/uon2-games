@@ -1,6 +1,56 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 
+/* 다음 행동을 한 가지로 안내하고, 나머지 활동은 자유롭게 선택한다. */
+.journey-card { position:relative; z-index:2; display:flex; align-items:center; gap:20px; width:min(900px,94vw); margin:0 auto 16px; padding:15px 20px; color:#fff0c5; background:#25483c; border:3px solid #a8b87e; border-radius:6px; font-family:system-ui,sans-serif; }
+.journey-card > div { flex:1; }
+.journey-card strong { display:block; font-size:clamp(17px,2.5vmin,23px); margin:4px 0; }
+.journey-card small { color:#c2dcc0; }
+.journey-card p { margin:5px 0; font-size:14px; line-height:1.5; }
+#screen-map .stage-list { overflow-y:auto; min-height:0; align-content:flex-start; padding-bottom:40px; }
+.boon-choices { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin:12px 0; width:100%; }
+.boon-choices > p { flex-basis:100%; margin:0 0 6px; font:600 15px/1.5 system-ui,sans-serif; }
+.boon-choice { flex:1 1 140px; max-width:210px; min-height:85px; border:2px solid #7c998a; border-radius:8px; padding:12px; background:#edf1df; color:#244438; cursor:pointer; }
+.boon-choice[aria-pressed=true] { border:3px solid #2e735a; background:#d8ead2; }
+.boon-choice strong,.boon-choice small { display:block; font-family:system-ui,sans-serif; }
+.boon-choice strong { font-size:17px; }
+.boon-choice small { font-size:13px; line-height:1.5; margin-top:6px; }
+.sentence-purpose { font:14px/1.5 system-ui,sans-serif; color:#48573c; margin:0; }
+.sentence-model { font:700 clamp(19px,3vmin,28px)/1.4 system-ui,sans-serif; margin:0; color:#254f4c; padding:8px 15px; background:#edf3e5; border-radius:6px; }
+.sentence-panel { max-height:94dvh; overflow-y:auto; }
+.swarm-hud { display:flex; gap:16px; align-items:center; justify-content:center; padding:4px 14px; color:#ffe3a3; font:600 14px/1.4 system-ui,sans-serif; }
+.swarm-hud progress { width:150px; height:12px; accent-color:#a9df84; }
+#swarm-upgrade .upgrade-panel { width:min(940px,94vw); max-height:92vh; overflow-y:auto; border-color:#264b3d; background:#e7ead8; color:#223e34; }
+.upgrade-panel h2 { font-size:clamp(23px,4vmin,32px); }
+.upgrade-choices { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin:24px 0; }
+.upgrade-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; min-height:200px; padding:22px 14px; border:3px solid #6a9170; border-radius:12px; background:#fbfae9; color:#234b3b; cursor:pointer; }
+.upgrade-card:hover,.upgrade-card:focus-visible { background:#dceccb; border-color:#2b7151; }
+.upgrade-card strong { font:700 21px/1.4 system-ui,sans-serif; }
+.upgrade-card small { font:15px/1.6 system-ui,sans-serif; }
+.upgrade-icon { font-size:44px; }
+.weapon-store { width:min(1000px,94vw); display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; }
+.weapon-store > * { min-width:0; }
+.weapon-store .shop-card { width:100%; height:100%; }
+#shop-gift { width:min(1000px,94vw); font-family:system-ui,sans-serif; }
+#screen-shop { overflow-y:auto; }
+#br-shop { margin:10px 0; }
+@media(max-width:620px) {
+  .upgrade-choices { grid-template-columns:1fr; gap:8px; margin:14px 0; }
+  .upgrade-card { min-height:100px; padding:12px; display:grid; grid-template-columns:50px 1fr; gap:6px 12px; text-align:left; }
+  .upgrade-icon { grid-row:span 2; font-size:35px; }
+  .upgrade-card strong { font-size:18px; }
+  .upgrade-card small { font-size:13px; }
+  .swarm-hud { flex-wrap:wrap; gap:4px; font-size:12px; }
+  .swarm-hud progress { width:90%; height:8px; }
+}
+.adventure-world { box-shadow:0 6px 0 #101f29,inset 0 0 30px #10262d; }
+@media(max-width:560px) {
+  .journey-card { gap:10px; padding:10px 12px; margin-bottom:8px; }
+  .journey-card p { font-size:12px; }
+  .journey-card .btn { font-size:14px; padding:10px; }
+  .boon-choice { min-height:72px; padding:8px; flex-basis:110px; }
+}
+
 html, body {
   height: 100%;
   margin: 0;
@@ -110,6 +160,14 @@ a.btn { display: inline-block; text-decoration: none; }
   font-size: clamp(18px, 2.8vmin, 28px);
   text-shadow: 2px 2px 0 #000;
 }
+
+.profile-trigger { border:0; padding:4px; margin:-4px; background:transparent; color:inherit; font-family:inherit; cursor:pointer; touch-action:manipulation; }
+.profile-trigger:focus-visible { outline:3px solid #ffdf70; outline-offset:3px; }
+.test-badge { padding:4px 7px; color:#302406; background:#ffe292; border-radius:4px; font:700 12px system-ui,sans-serif; text-shadow:none; }
+.test-mode-notice { position:relative; z-index:2; display:flex; align-items:center; gap:12px; width:min(900px,94vw); margin:0 auto 8px; padding:10px 14px; background:#fff0bd; color:#493b1b; border:2px solid #d7ac44; font-family:system-ui,sans-serif; }
+.test-mode-notice > div { flex:1; min-width:0; }
+.test-mode-notice small { display:block; margin-top:4px; line-height:1.4; }
+.test-mode-notice .btn { flex-shrink:0; font-size:14px; }
 
 .msg {
   margin: 6px 16px;
@@ -850,6 +908,25 @@ button:disabled { opacity:.5; cursor:default; }
 button:focus-visible { outline:3px solid #ffe18a; outline-offset:3px; }
 .boss-panel { display:flex; align-items:center; justify-content:center; gap:12px; padding:3px 12px; background:#382253; }
 .boss-panel progress { max-width:35vw; height:15px; accent-color:#e79ac8; }
+.camp-panel { width:min(92vw,700px); max-height:94dvh; overflow-y:auto; text-align:center; background:#f2edda; color:#233d35; border-color:#416450; font-family:system-ui,sans-serif; }
+.camp-phase { margin:0 0 8px; color:#426650; font-size:14px; font-weight:750; }
+.camp-panel h2 { font-size:clamp(22px,4vmin,30px); }
+.camp-scene { display:grid; place-items:center; min-height:100px; border-radius:14px; font-size:64px; background:linear-gradient(#d2e5d3 70%,#afc48e 70%); }
+.camp-scene.river { background:linear-gradient(#deead9 65%,#abd8db 65%); }
+.camp-model { font-size:clamp(23px,4vmin,32px); font-weight:800; margin:12px 0; }
+#camp-message { min-height:2.6em; font-size:16px; line-height:1.55; }
+.camp-tools { gap:10px; margin-bottom:12px; }
+.camp-panel .btn { font-family:system-ui,sans-serif; font-size:16px; min-height:48px; }
+.camp-choices { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin:14px 0; }
+.camp-choices:empty, #camp-slots:empty { display:none; }
+.camp-picture { flex:1 1 200px; min-height:110px; max-width:300px; background:#fffdf0; border:3px solid #6a8b66; border-radius:14px; color:#244638; cursor:pointer; font:700 20px system-ui,sans-serif; padding:12px; }
+.camp-picture-scene { display:block; font-size:34px; margin-bottom:8px; white-space:nowrap; }
+.camp-picture:active { transform:translateY(2px); background:#e3edc9; }
+.camp-word { min-height:78px; font-size:32px; letter-spacing:.04em; }
+.camp-panel .camp-letter { font-size:28px; min-width:56px; }
+.camp-exit { display:block; margin:14px auto 0; }
+#camp-next { width:100%; }
+@media(max-height:650px) { .camp-scene { min-height:60px; font-size:44px; } .camp-panel { padding:16px; } .camp-picture { min-height:84px; } #camp-message { margin:8px 0; } }
 .forge-panel { width:min(92vw,620px); max-height:92vh; overflow-y:auto; text-align:center; }
 .forge-emoji { font-size:64px; }
 #forge-message { min-height:3em; font-family:system-ui,sans-serif; }

@@ -41,7 +41,10 @@ function renderThemes() {
   });
 }
 
-function madeCounts() { return (save.craft && save.craft.made) || {}; }
+function madeCounts() {
+  const made = (save.craft && save.craft.made) || {};
+  return isTestMode() ? Object.fromEntries(RECIPES.map(r => [r.word, Math.max(3, made[r.word] || 0)])) : made;
+}
 
 function recipeOf(word) { return RECIPES.find(r => r.word === word); }
 

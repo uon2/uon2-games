@@ -2,10 +2,17 @@
 
 // 허브 전체(모든 게임)를 담당하는 서비스 워커
 // 네트워크 우선: 온라인이면 항상 최신 파일, 인터넷이 끊기면 마지막으로 받은 파일로 실행
-const CACHE = 'uon2-games-v16-hanja-expedition-strike1';
+const CACHE = 'uon2-games-v23-test-mode-fish-natural1-strike1';
 
 // index.html은 호스팅에서 폴더 주소로 리다이렉트될 수 있어 폴더 주소('./', 'english/')로만 캐시
 const CORE = [
+  'english/js/save-session.js',
+  'english/js/world-art.js',
+  'english/js/swarm-engine.js',
+  'english/js/word-learning.js',
+  'english/js/learning-camp.js',
+  'english/assets/forest-clearing.webp',
+  'english/assets/lava-arena.webp',
   './',
   'manifest.webmanifest',
   'icons/icon-192.png',
