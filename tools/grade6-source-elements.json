@@ -1,0 +1,1676 @@
+[
+  {
+    "type": "sound",
+    "target": "對話",
+    "answer": "대화",
+    "source": "112-1"
+  },
+  {
+    "type": "sound",
+    "target": "角度",
+    "answer": "각도",
+    "source": "112-2"
+  },
+  {
+    "type": "sound",
+    "target": "發病",
+    "answer": "발병",
+    "source": "112-3"
+  },
+  {
+    "type": "sound",
+    "target": "新聞",
+    "answer": "신문",
+    "source": "112-4"
+  },
+  {
+    "type": "sound",
+    "target": "果樹",
+    "answer": "과수",
+    "source": "112-5"
+  },
+  {
+    "type": "sound",
+    "target": "衣服",
+    "answer": "의복",
+    "source": "112-6"
+  },
+  {
+    "type": "sound",
+    "target": "合計",
+    "answer": "합계",
+    "source": "112-7"
+  },
+  {
+    "type": "sound",
+    "target": "母親",
+    "answer": "모친",
+    "source": "112-8"
+  },
+  {
+    "type": "sound",
+    "target": "交戰",
+    "answer": "교전",
+    "source": "112-9"
+  },
+  {
+    "type": "sound",
+    "target": "作別",
+    "answer": "작별",
+    "source": "112-10"
+  },
+  {
+    "type": "sound",
+    "target": "高級",
+    "answer": "고급",
+    "source": "112-11"
+  },
+  {
+    "type": "sound",
+    "target": "農藥",
+    "answer": "농약",
+    "source": "112-12"
+  },
+  {
+    "type": "sound",
+    "target": "所感",
+    "answer": "소감",
+    "source": "112-13"
+  },
+  {
+    "type": "sound",
+    "target": "直線",
+    "answer": "직선",
+    "source": "112-14"
+  },
+  {
+    "type": "sound",
+    "target": "黃土",
+    "answer": "황토",
+    "source": "112-15"
+  },
+  {
+    "type": "sound",
+    "target": "現地",
+    "answer": "현지",
+    "source": "112-16"
+  },
+  {
+    "type": "sound",
+    "target": "通用",
+    "answer": "통용",
+    "source": "112-17"
+  },
+  {
+    "type": "sound",
+    "target": "北風",
+    "answer": "북풍",
+    "source": "112-18"
+  },
+  {
+    "type": "sound",
+    "target": "平等",
+    "answer": "평등",
+    "source": "112-19"
+  },
+  {
+    "type": "sound",
+    "target": "綠色",
+    "answer": "녹색",
+    "source": "112-20"
+  },
+  {
+    "type": "sound",
+    "target": "注目",
+    "answer": "주목",
+    "source": "112-21"
+  },
+  {
+    "type": "sound",
+    "target": "失足",
+    "answer": "실족",
+    "source": "112-22"
+  },
+  {
+    "type": "sound",
+    "target": "太陽",
+    "answer": "태양",
+    "source": "112-23"
+  },
+  {
+    "type": "sound",
+    "target": "番號",
+    "answer": "번호",
+    "source": "112-24"
+  },
+  {
+    "type": "sound",
+    "target": "反省",
+    "answer": "반성",
+    "source": "112-25"
+  },
+  {
+    "type": "sound",
+    "target": "勝利",
+    "answer": "승리",
+    "source": "112-26"
+  },
+  {
+    "type": "sound",
+    "target": "勇氣",
+    "answer": "용기",
+    "source": "112-27"
+  },
+  {
+    "type": "sound",
+    "target": "水溫",
+    "answer": "수온",
+    "source": "112-28"
+  },
+  {
+    "type": "sound",
+    "target": "開放",
+    "answer": "개방",
+    "source": "112-29"
+  },
+  {
+    "type": "sound",
+    "target": "昨年",
+    "answer": "작년",
+    "source": "112-30"
+  },
+  {
+    "type": "sound",
+    "target": "英特",
+    "answer": "영특",
+    "source": "112-31"
+  },
+  {
+    "type": "sound",
+    "target": "急速",
+    "answer": "급속",
+    "source": "112-32"
+  },
+  {
+    "type": "sound",
+    "target": "幸運",
+    "answer": "행운",
+    "source": "112-33"
+  },
+  {
+    "type": "name",
+    "target": "多",
+    "answer": "많을 다",
+    "source": "112-34"
+  },
+  {
+    "type": "name",
+    "target": "米",
+    "answer": "쌀 미",
+    "source": "112-35"
+  },
+  {
+    "type": "name",
+    "target": "石",
+    "answer": "돌 석",
+    "source": "112-36"
+  },
+  {
+    "type": "name",
+    "target": "遠",
+    "answer": "멀 원",
+    "source": "112-37"
+  },
+  {
+    "type": "name",
+    "target": "頭",
+    "answer": "머리 두",
+    "source": "112-38"
+  },
+  {
+    "type": "name",
+    "target": "京",
+    "answer": "서울 경",
+    "source": "112-39"
+  },
+  {
+    "type": "name",
+    "target": "孫",
+    "answer": "손자 손",
+    "source": "112-42"
+  },
+  {
+    "type": "name",
+    "target": "待",
+    "answer": "기다릴 대",
+    "source": "112-43"
+  },
+  {
+    "type": "name",
+    "target": "雪",
+    "answer": "눈 설",
+    "source": "112-44"
+  },
+  {
+    "type": "name",
+    "target": "族",
+    "answer": "겨레 족",
+    "source": "112-45"
+  },
+  {
+    "type": "name",
+    "target": "郡",
+    "answer": "고을 군",
+    "source": "112-46"
+  },
+  {
+    "type": "name",
+    "target": "美",
+    "answer": "아름다울 미",
+    "source": "112-47"
+  },
+  {
+    "type": "name",
+    "target": "油",
+    "answer": "기름 유",
+    "source": "112-48"
+  },
+  {
+    "type": "name",
+    "target": "堂",
+    "answer": "집 당",
+    "source": "112-49"
+  },
+  {
+    "type": "name",
+    "target": "分",
+    "answer": "나눌 분",
+    "source": "112-50"
+  },
+  {
+    "type": "name",
+    "target": "式",
+    "answer": "법 식",
+    "source": "112-51"
+  },
+  {
+    "type": "name",
+    "target": "例",
+    "answer": "법식 례",
+    "source": "112-52"
+  },
+  {
+    "type": "name",
+    "target": "定",
+    "answer": "정할 정",
+    "source": "112-53"
+  },
+  {
+    "type": "name",
+    "target": "根",
+    "answer": "뿌리 근",
+    "source": "112-54"
+  },
+  {
+    "type": "name",
+    "target": "庭",
+    "answer": "뜰 정",
+    "source": "112-55"
+  },
+  {
+    "type": "antonym",
+    "target": "長",
+    "answer": "短",
+    "options": [
+      "界",
+      "村",
+      "後",
+      "短"
+    ],
+    "source": "112-56"
+  },
+  {
+    "type": "antonym",
+    "target": "死",
+    "answer": "活",
+    "options": [
+      "活",
+      "由",
+      "植",
+      "班"
+    ],
+    "source": "112-57"
+  },
+  {
+    "type": "antonym",
+    "target": "晝",
+    "answer": "夜",
+    "options": [
+      "南",
+      "代",
+      "夜",
+      "里"
+    ],
+    "source": "112-58"
+  },
+  {
+    "type": "synonym",
+    "target": "道",
+    "answer": "路",
+    "options": [
+      "圖",
+      "路",
+      "窓",
+      "表"
+    ],
+    "source": "112-59"
+  },
+  {
+    "type": "synonym",
+    "target": "海",
+    "answer": "洋",
+    "options": [
+      "形",
+      "紙",
+      "前",
+      "洋"
+    ],
+    "source": "112-60"
+  },
+  {
+    "type": "homophone",
+    "target": "在",
+    "answer": "才",
+    "options": [
+      "才",
+      "弟",
+      "題",
+      "第"
+    ],
+    "source": "112-61"
+  },
+  {
+    "type": "homophone",
+    "target": "和",
+    "answer": "畫",
+    "options": [
+      "來",
+      "每",
+      "畫",
+      "東"
+    ],
+    "source": "112-62"
+  },
+  {
+    "type": "complete",
+    "target": "公明正大",
+    "answer": "正",
+    "source": "112-63"
+  },
+  {
+    "type": "complete",
+    "target": "白面書生",
+    "answer": "生",
+    "source": "112-64"
+  },
+  {
+    "type": "complete",
+    "target": "自手成家",
+    "answer": "家",
+    "source": "112-65"
+  },
+  {
+    "type": "meaning",
+    "target": "消火",
+    "answer": "消火",
+    "source": "112-66"
+  },
+  {
+    "type": "meaning",
+    "target": "空席",
+    "answer": "空席",
+    "source": "112-67"
+  },
+  {
+    "type": "writing",
+    "target": "時間",
+    "answer": "時間",
+    "source": "112-68"
+  },
+  {
+    "type": "writing",
+    "target": "校歌",
+    "answer": "校歌",
+    "source": "112-69"
+  },
+  {
+    "type": "writing",
+    "target": "安住",
+    "answer": "安住",
+    "source": "112-71"
+  },
+  {
+    "type": "writing",
+    "target": "全然",
+    "answer": "全然",
+    "source": "112-72"
+  },
+  {
+    "type": "writing",
+    "target": "不便",
+    "answer": "不便",
+    "source": "112-73"
+  },
+  {
+    "type": "writing",
+    "target": "心算",
+    "answer": "心算",
+    "source": "112-74"
+  },
+  {
+    "type": "writing",
+    "target": "同門",
+    "answer": "同門",
+    "source": "112-75"
+  },
+  {
+    "type": "writing",
+    "target": "先祖",
+    "answer": "先祖",
+    "source": "112-76"
+  },
+  {
+    "type": "writing",
+    "target": "百姓",
+    "answer": "百姓",
+    "source": "112-77"
+  },
+  {
+    "type": "writing",
+    "target": "中食",
+    "answer": "中食",
+    "source": "112-78"
+  },
+  {
+    "type": "writing",
+    "target": "靑春",
+    "answer": "靑春",
+    "source": "112-79"
+  },
+  {
+    "type": "writing",
+    "target": "有名",
+    "answer": "有名",
+    "source": "112-80"
+  },
+  {
+    "type": "writing",
+    "target": "邑內",
+    "answer": "邑內",
+    "source": "112-81"
+  },
+  {
+    "type": "writing",
+    "target": "人夫",
+    "answer": "人夫",
+    "source": "112-82"
+  },
+  {
+    "type": "writing",
+    "target": "數萬",
+    "answer": "數萬",
+    "source": "112-83"
+  },
+  {
+    "type": "writing",
+    "target": "入金",
+    "answer": "入金",
+    "source": "112-84"
+  },
+  {
+    "type": "writing",
+    "target": "休日",
+    "answer": "休日",
+    "source": "112-85"
+  },
+  {
+    "type": "writing",
+    "target": "秋夕",
+    "answer": "秋夕",
+    "source": "112-86"
+  },
+  {
+    "type": "writing",
+    "target": "市場",
+    "answer": "市場",
+    "source": "112-87"
+  },
+  {
+    "type": "sound",
+    "target": "通風",
+    "answer": "통풍",
+    "source": "113-1"
+  },
+  {
+    "type": "sound",
+    "target": "速度",
+    "answer": "속도",
+    "source": "113-2"
+  },
+  {
+    "type": "sound",
+    "target": "口號",
+    "answer": "구호",
+    "source": "113-3"
+  },
+  {
+    "type": "sound",
+    "target": "一部",
+    "answer": "일부",
+    "source": "113-4"
+  },
+  {
+    "type": "sound",
+    "target": "對話",
+    "answer": "대화",
+    "source": "113-5"
+  },
+  {
+    "type": "sound",
+    "target": "定立",
+    "answer": "정립",
+    "source": "113-6"
+  },
+  {
+    "type": "sound",
+    "target": "和合",
+    "answer": "화합",
+    "source": "113-7"
+  },
+  {
+    "type": "sound",
+    "target": "交感",
+    "answer": "교감",
+    "source": "113-8"
+  },
+  {
+    "type": "sound",
+    "target": "現在",
+    "answer": "현재",
+    "source": "113-9"
+  },
+  {
+    "type": "sound",
+    "target": "答禮",
+    "answer": "답례",
+    "source": "113-10"
+  },
+  {
+    "type": "sound",
+    "target": "勝算",
+    "answer": "승산",
+    "source": "113-11"
+  },
+  {
+    "type": "sound",
+    "target": "水銀",
+    "answer": "수은",
+    "source": "113-12"
+  },
+  {
+    "type": "sound",
+    "target": "例外",
+    "answer": "예외",
+    "source": "113-13"
+  },
+  {
+    "type": "sound",
+    "target": "始作",
+    "answer": "시작",
+    "source": "113-14"
+  },
+  {
+    "type": "sound",
+    "target": "方向",
+    "answer": "방향",
+    "source": "113-15"
+  },
+  {
+    "type": "sound",
+    "target": "近代",
+    "answer": "근대",
+    "source": "113-16"
+  },
+  {
+    "type": "sound",
+    "target": "幸運",
+    "answer": "행운",
+    "source": "113-17"
+  },
+  {
+    "type": "sound",
+    "target": "等級",
+    "answer": "등급",
+    "source": "113-18"
+  },
+  {
+    "type": "sound",
+    "target": "公式",
+    "answer": "공식",
+    "source": "113-19"
+  },
+  {
+    "type": "sound",
+    "target": "成功",
+    "answer": "성공",
+    "source": "113-20"
+  },
+  {
+    "type": "sound",
+    "target": "太陽",
+    "answer": "태양",
+    "source": "113-21"
+  },
+  {
+    "type": "sound",
+    "target": "月別",
+    "answer": "월별",
+    "source": "113-22"
+  },
+  {
+    "type": "sound",
+    "target": "兄弟",
+    "answer": "형제",
+    "source": "113-23"
+  },
+  {
+    "type": "sound",
+    "target": "區分",
+    "answer": "구분",
+    "source": "113-24"
+  },
+  {
+    "type": "sound",
+    "target": "業界",
+    "answer": "업계",
+    "source": "113-25"
+  },
+  {
+    "type": "sound",
+    "target": "夏服",
+    "answer": "하복",
+    "source": "113-26"
+  },
+  {
+    "type": "sound",
+    "target": "愛用",
+    "answer": "애용",
+    "source": "113-27"
+  },
+  {
+    "type": "sound",
+    "target": "上京",
+    "answer": "상경",
+    "source": "113-28"
+  },
+  {
+    "type": "sound",
+    "target": "古書",
+    "answer": "고서",
+    "source": "113-29"
+  },
+  {
+    "type": "sound",
+    "target": "北行",
+    "answer": "북행",
+    "source": "113-30"
+  },
+  {
+    "type": "sound",
+    "target": "特命",
+    "answer": "특명",
+    "source": "113-31"
+  },
+  {
+    "type": "sound",
+    "target": "氣溫",
+    "answer": "기온",
+    "source": "113-32"
+  },
+  {
+    "type": "sound",
+    "target": "空間",
+    "answer": "공간",
+    "source": "113-33"
+  },
+  {
+    "type": "name",
+    "target": "根",
+    "answer": "뿌리 근",
+    "source": "113-34"
+  },
+  {
+    "type": "name",
+    "target": "高",
+    "answer": "높을 고",
+    "source": "113-35"
+  },
+  {
+    "type": "name",
+    "target": "神",
+    "answer": "귀신 신",
+    "source": "113-36"
+  },
+  {
+    "type": "name",
+    "target": "強",
+    "answer": "강할 강",
+    "source": "113-37"
+  },
+  {
+    "type": "name",
+    "target": "藥",
+    "answer": "약 약",
+    "source": "113-38"
+  },
+  {
+    "type": "name",
+    "target": "綠",
+    "answer": "푸를 록",
+    "source": "113-39"
+  },
+  {
+    "type": "name",
+    "target": "圖",
+    "answer": "그림 도",
+    "source": "113-40"
+  },
+  {
+    "type": "name",
+    "target": "戰",
+    "answer": "싸움 전",
+    "source": "113-41"
+  },
+  {
+    "type": "name",
+    "target": "身",
+    "answer": "몸 신",
+    "source": "113-42"
+  },
+  {
+    "type": "name",
+    "target": "親",
+    "answer": "친할 친",
+    "source": "113-43"
+  },
+  {
+    "type": "name",
+    "target": "樹",
+    "answer": "나무 수",
+    "source": "113-44"
+  },
+  {
+    "type": "name",
+    "target": "石",
+    "answer": "돌 석",
+    "source": "113-45"
+  },
+  {
+    "type": "name",
+    "target": "死",
+    "answer": "죽을 사",
+    "source": "113-46"
+  },
+  {
+    "type": "name",
+    "target": "集",
+    "answer": "모을 집",
+    "source": "113-47"
+  },
+  {
+    "type": "name",
+    "target": "米",
+    "answer": "쌀 미",
+    "source": "113-48"
+  },
+  {
+    "type": "name",
+    "target": "球",
+    "answer": "공 구",
+    "source": "113-49"
+  },
+  {
+    "type": "name",
+    "target": "言",
+    "answer": "말씀 언",
+    "source": "113-50"
+  },
+  {
+    "type": "name",
+    "target": "病",
+    "answer": "병 병",
+    "source": "113-51"
+  },
+  {
+    "type": "name",
+    "target": "飮",
+    "answer": "마실 음",
+    "source": "113-52"
+  },
+  {
+    "type": "name",
+    "target": "習",
+    "answer": "익힐 습",
+    "source": "113-53"
+  },
+  {
+    "type": "name",
+    "target": "郡",
+    "answer": "고을 군",
+    "source": "113-54"
+  },
+  {
+    "type": "name",
+    "target": "昨",
+    "answer": "어제 작",
+    "source": "113-55"
+  },
+  {
+    "type": "antonym",
+    "target": "祖",
+    "answer": "孫",
+    "options": [
+      "由",
+      "席",
+      "畫",
+      "孫"
+    ],
+    "source": "113-56"
+  },
+  {
+    "type": "antonym",
+    "target": "晝",
+    "answer": "夜",
+    "options": [
+      "夜",
+      "黃",
+      "使",
+      "待"
+    ],
+    "source": "113-57"
+  },
+  {
+    "type": "antonym",
+    "target": "苦",
+    "answer": "樂",
+    "options": [
+      "朝",
+      "美",
+      "醫",
+      "樂"
+    ],
+    "source": "113-58"
+  },
+  {
+    "type": "synonym",
+    "target": "海",
+    "answer": "洋",
+    "options": [
+      "油",
+      "洋",
+      "英",
+      "族"
+    ],
+    "source": "113-59"
+  },
+  {
+    "type": "synonym",
+    "target": "永",
+    "answer": "遠",
+    "options": [
+      "番",
+      "李",
+      "遠",
+      "路"
+    ],
+    "source": "113-60"
+  },
+  {
+    "type": "homophone",
+    "target": "班",
+    "answer": "反",
+    "options": [
+      "數",
+      "工",
+      "術",
+      "反"
+    ],
+    "source": "113-61"
+  },
+  {
+    "type": "homophone",
+    "target": "所",
+    "answer": "消",
+    "options": [
+      "消",
+      "邑",
+      "秋",
+      "第"
+    ],
+    "source": "113-62"
+  },
+  {
+    "type": "complete",
+    "target": "野生動物",
+    "answer": "生",
+    "source": "113-63"
+  },
+  {
+    "type": "complete",
+    "target": "同時多發",
+    "answer": "多",
+    "source": "113-64"
+  },
+  {
+    "type": "complete",
+    "target": "百萬長者",
+    "answer": "者",
+    "source": "113-65"
+  },
+  {
+    "type": "meaning",
+    "target": "失意",
+    "answer": "失意",
+    "source": "113-66"
+  },
+  {
+    "type": "meaning",
+    "target": "注目",
+    "answer": "注目",
+    "source": "113-67"
+  },
+  {
+    "type": "writing",
+    "target": "自然",
+    "answer": "自然",
+    "source": "113-68"
+  },
+  {
+    "type": "writing",
+    "target": "重力",
+    "answer": "重力",
+    "source": "113-69"
+  },
+  {
+    "type": "writing",
+    "target": "後面",
+    "answer": "後面",
+    "source": "113-70"
+  },
+  {
+    "type": "writing",
+    "target": "家出",
+    "answer": "家出",
+    "source": "113-71"
+  },
+  {
+    "type": "writing",
+    "target": "老母",
+    "answer": "老母",
+    "source": "113-72"
+  },
+  {
+    "type": "writing",
+    "target": "來日",
+    "answer": "來日",
+    "source": "113-73"
+  },
+  {
+    "type": "writing",
+    "target": "學年",
+    "answer": "學年",
+    "source": "113-74"
+  },
+  {
+    "type": "writing",
+    "target": "花草",
+    "answer": "花草",
+    "source": "113-75"
+  },
+  {
+    "type": "writing",
+    "target": "入山",
+    "answer": "入山",
+    "source": "113-76"
+  },
+  {
+    "type": "writing",
+    "target": "有名",
+    "answer": "有名",
+    "source": "113-77"
+  },
+  {
+    "type": "writing",
+    "target": "白色",
+    "answer": "白色",
+    "source": "113-78"
+  },
+  {
+    "type": "writing",
+    "target": "休校",
+    "answer": "休校",
+    "source": "113-79"
+  },
+  {
+    "type": "writing",
+    "target": "人心",
+    "answer": "人心",
+    "source": "113-80"
+  },
+  {
+    "type": "writing",
+    "target": "正直",
+    "answer": "正直",
+    "source": "113-81"
+  },
+  {
+    "type": "writing",
+    "target": "不足",
+    "answer": "不足",
+    "source": "113-82"
+  },
+  {
+    "type": "writing",
+    "target": "住民",
+    "answer": "住民",
+    "source": "113-83"
+  },
+  {
+    "type": "writing",
+    "target": "敎育",
+    "answer": "敎育",
+    "source": "113-84"
+  },
+  {
+    "type": "writing",
+    "target": "平地",
+    "answer": "平地",
+    "source": "113-85"
+  },
+  {
+    "type": "writing",
+    "target": "食事",
+    "answer": "食事",
+    "source": "113-86"
+  },
+  {
+    "type": "writing",
+    "target": "天下",
+    "answer": "天下",
+    "source": "113-87"
+  },
+  {
+    "type": "sound",
+    "target": "神通",
+    "answer": "신통",
+    "source": "114-1"
+  },
+  {
+    "type": "sound",
+    "target": "藥物",
+    "answer": "약물",
+    "source": "114-2"
+  },
+  {
+    "type": "sound",
+    "target": "高級",
+    "answer": "고급",
+    "source": "114-3"
+  },
+  {
+    "type": "sound",
+    "target": "新綠",
+    "answer": "신록",
+    "source": "114-4"
+  },
+  {
+    "type": "sound",
+    "target": "戰功",
+    "answer": "전공",
+    "source": "114-5"
+  },
+  {
+    "type": "sound",
+    "target": "代身",
+    "answer": "대신",
+    "source": "114-6"
+  },
+  {
+    "type": "sound",
+    "target": "強行",
+    "answer": "강행",
+    "source": "114-7"
+  },
+  {
+    "type": "sound",
+    "target": "親庭",
+    "answer": "친정",
+    "source": "114-8"
+  },
+  {
+    "type": "sound",
+    "target": "植樹",
+    "answer": "식수",
+    "source": "114-9"
+  },
+  {
+    "type": "sound",
+    "target": "根本",
+    "answer": "근본",
+    "source": "114-10"
+  },
+  {
+    "type": "sound",
+    "target": "石油",
+    "answer": "석유",
+    "source": "114-11"
+  },
+  {
+    "type": "sound",
+    "target": "死線",
+    "answer": "사선",
+    "source": "114-12"
+  },
+  {
+    "type": "sound",
+    "target": "白米",
+    "answer": "백미",
+    "source": "114-13"
+  },
+  {
+    "type": "sound",
+    "target": "野球",
+    "answer": "야구",
+    "source": "114-14"
+  },
+  {
+    "type": "sound",
+    "target": "名言",
+    "answer": "명언",
+    "source": "114-15"
+  },
+  {
+    "type": "sound",
+    "target": "海洋",
+    "answer": "해양",
+    "source": "114-16"
+  },
+  {
+    "type": "sound",
+    "target": "飮用",
+    "answer": "음용",
+    "source": "114-17"
+  },
+  {
+    "type": "sound",
+    "target": "注意",
+    "answer": "주의",
+    "source": "114-18"
+  },
+  {
+    "type": "sound",
+    "target": "始動",
+    "answer": "시동",
+    "source": "114-19"
+  },
+  {
+    "type": "sound",
+    "target": "勝利",
+    "answer": "승리",
+    "source": "114-20"
+  },
+  {
+    "type": "sound",
+    "target": "目禮",
+    "answer": "목례",
+    "source": "114-21"
+  },
+  {
+    "type": "sound",
+    "target": "開業",
+    "answer": "개업",
+    "source": "114-22"
+  },
+  {
+    "type": "sound",
+    "target": "運命",
+    "answer": "운명",
+    "source": "114-23"
+  },
+  {
+    "type": "sound",
+    "target": "農園",
+    "answer": "농원",
+    "source": "114-24"
+  },
+  {
+    "type": "sound",
+    "target": "車窓",
+    "answer": "차창",
+    "source": "114-25"
+  },
+  {
+    "type": "sound",
+    "target": "黃土",
+    "answer": "황토",
+    "source": "114-26"
+  },
+  {
+    "type": "sound",
+    "target": "全部",
+    "answer": "전부",
+    "source": "114-27"
+  },
+  {
+    "type": "sound",
+    "target": "反對",
+    "answer": "반대",
+    "source": "114-28"
+  },
+  {
+    "type": "sound",
+    "target": "先例",
+    "answer": "선례",
+    "source": "114-29"
+  },
+  {
+    "type": "sound",
+    "target": "書堂",
+    "answer": "서당",
+    "source": "114-30"
+  },
+  {
+    "type": "sound",
+    "target": "果然",
+    "answer": "과연",
+    "source": "114-31"
+  },
+  {
+    "type": "sound",
+    "target": "溫室",
+    "answer": "온실",
+    "source": "114-32"
+  },
+  {
+    "type": "sound",
+    "target": "英才",
+    "answer": "영재",
+    "source": "114-33"
+  },
+  {
+    "type": "name",
+    "target": "昨",
+    "answer": "어제 작",
+    "source": "114-34"
+  },
+  {
+    "type": "name",
+    "target": "科",
+    "answer": "과목 과",
+    "source": "114-35"
+  },
+  {
+    "type": "name",
+    "target": "合",
+    "answer": "합할 합",
+    "source": "114-36"
+  },
+  {
+    "type": "name",
+    "target": "待",
+    "answer": "기다릴 대",
+    "source": "114-37"
+  },
+  {
+    "type": "name",
+    "target": "朝",
+    "answer": "아침 조",
+    "source": "114-38"
+  },
+  {
+    "type": "name",
+    "target": "社",
+    "answer": "모일 사",
+    "source": "114-39"
+  },
+  {
+    "type": "name",
+    "target": "永",
+    "answer": "길 영",
+    "source": "114-40"
+  },
+  {
+    "type": "name",
+    "target": "班",
+    "answer": "나눌 반",
+    "source": "114-41"
+  },
+  {
+    "type": "name",
+    "target": "郡",
+    "answer": "고을 군",
+    "source": "114-42"
+  },
+  {
+    "type": "name",
+    "target": "雪",
+    "answer": "눈 설",
+    "source": "114-43"
+  },
+  {
+    "type": "name",
+    "target": "由",
+    "answer": "말미암을 유",
+    "source": "114-44"
+  },
+  {
+    "type": "name",
+    "target": "計",
+    "answer": "셀 계",
+    "source": "114-45"
+  },
+  {
+    "type": "name",
+    "target": "勇",
+    "answer": "날랠 용",
+    "source": "114-46"
+  },
+  {
+    "type": "name",
+    "target": "太",
+    "answer": "클 태",
+    "source": "114-47"
+  },
+  {
+    "type": "name",
+    "target": "交",
+    "answer": "사귈 교",
+    "source": "114-48"
+  },
+  {
+    "type": "name",
+    "target": "光",
+    "answer": "빛 광",
+    "source": "114-49"
+  },
+  {
+    "type": "name",
+    "target": "信",
+    "answer": "믿을 신",
+    "source": "114-50"
+  },
+  {
+    "type": "name",
+    "target": "村",
+    "answer": "마을 촌",
+    "source": "114-51"
+  },
+  {
+    "type": "name",
+    "target": "族",
+    "answer": "겨레 족",
+    "source": "114-52"
+  },
+  {
+    "type": "name",
+    "target": "共",
+    "answer": "한가지 공",
+    "source": "114-53"
+  },
+  {
+    "type": "name",
+    "target": "弟",
+    "answer": "아우 제",
+    "source": "114-54"
+  },
+  {
+    "type": "name",
+    "target": "第",
+    "answer": "차례 제",
+    "source": "114-55"
+  },
+  {
+    "type": "antonym",
+    "target": "遠",
+    "answer": "近",
+    "options": [
+      "校",
+      "育",
+      "近",
+      "向"
+    ],
+    "source": "114-56"
+  },
+  {
+    "type": "antonym",
+    "target": "老",
+    "answer": "少",
+    "options": [
+      "放",
+      "席",
+      "區",
+      "少"
+    ],
+    "source": "114-57"
+  },
+  {
+    "type": "antonym",
+    "target": "天",
+    "answer": "地",
+    "options": [
+      "有",
+      "地",
+      "春",
+      "形"
+    ],
+    "source": "114-58"
+  },
+  {
+    "type": "synonym",
+    "target": "衣",
+    "answer": "服",
+    "options": [
+      "服",
+      "陽",
+      "孫",
+      "銀"
+    ],
+    "source": "114-59"
+  },
+  {
+    "type": "synonym",
+    "target": "分",
+    "answer": "別",
+    "options": [
+      "式",
+      "別",
+      "弱",
+      "百"
+    ],
+    "source": "114-60"
+  },
+  {
+    "type": "homophone",
+    "target": "道",
+    "answer": "度",
+    "options": [
+      "路",
+      "度",
+      "童",
+      "頭"
+    ],
+    "source": "114-61"
+  },
+  {
+    "type": "homophone",
+    "target": "話",
+    "answer": "和",
+    "options": [
+      "幸",
+      "活",
+      "下",
+      "和"
+    ],
+    "source": "114-62"
+  },
+  {
+    "type": "complete",
+    "target": "各自圖生",
+    "answer": "自",
+    "source": "114-63"
+  },
+  {
+    "type": "complete",
+    "target": "作心三日",
+    "answer": "心",
+    "source": "114-64"
+  },
+  {
+    "type": "complete",
+    "target": "淸風明月",
+    "answer": "月",
+    "source": "114-65"
+  },
+  {
+    "type": "meaning",
+    "target": "速記",
+    "answer": "速記",
+    "source": "114-66"
+  },
+  {
+    "type": "meaning",
+    "target": "消失",
+    "answer": "消失",
+    "source": "114-67"
+  },
+  {
+    "type": "writing",
+    "target": "秋夕",
+    "answer": "秋夕",
+    "source": "114-68"
+  },
+  {
+    "type": "writing",
+    "target": "每事",
+    "answer": "每事",
+    "source": "114-69"
+  },
+  {
+    "type": "writing",
+    "target": "兄夫",
+    "answer": "兄夫",
+    "source": "114-70"
+  },
+  {
+    "type": "writing",
+    "target": "歌手",
+    "answer": "歌手",
+    "source": "114-71"
+  },
+  {
+    "type": "writing",
+    "target": "時間",
+    "answer": "時間",
+    "source": "114-72"
+  },
+  {
+    "type": "writing",
+    "target": "空氣",
+    "answer": "空氣",
+    "source": "114-73"
+  },
+  {
+    "type": "writing",
+    "target": "登場",
+    "answer": "登場",
+    "source": "114-74"
+  },
+  {
+    "type": "writing",
+    "target": "方面",
+    "answer": "方面",
+    "source": "114-75"
+  },
+  {
+    "type": "writing",
+    "target": "食後",
+    "answer": "食後",
+    "source": "114-76"
+  },
+  {
+    "type": "writing",
+    "target": "安住",
+    "answer": "安住",
+    "source": "114-77"
+  },
+  {
+    "type": "writing",
+    "target": "靑色",
+    "answer": "靑色",
+    "source": "114-78"
+  },
+  {
+    "type": "writing",
+    "target": "休紙",
+    "answer": "休紙",
+    "source": "114-79"
+  },
+  {
+    "type": "writing",
+    "target": "入學",
+    "answer": "入學",
+    "source": "114-80"
+  },
+  {
+    "type": "writing",
+    "target": "來年",
+    "answer": "來年",
+    "source": "114-81"
+  },
+  {
+    "type": "writing",
+    "target": "家門",
+    "answer": "家門",
+    "source": "114-82"
+  },
+  {
+    "type": "writing",
+    "target": "祖上",
+    "answer": "祖上",
+    "source": "114-83"
+  },
+  {
+    "type": "writing",
+    "target": "外出",
+    "answer": "外出",
+    "source": "114-84"
+  },
+  {
+    "type": "writing",
+    "target": "里長",
+    "answer": "里長",
+    "source": "114-85"
+  },
+  {
+    "type": "writing",
+    "target": "花草",
+    "answer": "花草",
+    "source": "114-86"
+  },
+  {
+    "type": "writing",
+    "target": "所重",
+    "answer": "所重",
+    "source": "114-87"
+  }
+]

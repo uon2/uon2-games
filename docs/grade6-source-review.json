@@ -1,0 +1,2330 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-11-24",
+  "sources": [
+    {
+      "round": 112,
+      "sha256": "d890a6524f3b83db92b1a1fb26b16ba42101f041259f1e06a1321a698b60ffde",
+      "date": "2026-02-28"
+    },
+    {
+      "round": 113,
+      "sha256": "41cb4dd6585ccc0646659bc75e60fa8ac2d748b541eaef12fae03d3b8509561b",
+      "date": "2026-05-23"
+    },
+    {
+      "round": 114,
+      "sha256": "003e65748dcf4217ae7d389a894df609f8875768e39bae7798c92e7bfff5bc43",
+      "date": "2026-08-22"
+    }
+  ],
+  "questionCount": 270,
+  "originalPlayableCount": 0,
+  "adaptedElementCount": 258,
+  "heldCount": 12,
+  "note": "구조·원본 해시·학습 요소를 대조한 결과입니다. 원문의 시각 교정 완료를 뜻하지 않습니다.",
+  "items": [
+    {
+      "id": "112-1",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-2",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-3",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-4",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-5",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-6",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-7",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-8",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-9",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-10",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-11",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-12",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-13",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-14",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-15",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-16",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-17",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-18",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-19",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-20",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-21",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-22",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-23",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-24",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-25",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-26",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-27",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-28",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-29",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-30",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-31",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-32",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-33",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-34",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-35",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-36",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-37",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-38",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-39",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-40",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "hold",
+      "reasons": [
+        "원문 훈음과 공식 배정표의 표기 차이; 원문을 자동 수정하지 않음"
+      ]
+    },
+    {
+      "id": "112-41",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "hold",
+      "reasons": [
+        "원문 훈음과 공식 배정표의 표기 차이; 원문을 자동 수정하지 않음"
+      ]
+    },
+    {
+      "id": "112-42",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-43",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-44",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-45",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-46",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-47",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-48",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-49",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-50",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-51",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-52",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-53",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-54",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-55",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-56",
+      "type": "antonym",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-57",
+      "type": "antonym",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-58",
+      "type": "antonym",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-59",
+      "type": "synonym",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-60",
+      "type": "synonym",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-61",
+      "type": "homophone",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-62",
+      "type": "homophone",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-63",
+      "type": "complete",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-64",
+      "type": "complete",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-65",
+      "type": "complete",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-66",
+      "type": "meaning",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-67",
+      "type": "meaning",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "112-68",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-69",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-70",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "hold",
+      "reasons": [
+        "복수 원문 답안; 문맥/밑줄 시각 검수 필요"
+      ]
+    },
+    {
+      "id": "112-71",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-72",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-73",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-74",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-75",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-76",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-77",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-78",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-79",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-80",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-81",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-82",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-83",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-84",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-85",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-86",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-87",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "112-88",
+      "type": "stroke",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "hold",
+      "reasons": [
+        "원본 그림·강조 획의 문항 대응 미검수; 원문 출제 보류"
+      ]
+    },
+    {
+      "id": "112-89",
+      "type": "stroke",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "hold",
+      "reasons": [
+        "원본 그림·강조 획의 문항 대응 미검수; 원문 출제 보류"
+      ]
+    },
+    {
+      "id": "112-90",
+      "type": "stroke",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "hold",
+      "reasons": [
+        "원본 그림·강조 획의 문항 대응 미검수; 원문 출제 보류"
+      ]
+    },
+    {
+      "id": "113-1",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-2",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-3",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-4",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-5",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-6",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-7",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-8",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-9",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-10",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-11",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-12",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-13",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-14",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-15",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-16",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-17",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-18",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-19",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-20",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-21",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-22",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-23",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-24",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-25",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-26",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-27",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-28",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-29",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-30",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-31",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-32",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-33",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-34",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-35",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-36",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-37",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-38",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-39",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-40",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-41",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-42",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-43",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-44",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-45",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-46",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-47",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-48",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-49",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-50",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-51",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-52",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-53",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-54",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-55",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-56",
+      "type": "antonym",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-57",
+      "type": "antonym",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-58",
+      "type": "antonym",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-59",
+      "type": "synonym",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-60",
+      "type": "synonym",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-61",
+      "type": "homophone",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-62",
+      "type": "homophone",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-63",
+      "type": "complete",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-64",
+      "type": "complete",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-65",
+      "type": "complete",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-66",
+      "type": "meaning",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-67",
+      "type": "meaning",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "113-68",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-69",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-70",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-71",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-72",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-73",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-74",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-75",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-76",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-77",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-78",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-79",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-80",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-81",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-82",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-83",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-84",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-85",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-86",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-87",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "113-88",
+      "type": "stroke",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "hold",
+      "reasons": [
+        "원본 그림·강조 획의 문항 대응 미검수; 원문 출제 보류"
+      ]
+    },
+    {
+      "id": "113-89",
+      "type": "stroke",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "hold",
+      "reasons": [
+        "원본 그림·강조 획의 문항 대응 미검수; 원문 출제 보류"
+      ]
+    },
+    {
+      "id": "113-90",
+      "type": "stroke",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "hold",
+      "reasons": [
+        "원본 그림·강조 획의 문항 대응 미검수; 원문 출제 보류"
+      ]
+    },
+    {
+      "id": "114-1",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-2",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-3",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-4",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-5",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-6",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-7",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-8",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-9",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-10",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-11",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-12",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-13",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-14",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-15",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-16",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-17",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-18",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-19",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-20",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-21",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-22",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-23",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-24",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-25",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-26",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-27",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-28",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-29",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-30",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-31",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-32",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-33",
+      "type": "sound",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-34",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-35",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-36",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-37",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-38",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-39",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-40",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-41",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-42",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-43",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-44",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-45",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-46",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-47",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-48",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-49",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-50",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-51",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-52",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-53",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-54",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-55",
+      "type": "name",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-56",
+      "type": "antonym",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-57",
+      "type": "antonym",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-58",
+      "type": "antonym",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-59",
+      "type": "synonym",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-60",
+      "type": "synonym",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-61",
+      "type": "homophone",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-62",
+      "type": "homophone",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-63",
+      "type": "complete",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-64",
+      "type": "complete",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-65",
+      "type": "complete",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-66",
+      "type": "meaning",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-67",
+      "type": "meaning",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": []
+    },
+    {
+      "id": "114-68",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-69",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-70",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-71",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-72",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-73",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-74",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-75",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-76",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-77",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-78",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-79",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-80",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-81",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-82",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-83",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-84",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-85",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-86",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-87",
+      "type": "writing",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "adapted_element_checked",
+      "reasons": [
+        "원문 밑줄 미확인; 새 독립 지시문에만 활용"
+      ]
+    },
+    {
+      "id": "114-88",
+      "type": "stroke",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "hold",
+      "reasons": [
+        "원본 그림·강조 획의 문항 대응 미검수; 원문 출제 보류"
+      ]
+    },
+    {
+      "id": "114-89",
+      "type": "stroke",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "hold",
+      "reasons": [
+        "원본 그림·강조 획의 문항 대응 미검수; 원문 출제 보류"
+      ]
+    },
+    {
+      "id": "114-90",
+      "type": "stroke",
+      "originalLayoutReviewed": false,
+      "originalPlayable": false,
+      "status": "hold",
+      "reasons": [
+        "원본 그림·강조 획의 문항 대응 미검수; 원문 출제 보류"
+      ]
+    }
+  ]
+}
