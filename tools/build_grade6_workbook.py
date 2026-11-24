@@ -134,11 +134,11 @@ def build(catalog, existing, curated, elements):
                           'references': sorted(refs.get(target, refs.get(target.split('-')[0], []))), **extra})
 
     def glyphs(word):
-        return ' · '.join(ch + ' ' + chars[ch]['hun'] + ' ' + chars[ch]['eum'] for ch in word)
+        return ' · '.join(ch + ' ' + re.sub(r'\([^)]*\)|\[[^\]]*\]', '', chars[ch]['hun']) + ' ' + chars[ch]['eum'] for ch in word)
 
     for ch, c in sorted(chars.items()):
         pairs = [{'hun': r['hun'].split('/'), 'eum': r['eum']} for r in c['readings']]
-        add('name', ch, ch, c['hun'] + ' ' + c['eum'], '뜻과 음을 쓰세요.', glyphs(ch), pairs=pairs, kind='name')
+        add('name', ch, ch, re.sub(r'\([^)]*\)|\[[^\]]*\]', '', c['hun']) + ' ' + c['eum'], '뜻과 음을 쓰세요.', glyphs(ch), pairs=pairs, kind='name')
     for word, (reading, meaning) in sorted(words.items()):
         assert all(ch in chars for ch in word), f'Outside reading scope: {word}'
         explain = f'{word} · {reading} — {meaning}\n{glyphs(word)}'
@@ -183,7 +183,7 @@ def build(catalog, existing, curated, elements):
             add('stroke', model['ch'] + '-' + str(i), model['ch'], str(i+1),
                 '진하게 표시한 획은 몇 번째로 쓰나요?', f'{model["ch"]}의 표시한 획은 {i+1}번째입니다.',
                 kind='stroke', paths=model['paths'], highlight=i,
-                options=[str(n+1) for n in range(len(model['paths']))])
+                options=[str(n+1) for n in range(len(model['paths']))], familyKeyOverride=model['ch'])
     for q in questions:
         if 'familyKeyOverride' in q:
             q['familyKey'] = q.pop('familyKeyOverride')
