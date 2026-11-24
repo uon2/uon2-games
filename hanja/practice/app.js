@@ -4,11 +4,12 @@
   const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   const qa=new URLSearchParams(location.search).has('qa'),KEY='uon2-grade6-workbook-v1'+(qa?'-qa':'');
   let bank,store,questions,page='home',resultId=null,readingIndex=0,readingType='',readingSearch='',readingRevealed=false;
-  let persistCurrent=null,expiring=false,writeTimer=null;
+  let persistCurrent=null,expiring=false,writeTimer=null,disposePad=null;
   const date=at=>new Date(at).toLocaleDateString('ko-KR',{month:'long',day:'numeric'});
   const notify=(message,danger=false)=>{const n=$('notice');n.textContent=message;n.hidden=false;n.classList.toggle('danger',danger);};
   const bind=(id,fn,event='click')=>{const el=$(id);if(el)el.addEventListener(event,fn);};
   function render(html){
+    disposePad?.();disposePad=null;
     clearTimeout(writeTimer);persistCurrent=null;app.innerHTML=html;
     document.querySelectorAll('[data-page]').forEach(b=>{
       const current=b.dataset.page===(page==='attempt'?(store.get().active?.mode==='exam'?'exam':'home'):page==='result'||page==='grade'?'exam':page);
@@ -69,19 +70,12 @@
   function controls(q,value){
     if(q.kind==='name')return `<div class="two-fields"><label class="answer-label">뜻<input id="answer-hun" value="${esc(value?.hun||'')}" autocomplete="off" spellcheck="false" maxlength="30"></label><label class="answer-label">음<input id="answer-eum" value="${esc(value?.eum||'')}" autocomplete="off" spellcheck="false" maxlength="10"></label></div>`;
     if(q.options)return `<div class="options" role="group" aria-label="답 고르기">${q.options.map(option=>`<button type="button" data-choice="${esc(option)}" aria-pressed="${String(value===option)}">${esc(q.kind==='stroke'?option+'번째':option)}</button>`).join('')}</div>`;
-    if(q.kind==='writing')return `<canvas id="ink" class="ink-pad" width="640" height="250" aria-label="한자 두 글자를 쓰는 칸"></canvas><div class="ink-tools"><button type="button" id="clear-ink" class="text">지우고 다시 쓰기</button><span>손가락이나 펜으로 써 주세요.</span></div><label class="paper-label"><input id="paper" type="checkbox" ${value?.paper?'checked':''}>종이에 답을 썼어요</label>`;
+    if(q.kind==='writing')return `<canvas id="ink" class="ink-pad" width="640" height="250" draggable="false" aria-label="한자 두 글자를 쓰는 칸"></canvas><div class="ink-tools"><button type="button" id="clear-ink" class="text">지우고 다시 쓰기</button><span>필기 중 화면 고정</span></div><label class="paper-label"><input id="paper" type="checkbox" ${value?.paper?'checked':''}>종이에 답을 썼어요</label>`;
     return `<label class="answer-label">한글 독음<input id="answer-text" value="${esc(value||'')}" autocomplete="off" spellcheck="false" maxlength="40"></label>`;
   }
   function draw(canvas,ink){
     const c=canvas.getContext('2d');c.clearRect(0,0,canvas.width,canvas.height);c.strokeStyle='#243a35';c.lineWidth=4;c.lineCap='round';c.lineJoin='round';
     for(const line of ink||[]){if(!line.length)continue;c.beginPath();line.forEach((p,i)=>i?c.lineTo(p[0]*canvas.width,p[1]*canvas.height):c.moveTo(p[0]*canvas.width,p[1]*canvas.height));c.stroke();}
-  }
-  function pad(canvas,ink,save){
-    let current=null,total=ink.reduce((n,s)=>n+s.length,0);
-    const point=e=>{const r=canvas.getBoundingClientRect();return [Math.max(0,Math.min(1,+( (e.clientX-r.left)/r.width ).toFixed(3))),Math.max(0,Math.min(1,+( (e.clientY-r.top)/r.height ).toFixed(3)))];};
-    canvas.onpointerdown=e=>{if(ink.length>=40)return;e.preventDefault();current=[point(e)];ink.push(current);canvas.setPointerCapture(e.pointerId);};
-    canvas.onpointermove=e=>{if(!current)return;e.preventDefault();const p=point(e),last=current.at(-1);if(Math.hypot(p[0]-last[0],p[1]-last[1])>.006){current.push(p);total++;if(total>512){for(const line of ink)if(line.length>2)line.splice(1,1);total=ink.reduce((n,s)=>n+s.length,0);}draw(canvas,ink);save(false);}};
-    canvas.onpointerup=canvas.onpointercancel=()=>{if(current){current=null;draw(canvas,ink);save(true);}};draw(canvas,ink);
   }
   function attachControls(q,value,onChange){
     let selection=typeof value==='string'?value:'',ink=JSON.parse(JSON.stringify(value?.ink||[]));
@@ -90,7 +84,7 @@
       selection=b.dataset.choice;app.querySelectorAll('[data-choice]').forEach(other=>other.setAttribute('aria-pressed',String(other===b)));onChange(true,getValue());
     });
     if(q.kind==='writing'){
-      pad($('ink'),ink,immediate=>onChange(immediate,getValue()));
+      disposePad=Grade6WritingPad.attach($('ink'),{ink,draw,onChange:immediate=>onChange(immediate,getValue())});
       bind('clear-ink',()=>{ink.length=0;draw($('ink'),ink);onChange(true,getValue());});
       bind('paper',()=>onChange(true,getValue()),'change');
     }
@@ -206,7 +200,7 @@
   }
   for(const button of document.querySelectorAll('[data-page]'))button.onclick=()=>go(button.dataset.page);
   try{
-    const response=await fetch('data/bank.json?v=20261124-3');if(!response.ok)throw Error('문제집을 불러오지 못했습니다.');
+    const response=await fetch('data/bank.json?v=20261124-4');if(!response.ok)throw Error('문제집을 불러오지 못했습니다.');
     bank=E.validateBank(await response.json());questions=new Map(bank.questions.map(q=>[q.id,q]));
     store=Grade6Storage.create({engine:E,bank,key:KEY,storage:localStorage,locks:navigator.locks,
       onError:()=>notify('기록을 저장하지 못했습니다. 저장 공간과 브라우저 설정을 확인한 뒤 다시 시도해 주세요. 이번 변경은 저장되지 않았습니다.',true)});

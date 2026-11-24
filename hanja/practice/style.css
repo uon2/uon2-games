@@ -10,3 +10,7 @@ h1:focus{outline:none}.study-link strong span{display:inline;color:inherit;font-
 @media(max-width:440px){.topbar nav button{white-space:nowrap;font-size:13px;padding-inline:4px}}
 
 .reading-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}.reading-choices span{border:1px solid var(--line);border-radius:8px;text-align:center;padding:10px;font-size:24px;font-family:serif}
+
+.ink-pad:not(.readonly){overscroll-behavior:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none}html.is-inking,html.is-inking body{overscroll-behavior:none;user-select:none;-webkit-user-select:none}
+
+.ink-tools .text{white-space:nowrap;flex:none;font-size:14px;padding-inline:5px}

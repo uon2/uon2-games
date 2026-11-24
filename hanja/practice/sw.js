@@ -1,6 +1,6 @@
 'use strict';
-const CACHE='uon2-grade6-workbook-20261124-3';
-const FILES=['./','style.css','engine.js','storage.js','app.js','data/bank.json'];
+const CACHE='uon2-grade6-workbook-20261124-4';
+const FILES=['./','style.css','engine.js','storage.js','writing-pad.js','app.js','data/bank.json'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES.map(path=>new Request(new URL(path,self.registration.scope),{cache:'reload'})))).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('uon2-grade6-workbook-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
