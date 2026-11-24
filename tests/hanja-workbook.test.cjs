@@ -128,3 +128,14 @@ test('serialized storage merges current tab changes, rolls back failed writes, a
   assert.equal(a.get().reads[q.id].count,1);assert.equal(errors,1);
   values.set('isolated','{bad');assert.throws(()=>Storage.create(opts));assert.equal(values.get('isolated'),'{bad');
 });
+test('offline workbook ignores stale copies in the parent game cache',async()=>{
+  const fs=require('node:fs'),vm=require('node:vm'),handlers={};let response,ownCacheOpened=false;
+  const self={registration:{scope:'https://example.test/hanja/practice/'},addEventListener:(name,fn)=>handlers[name]=fn};
+  vm.runInNewContext(fs.readFileSync(require.resolve('../hanja/practice/sw.js'),'utf8'),{
+    self,URL,Request,Response,fetch:async()=>{throw Error('offline');},
+    caches:{open:async name=>{assert.match(name,/^uon2-grade6-workbook-/);ownCacheOpened=true;return {match:async()=>new Response('current workbook')};},
+      match:async()=>new Response('stale parent game copy')}
+  });
+  handlers.fetch({request:new Request('https://example.test/hanja/practice/?qa=1'),respondWith:p=>response=p,waitUntil:()=>{}});
+  assert.equal(await (await response).text(),'current workbook');assert.ok(ownCacheOpened);
+});

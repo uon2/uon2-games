@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#235e54">
+  <title>6급 한자 공부방</title>
+  <link rel="icon" href="../../icons/icon-192.png">
+  <link rel="stylesheet" href="style.css?v=20261124-3">
+  <script defer src="engine.js?v=20261124-3"></script>
+  <script defer src="storage.js?v=20261124-3"></script>
+  <script defer src="app.js?v=20261124-3"></script>
+</head>
+<body>
+  <a class="skip-link" href="#app">학습 내용으로 이동</a>
+  <header class="topbar">
+    <a href="./" class="brand"><span class="brand-mark" aria-hidden="true">六</span><span>6급 한자 공부방<small>조금씩 풀고, 오래 기억하기</small></span></a>
+    <nav aria-label="공부 메뉴">
+      <button type="button" data-page="home" aria-current="page">오늘의 공부</button>
+      <button type="button" data-page="review">오답 복습</button>
+      <button type="button" data-page="read">문제 읽기</button>
+      <button type="button" data-page="exam">모의시험</button>
+    </nav>
+  </header>
+  <p id="notice" class="notice" role="status" aria-live="polite" hidden></p>
+  <main id="app" tabindex="-1"><p class="loading">문제집을 펼치고 있습니다.</p></main>
+  <footer>
+    <p>학습 기록은 이 브라우저에 저장됩니다. 다른 기기로 옮길 때는 백업 파일을 이용해 주세요.</p>
+    <div class="footer-actions"><button type="button" id="export" disabled>기록 백업</button><label class="file-label">백업 불러오기<input id="import" type="file" accept="application/json,.json" disabled></label><a href="../">한자 낚시터</a><a href="../../">게임방</a></div>
+    <p class="fine">한국어문회 6급 범위의 자체 연습입니다. 공식 기출 원문이나 공식 합격 판정은 아닙니다.</p>
+  </footer>
+  <dialog id="confirm-dialog"><div id="confirm-content"></div></dialog>
+</body>
+</html>

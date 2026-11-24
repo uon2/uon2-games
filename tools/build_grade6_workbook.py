@@ -197,7 +197,7 @@ def build(catalog, existing, curated, elements):
     counts = dict(Counter(q['type'] for q in questions))
     for typ, count in COUNTS.items():
         assert len({q['skillKey'] for q in questions if q['type'] == typ}) >= count
-    return {'version': '2026-11-24.1', 'grade': '6', 'authorship': curated['note'],
+    return {'version': '2026-11-24.3', 'grade': '6', 'authorship': curated['note'],
             'exam': {'minutes': 50, 'passScore': 63, 'counts': COUNTS,
                      'basis': '확보된 112~114회 자료와 2026-10-26 저장 기준. 공식 시험과의 동등성을 보장하지 않습니다.'},
             'counts': counts,

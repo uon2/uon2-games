@@ -60,7 +60,7 @@
         (finished ? validTime(a.finishedAt) : a.finishedAt===null);
     }
     if (validAttempt(raw.active,false)) s.active=clone(raw.active);
-    s.history=(Array.isArray(raw.history)?raw.history:[]).filter(a=>validAttempt(a,true)).slice(-30).map(clone);
+    s.history=(Array.isArray(raw.history)?raw.history:[]).filter(a=>validAttempt(a,true)).slice(-12).map(clone);
     s.last=s.history.some(a=>a.id===raw.last)?raw.last:s.history.at(-1)?.id || null;
     return s;
   }
@@ -184,7 +184,7 @@
       const ans=a.answers[i];
       if(typeof ans.correct==='boolean')record(state,q,ans,now);
     }
-    a.finishedAt=now;a.drafts={};state.history.push(a);state.history=state.history.slice(-30);state.last=a.id;state.active=null;
+    a.finishedAt=now;a.drafts={};state.history.push(a);state.history=state.history.slice(-12);state.last=a.id;state.active=null;
     return a;
   }
   function advance(state,bank,id,index,now=Date.now()) {
@@ -240,7 +240,7 @@
     const history=new Map(state.history.map(a=>[a.id,a]));
     const editedAt=a=>Math.max(a.finishedAt,...Object.values(a.answers).map(ans=>ans.gradedAt||ans.at||0));
     for(const a of incoming.history)if(!history.has(a.id)||editedAt(a)>editedAt(history.get(a.id)))history.set(a.id,a);
-    state.history=[...history.values()].sort((a,b)=>a.finishedAt-b.finishedAt).slice(-30);
+    state.history=[...history.values()].sort((a,b)=>a.finishedAt-b.finishedAt).slice(-12);
     if(!state.active)state.active=incoming.active;
     state.last=state.history.at(-1)?.id || null;return true;
   }

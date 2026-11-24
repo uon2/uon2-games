@@ -13,9 +13,9 @@
     * { box-sizing: border-box; }
 
     html, body {
-      height: 100%;
+      min-height: 100%;
       margin: 0;
-      overflow: hidden;
+      overflow-x: hidden;
       background: linear-gradient(#6fb6ff, #b5ddff);
       color: #fff;
       font-family: 'Galmuri11', system-ui, sans-serif;
@@ -27,7 +27,7 @@
     .hub {
       position: relative;
       z-index: 1;
-      height: 100%;
+      min-height: 100svh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -117,10 +117,10 @@
         <b>몽글몽글 수학 농장</b>
         <span>씨앗 재배 · 동물 주문 · 수학 놀이</span>
       </a>
-      <a class="game" href="hanja/">
-        <div class="soon-icon" style="background:linear-gradient(#e2e8ce,#a4cfc5);font-family:serif;color:#335f56">水 🐟</div>
-        <b>한자 낚시터</b>
-        <span>수채 낚시 · 급수 선택 · 한자 300자</span>
+      <a class="game" href="hanja/practice/">
+        <div class="soon-icon" style="background:#e7eee5;font-family:serif;color:#235e54">六級</div>
+        <b>6급 한자 공부방</b>
+        <span>문제 풀이 · 오답 복습 · 모의시험</span>
       </a>
     </div>
   </main>
